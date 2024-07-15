@@ -29,8 +29,11 @@ function process(tickets) {
         PM: {},
     };
 
+    const regex_restrictions = /^(AM|PM)-(0[2-9]|1[0-9]|20)-([1-4])$/;
+
     const reservations = tickets
-        .map((ticket) => ticket.split("-"))
+        .filter((ticket) => regex_restrictions.test(ticket))
+        .map((ticket) => regex_restrictions.exec(ticket).splice(1, 4))
         .map(([time_period, participants, meeting_time]) => ({
             time_period,
             participants: Number(participants),
@@ -47,5 +50,6 @@ function process(tickets) {
 }
 
 process(["AM-03-2"]);
+process(["AM-03-7", "BM-04-1", "AM-01-2"]); // exception case
 process(["AM-02-3", "PM-06-2", "AM-10-2", "PM-15-1", "PM-05-1"]);
 process(["AM-02-3", "PM-06-2", "AM-04-2", "AM-10-2", "PM-15-1", "PM-05-1", "PM-08-3"]);
