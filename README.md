@@ -12,22 +12,21 @@
 
 ### pseudo code
 
-```python
-def reserve
-    rooms: [A, B, C] <- time period in timetable
+```
+func allocate room:
+    {time period, participants, meeting time} <- reservation
+    room <- [A, B, C]
 
-    rooms
-        find first
-            if participants < maximum capacity
-            && meeting time < remains time
-        then
-            reserve to room
+    selected room <- find to room if participants <= maximum capacity of room
 
-            return success
-        catch
-            return failure
+    if exist selected room
+    && meeting time <= maximum time of selected room
+        return reservation
 
-def output
+    else
+        return failure
+
+func output
             |오|전|시|간||오|후|시|간|
     ----------------------------------
     회의실 A|🁢🁢|🁢🁢|🁢🁢|  ||🁢🁢|  |  |  |
@@ -36,17 +35,19 @@ def output
     ----------------------------------
     회의실 C|  |  |  |  ||🁢🁢|  |  |  |
 
-def process
-    while
-        reservation: {time period, participants, meeting time} = check to restrictions(input())
+func process
+    reservations <- tickets
+        filter check ticket to restrictions
+        map allocate room by ticket
+        filter success
 
-        reserve(reservation)
-            then:
-                timetable
-            catch failure:
-                waiting(time period, participants, meeting time)
+    for room, participants in reservations
+        if timetable[room] is empty
+            timetable[room] <- participants
+        else
+            waiting[room] <- participants
 
-        output(timetable)
+    output(timetable, waiting)
 ```
 
 ## 학습 메모
