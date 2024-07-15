@@ -20,8 +20,24 @@ function allocated_room({ time_period, participants, meeting_time }) {
 }
 
 function output(timetable, waiting) {
-    console.log("timetable", timetable);
-    console.log("waiting", waiting);
+    const maximum_time = 4;
+    const progress_bar = (time) => "|🁢🁢".repeat(time) + "|  ".repeat(maximum_time - time);
+    const rooms = ["A", "B", "C"];
+
+    console.log(`        |오|전|시|간||오|후|시|간|`);
+    for (const room of rooms) {
+        console.log(`----------------------------------`);
+        const occupied_am = timetable["AM"][room] || 0;
+        const occupied_pm = timetable["PM"][room] || 0;
+        const waiting_am = waiting["AM"][room] || 0;
+        const waiting_pm = waiting["PM"][room] || 0;
+
+        console.log(`회의실 ${room}${progress_bar(occupied_am)}|${progress_bar(occupied_pm)}`);
+        if (waiting_am || waiting_pm) {
+            console.log(`예약대기${progress_bar(waiting_am)}${progress_bar(waiting_pm)}`);
+        }
+    }
+    console.log();
 }
 
 function process(tickets) {
@@ -59,6 +75,5 @@ function process(tickets) {
 }
 
 process(["AM-03-2"]);
-process(["AM-03-7", "BM-04-1", "AM-01-2"]); // exception case
 process(["AM-02-3", "PM-06-2", "AM-10-2", "PM-15-1", "PM-05-1"]);
 process(["AM-02-3", "PM-06-2", "AM-04-2", "AM-10-2", "PM-15-1", "PM-05-1", "PM-08-3"]);
