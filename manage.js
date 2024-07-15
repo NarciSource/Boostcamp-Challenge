@@ -19,12 +19,17 @@ function allocated_room({ time_period, participants, meeting_time }) {
     }
 }
 
-function output(timetable) {
+function output(timetable, waiting) {
     console.log("timetable", timetable);
+    console.log("waiting", waiting);
 }
 
 function process(tickets) {
     let timetable = {
+        AM: {},
+        PM: {},
+    };
+    let waiting = {
         AM: {},
         PM: {},
     };
@@ -43,10 +48,14 @@ function process(tickets) {
         .filter((i) => i);
 
     for (const { time_period, room_name, meeting_time } of reservations) {
-        timetable[time_period][room_name] = meeting_time;
+        if (!timetable[time_period][room_name]) {
+            timetable[time_period][room_name] = meeting_time;
+        } else {
+            waiting[time_period][room_name] = meeting_time;
+        }
     }
 
-    output(timetable);
+    output(timetable, waiting);
 }
 
 process(["AM-03-2"]);
