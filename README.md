@@ -6,7 +6,7 @@
 -   [x] 제약사항 예외 처리 &rightarrow; 정규식 처리
 -   [x] 예약 대기 추가
 -   [x] 콘솔 출력 UI
--   [ ] 이미지 캡처
+-   [x] 이미지 캡처
 
 ## 문제 해결 과정
 
@@ -49,5 +49,9 @@ func process
 
     output(timetable, waiting)
 ```
+
+### 출력한 결과
+
+![output](https://gist.github.com/user-attachments/assets/3bc5ca5d-2c2e-4d81-9559-3618d2af6b41)
 
 ## 학습 메모
