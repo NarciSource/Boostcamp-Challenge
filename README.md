@@ -1,3 +1,5 @@
+# 부스트캠프 챌린지 Day1. 개발 환경
+
 ## 나만의 체크포인트
 
 -   [x] 문제 이해, 입출력 조건 파악
@@ -20,9 +22,7 @@ func allocate room:
     selected room <- find to room if participants <= maximum capacity of room
 
     if exist selected room
-    && meeting time <= maximum time of selected room
         return reservation
-
     else
         return failure
 

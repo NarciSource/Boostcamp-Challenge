@@ -8,7 +8,7 @@ function allocated_room({ time_period, participants, meeting_time }) {
 
     const selected_room = rooms.find(({ maximum_capacity }) => participants <= maximum_capacity);
 
-    if (selected_room && meeting_time <= selected_room.maximum_time) {
+    if (selected_room) {
         return {
             time_period,
             room_name: selected_room.room_name,
