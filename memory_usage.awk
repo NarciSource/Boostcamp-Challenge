@@ -3,10 +3,9 @@ BEGIN {
     count = 0
 }
 NR > 3 && !/^Average:/ {
-    kbactive = $10
-    kbinact = $11
+    memused = $5
 
-    if (kbactive / (kbactive + kbinact) * 100 > threshold) {
+    if (memused > threshold) {
         count++
     }
 }
