@@ -87,6 +87,7 @@
 ## 학습 메모
 
 -   ssh 원격 접속 에러(WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!)  
+    `ssh-keygen -R 127.0.0.1`
     [출처](https://visu4l.tistory.com/entry/ssh-원격-접속-에러WARNING-REMOTE-HOST-IDENTIFICATION-HAS-CHANGED)
 
 # 쉘 스크립트
@@ -97,7 +98,7 @@
 
 -   가상 머신의 CPU 사용량, 가상 메모리 사용량, 네트워크 사용량 변화를 측정해서 정해진 기준보다 높을 경우 알림을 보내야 한다.
 
-    -   [ ] CPU 사용량 3분이상 70% 유지
+    -   [x] CPU 사용량 3분이상 70% 유지
 
     -   [ ] 가상 메모리 사용량 전체 사용량 중에 active 메모리 사용량이 3분이상 50% 유지
 
@@ -111,4 +112,34 @@
 
 ## 문제 해결 과정
 
+### sysstat 서비스 실행
+
+1. 패키지 설치 `sudo apt install sysstat`
+2. 서비스 실행 `sudo systemctl start sysstat`
+
+### awk 설치
+
+`sudo apt-get install gawk`
+
+### cpu 사용량 3분 이상 70% 유지 알림 기능
+
+1. cpu 사용량 체크 `sar -u 60 3`
+    - 첫번째 인수: 반복 시간 (초)
+    - 두번재 인수: 반복 횟수
+2. awk로 파이프라인 `| awk -f /home/user/day2/cpu_usage.awk`
+
+3. awk에서 파싱
+    ```
+    03:11:04        CPU     %user     %nice   %system   %iowait    %steal     %idle
+    03:11:05        all      0.06      0.00      0.12      0.00      0.00     99.81
+    03:11:06        all      0.00      0.00      0.00      0.00      0.00    100.00
+    03:11:07        all      0.00      0.00      0.06      0.00      0.00     99.94
+    ```
+    - 8번째 필드가 %idle
+    - cpu 사용량 = 100 - %idle
+
 ## 학습 메모
+
+-   [awk 명령어](https://www.ibm.com/docs/ko/aix/7.2?topic=awk-command)
+
+-   [sar 명렁어](https://docs.oracle.com/cd/E24846_01/html/E23088/spmonitor-8.html)
