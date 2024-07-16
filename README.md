@@ -106,7 +106,7 @@
 
 -   crontab 동작 방식을 확인하고 아래 조건을 설정한다.
 
-    -   [ ] 위에 작성한 걸 활용해서 매 1분마다 실행하도록 자동화한다.
+    -   [x] 위에 작성한 걸 활용해서 매 1분마다 실행하도록 자동화한다.
 
     -   [ ] 특정 기준을 넘길 경우 아래 예시와 비슷하게 알람 메시지를 정해서 보낸다.
 
@@ -143,6 +143,7 @@
 1. 메모리 사용량 체크 `sar -r 60 3`
 2. awk로 파이프라인 `| awk -f /home/user/day2/memory_usage.awk`
 3. awk에서 파싱
+
     ```
     03:21:06    kbmemfree   kbavail kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty
     03:21:07        95708    535480   1218520     60.40     26904    505476   4287748    139.85    427944   1016212       136
@@ -150,6 +151,7 @@
     03:21:09        93160    532940   1221064     60.53     26904    505476   4287352    139.83    427964   1016816       136
     Average:        94192    533969   1220033     60.47     26904    505476   4287908    139.85    427957   1016628       136
     ```
+
     - 10번째 필드가 kbactive
     - 11번째 필드가 kbinact
     - 활성 사용량 비율 = kbactive / (kbactive + kbinact)
@@ -159,17 +161,27 @@
 1. 네트워크 사용량 체크 `sar -n DEV 1 60`
 2. awk로 파이프라인 `| awk -f /home/user/day2/network_usage.awk`
 3. awk에서 파싱
+
     ```
     03:26:59        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s   %ifutil
     03:27:00           lo     17.00     17.00      1.96      1.96      0.00      0.00      0.00      0.00
     03:27:00         eth0      8.00      8.00      1.15      1.18      0.00      0.00      0.00      0.00
     ```
+
     - 5번째 필드가 rxkB/s
     - 6번째 필드가 txkb/s
     - 1분당 10MB 이상 = rxkBm > 10240 || txkBm > 10240
+
+### cron 스케줄 자동화
+
+-   조건: 1분마다 설정 `* * * * *`
+
+-   crontab으로 설정 `crontab /home/user/day2/alarm.cron`
 
 ## 학습 메모
 
 -   [awk 명령어](https://www.ibm.com/docs/ko/aix/7.2?topic=awk-command)
 
 -   [sar 명렁어](https://docs.oracle.com/cd/E24846_01/html/E23088/spmonitor-8.html)
+
+-   [cron 표현식](https://en.wikipedia.org/wiki/Cron)
