@@ -25,7 +25,7 @@
 
 -   [x] 가상 환경에 node.js 를 설치하고 버전을 확인한다.
 
--   [ ] 어제 작성한 day1 미션 js파일을 복사해서 실행한다.
+-   [x] 어제 작성한 day1 미션 js파일을 복사해서 실행한다.
 
 ## 문제 해결 과정
 
@@ -55,7 +55,7 @@
     1. `cd /home/user`
     2. `ls -l`
 
-    ![ls](https://gist.github.com/user-attachments/assets/3c5c5e4e-6f3d-4513-b1a4-495dc99fbb42)
+![ls](https://gist.github.com/user-attachments/assets/3c5c5e4e-6f3d-4513-b1a4-495dc99fbb42)
 
 ### 시간 동기화
 
@@ -71,6 +71,18 @@
 1. `sudo apt install nodejs`
 2. `node --version`
 
-    ![node](https://gist.github.com/user-attachments/assets/48983c7b-cd3d-4eb4-ab7a-fab6b04b7173)
+![node](https://gist.github.com/user-attachments/assets/48983c7b-cd3d-4eb4-ab7a-fab6b04b7173)
+
+### day1 미션 실행
+
+-   로컬
+
+    1. 파일 서버로 전송 `scp -P 2222 * user@127.0.0.1:/home/user/`
+
+-   가상환경
+
+    1. 노드로 실행 `node ./manage.js`
+
+![exec](https://gist.github.com/user-attachments/assets/4721a796-5d42-457a-a76b-2fc3983bd7a3)
 
 ## 학습 메모
