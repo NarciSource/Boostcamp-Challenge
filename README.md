@@ -102,7 +102,7 @@
 
     -   [x] 가상 메모리 사용량 전체 사용량 중에 active 메모리 사용량이 3분이상 50% 유지
 
-    -   [ ] 네트워크 RX, TX 사용량 1분당 10MB 이상 사용
+    -   [x] 네트워크 RX, TX 사용량 1분당 10MB 이상 사용
 
 -   crontab 동작 방식을 확인하고 아래 조건을 설정한다.
 
@@ -141,7 +141,8 @@
 ### 메모리 활성 사용량 알림 기능
 
 1. 메모리 사용량 체크 `sar -r 60 3`
-2. awk에서 파싱
+2. awk로 파이프라인 `| awk -f /home/user/day2/memory_usage.awk`
+3. awk에서 파싱
     ```
     03:21:06    kbmemfree   kbavail kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty
     03:21:07        95708    535480   1218520     60.40     26904    505476   4287748    139.85    427944   1016212       136
@@ -152,6 +153,20 @@
     - 10번째 필드가 kbactive
     - 11번째 필드가 kbinact
     - 활성 사용량 비율 = kbactive / (kbactive + kbinact)
+
+### 네트워크 사용량 알림 기능
+
+1. 네트워크 사용량 체크 `sar -n DEV 1 60`
+2. awk로 파이프라인 `| awk -f /home/user/day2/network_usage.awk`
+3. awk에서 파싱
+    ```
+    03:26:59        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+    03:27:00           lo     17.00     17.00      1.96      1.96      0.00      0.00      0.00      0.00
+    03:27:00         eth0      8.00      8.00      1.15      1.18      0.00      0.00      0.00      0.00
+    ```
+    - 5번째 필드가 rxkB/s
+    - 6번째 필드가 txkb/s
+    - 1분당 10MB 이상 = rxkBm > 10240 || txkBm > 10240
 
 ## 학습 메모
 
