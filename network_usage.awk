@@ -1,5 +1,5 @@
 BEGIN {
-    threshold = 50
+    threshold = 10
     count = 0
     rxkBm = 0
     txkBm = 0
@@ -15,6 +15,6 @@ NR > 3 && !/^Average:/ {
 }
 END {
     if (rxkBm > threshold * 1024 || txkBm > threshold * 1024) {
-        print "alarm"
+        print "network", threshold"MB/m"
     }
 }

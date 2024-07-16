@@ -12,6 +12,6 @@ NR > 3 && !/^Average:/ {
 }
 END {
     if (count == 3) {
-        print "alarm"
+        print "memory", threshold"%"
     }
 }

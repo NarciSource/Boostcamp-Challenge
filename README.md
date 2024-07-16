@@ -108,7 +108,11 @@
 
     -   [x] 위에 작성한 걸 활용해서 매 1분마다 실행하도록 자동화한다.
 
-    -   [ ] 특정 기준을 넘길 경우 아래 예시와 비슷하게 알람 메시지를 정해서 보낸다.
+    -   [x] 특정 기준을 넘길 경우 아래 예시와 비슷하게 알람 메시지를 정해서 보낸다.
+
+        ```
+        curl -X POST -H 'Content-type: application/json' --data '{"text":"J041 CPU is now ALARM: usage is over 70%"}' https://hooks.slack.com/services/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
+        ```
 
 ## 문제 해결 과정
 
@@ -178,6 +182,11 @@
 
 -   crontab으로 설정 `crontab /home/user/day2/alarm.cron`
 
+### 메시지 알림
+
+-   셸에서 curl 명령 수행
+-   xargs로 인수 분리해서 파이프라인 `| xargs -n 2 /home/user/day2/alarm.sh`
+
 ## 학습 메모
 
 -   [awk 명령어](https://www.ibm.com/docs/ko/aix/7.2?topic=awk-command)
@@ -185,3 +194,5 @@
 -   [sar 명렁어](https://docs.oracle.com/cd/E24846_01/html/E23088/spmonitor-8.html)
 
 -   [cron 표현식](https://en.wikipedia.org/wiki/Cron)
+
+-   [xargs 명령어](https://www.ibm.com/docs/ko/aix/7.3?topic=x-xargs-command)
