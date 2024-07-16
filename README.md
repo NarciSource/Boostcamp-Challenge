@@ -15,7 +15,6 @@
 -   [x] 본인 계정으로 /scrap 디렉토리를 생성한다.
 
     -   764 모드로 접근 권한을 바꿔서, 본인 계정에서도 쓸 수 있도록 설정한다.
-    -   `mkdir -m 764 scrp`
 
 -   [x] 가상 환경에서 터미널을 열고 /scrap 경로에 대해 권한을 확인하는 화면을 캡처한다.
 
@@ -86,3 +85,6 @@
 ![exec](https://gist.github.com/user-attachments/assets/4721a796-5d42-457a-a76b-2fc3983bd7a3)
 
 ## 학습 메모
+
+-   ssh 원격 접속 에러(WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!)  
+    [출처](https://visu4l.tistory.com/entry/ssh-원격-접속-에러WARNING-REMOTE-HOST-IDENTIFICATION-HAS-CHANGED)
