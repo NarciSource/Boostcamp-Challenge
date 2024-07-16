@@ -114,6 +114,8 @@
         curl -X POST -H 'Content-type: application/json' --data '{"text":"J041 CPU is now ALARM: usage is over 70%"}' https://hooks.slack.com/services/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
         ```
 
+    -   [x] 알림을 보낼 때 마다 /monitoring 폴더에 YYYYMMDD-HHMMSS 형식으로 빈 파일을 생성한다.
+
 ## 문제 해결 과정
 
 ### sysstat 서비스 실행
@@ -184,8 +186,12 @@
 
 ### 메시지 알림
 
--   셸에서 curl 명령 수행
 -   xargs로 인수 분리해서 파이프라인 `| xargs -n 2 -r /home/user/day2/alarm.sh`
+-   셸에서 curl 명령 수행
+
+### monitoring 폴더에 파일 생성
+
+`echo $text >"/home/user/day2/monitoring/$(date +"%Y%m%d-%H%M%S")"`
 
 ## 학습 메모
 
