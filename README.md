@@ -185,7 +185,7 @@
 ### 메시지 알림
 
 -   셸에서 curl 명령 수행
--   xargs로 인수 분리해서 파이프라인 `| xargs -n 2 /home/user/day2/alarm.sh`
+-   xargs로 인수 분리해서 파이프라인 `| xargs -n 2 -r /home/user/day2/alarm.sh`
 
 ## 학습 메모
 
