@@ -88,3 +88,27 @@
 
 -   ssh 원격 접속 에러(WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!)  
     [출처](https://visu4l.tistory.com/entry/ssh-원격-접속-에러WARNING-REMOTE-HOST-IDENTIFICATION-HAS-CHANGED)
+
+# 쉘 스크립트
+
+## 나만의 체크포인트
+
+-   [x] vscode에서 ssh로 접속
+
+-   가상 머신의 CPU 사용량, 가상 메모리 사용량, 네트워크 사용량 변화를 측정해서 정해진 기준보다 높을 경우 알림을 보내야 한다.
+
+    -   [ ] CPU 사용량 3분이상 70% 유지
+
+    -   [ ] 가상 메모리 사용량 전체 사용량 중에 active 메모리 사용량이 3분이상 50% 유지
+
+    -   [ ] 네트워크 RX, TX 사용량 1분당 10MB 이상 사용
+
+-   crontab 동작 방식을 확인하고 아래 조건을 설정한다.
+
+    -   [ ] 위에 작성한 걸 활용해서 매 1분마다 실행하도록 자동화한다.
+
+    -   [ ] 특정 기준을 넘길 경우 아래 예시와 비슷하게 알람 메시지를 정해서 보낸다.
+
+## 문제 해결 과정
+
+## 학습 메모
