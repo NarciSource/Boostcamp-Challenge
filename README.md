@@ -193,6 +193,13 @@
 
 `echo $text >"/home/user/day2/monitoring/$(date +"%Y%m%d-%H%M%S")"`
 
+### 부하
+
+`sudo apt-get install stress`
+
+-   CPU: `stress --cpu 16 --timeout 200s`
+-   메모리: `stress --vm 1 --vm-bytes 1.5G --timeout 200s`
+
 ## 학습 메모
 
 -   [awk 명령어](https://www.ibm.com/docs/ko/aix/7.2?topic=awk-command)
