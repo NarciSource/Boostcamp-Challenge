@@ -32,16 +32,16 @@ function parse_prolog(prolog_xml) {
 
     const attributes = {};
     while ((match = attributes_regex.exec(attributes_line)) !== null) {
-        [, key, value] = match;
+        const [, key, value] = match;
         attributes[key] = value;
     }
     return tag_name && { [tag_name]: attributes };
 }
 
 function split_tokens(xml) {
-    const token_regex_str = "<[^>?]+>";
+    const element_regex_str = "<[^>?]+>";
     const text_regex_str = "[^<>]+";
-    const union_regex_str = `\\s*((?:${token_regex_str})|(?:${text_regex_str}))\\s*`;
+    const union_regex_str = `\\s*((?:${element_regex_str})|(?:${text_regex_str}))\\s*`;
     const union_regex = new RegExp(union_regex_str, "g");
 
     const tokens = [];
@@ -51,8 +51,33 @@ function split_tokens(xml) {
     return tokens;
 }
 
-function parse_token(tokens) {
-    return tokens;
+function analyze_lexical(token) {
+    // token : element | text
+    const tag_regex = /<(\/)?([^>\s]+)([^>]*)>/;
+    const attributes_regex = /(\w+)="(.*?)"/g;
+
+    if (tag_regex.test(token)) {
+        const [, pattern_start, tag_name, attributes_line] = tag_regex.exec(token);
+
+        if (pattern_start == "/") {
+            return {
+                [tag_name]: "close_tag",
+            };
+        } else {
+            const attributes = {};
+            while ((match = attributes_regex.exec(attributes_line)) !== null) {
+                const [, key, value] = match;
+                attributes[key] = value;
+            }
+            return {
+                [tag_name]: attributes,
+            };
+        }
+    } else {
+        return {
+            [token]: "scalar",
+        };
+    }
 }
 
 async function main() {
@@ -69,6 +94,9 @@ async function main() {
 
     json_tree["prolog"] = parse_prolog(prolog_xml);
 
-    console.log(parse_token(split_tokens(xml)));
+    // parse element
+    const tokens = split_tokens(xml);
+    const tags = tokens.map(analyze_lexical);
+    console.log(tags);
 }
 main();
