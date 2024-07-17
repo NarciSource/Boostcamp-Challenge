@@ -16,7 +16,7 @@
     -   [x] prolog 파싱
     -   [x] 파서 트리
 
--   [ ] Parser가 어떤 데이터 흐름으로 어떻게 동작하는지 설계 결과를 작성한다.
+-   [x] Parser가 어떤 데이터 흐름으로 어떻게 동작하는지 설계 결과를 작성한다.
 
 -   [x] Parser가 만든 데이터 구조를 탐색해서 JSON 문자열로 출력하도록 구현해야 한다.
 
@@ -106,40 +106,42 @@
 ### pseudo code
 
 ```js
-function make_parse_tree
+function analyze_lexical
+    <tag>, open_tag
+    </tag>, close_tag
+    <tag/>, closure_tag
 
+function analyze_syntax
     for tag of tags
-        if not exist start_tag
-            start_tag <- tag
-        elif tag is under level to start_tag
-            children <- tag
+        if this tag is not close tag
+            stack <- tag
         else
-            end_tag <- tag
+            find to open tag sibling
 
-            elements <- tag.attributes
-            elements <- make_parse_tree(children)
-
-            symbol_table <- start_tag
-            start_tag <- reset
+            elements <- range from open to close
+            stack <- element
 
 // clear up
-delete_comments()
+delete_comments
 
-delete_end_of_line()
+delete_end_of_line
 
-// prolog
-json_tree[prolog] <- parse prolog using prolog_regex
+// compiler
+tokens: (< ... > | ... ) <- tokenize xml
 
-// element
-tokens: (< ... >) <- parse xml using token_regex
+tags: (tag_name, attributes, children) <- analyze_lexical tokens
 
-tags: (tag_name, attributes) <- tokens map to element_regex
+tree <- analyze_syntax tags
 
-tree: ( tag_name: { elements }) <- make_parse_tree(tags)
-
-json_tree[element] <- tree
+json <- tree ~ [prolog, root]
 
 ```
+
+### 결과 화면
+
+![test1](https://gist.github.com/user-attachments/assets/e7689310-8a84-4657-8610-e47f5575f256)
+![test2](https://gist.github.com/user-attachments/assets/74a739ea-8def-436d-8b34-87360e762c27)
+![test3](https://gist.github.com/user-attachments/assets/ebf284d9-7012-4af4-8e5a-c5ca3ffedebf)
 
 ## 학습 메모
 

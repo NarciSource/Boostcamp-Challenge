@@ -21,7 +21,7 @@ function tokenize(xml) {
 }
 
 async function main() {
-    let xml = await fs.readFile("sample2.xml", "utf8");
+    let xml = await fs.readFile("sample1.xml", "utf8");
     xml = delete_comment(xml);
     xml = delete_end_of_line(xml);
 
