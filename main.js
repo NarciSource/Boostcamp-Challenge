@@ -1,9 +1,9 @@
 const fs = require("fs").promises;
 const regex = require("./regex.js").regex;
 const { delete_comment, delete_end_of_line } = require("./clean_up.js");
-const { display_json } = require("./output.js");
 const { analyze_lexical } = require("./analyze_lexical.js");
 const { analyze_syntax } = require("./analyze_syntax.js");
+const { display_json, treatment, element_by_attribute, report_by_class } = require("./output.js");
 
 function split_prolog_root(xml) {
     const match = regex.prolog.exec(xml);
@@ -31,12 +31,16 @@ async function main() {
         const tokens = tokenize(xml);
         const tags = analyze_lexical(tokens, part);
         const tree = analyze_syntax(tags);
-        return tree;
+        const data = treatment(tree);
+        return data;
     }
 
     const meta = compiler(prolog_xml, "prolog");
     const data = compiler(root_xml, "root");
+    const json = { meta, data };
 
-    display_json({ meta, data });
+    display_json(json);
+    display_json(element_by_attribute("id", json.data));
+    display_json(report_by_class(json.data));
 }
 main();
