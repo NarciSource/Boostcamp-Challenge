@@ -2,7 +2,7 @@
 
 ## 나만의 체크포인트
 
--   [ ] XML 문서 형식 이해
+-   [x] XML 문서 형식 이해
 
 -   [ ] 컴파일러 과정 정리
 
@@ -18,6 +18,20 @@
 
 ## 문제 해결 과정
 
+### XML 문서 형식 이해
+
+-   Well-formed Documents (적격 구조 문서)
+
+    -   XML documents must have a root element &rightarrow; 루트는 하나
+    -   XML elements must have a closing tag &rightarrow; 열렸으면 닫혀야한다.
+    -   XML tags are case sensitive &rightarrow; 태그 대소문자 구분
+    -   XML elements must be properly nested &rightarrow; 요소의 결합 형태는 적절해야한다.
+    -   XML attribute values must be quoted &rightarrow; 속성은 따움표로 감싸야한다.
+
+-   Valid Documents (유효한 문서) &leftarrow; 🤔해야하나?
+    -   DTD
+    -   XML Schema
+
 ### pseudo code
 
 ```js
@@ -25,3 +39,7 @@
 ```
 
 ## 학습 메모
+
+[XML wiki](https://en.wikipedia.org/wiki/XML)
+
+[XML Validator](https://www.w3schools.com/xml/xml_validator.asp)
