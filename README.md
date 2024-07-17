@@ -8,7 +8,7 @@
 
 -   [x] 정규식 작성
 
--   [ ] 슈도 코드
+-   [x] 슈도 코드
 
 -   [ ] 여러 XML 샘플을 분석해서 요소별로 분리하는 Parser를 구현해야 한다.
 
@@ -67,6 +67,7 @@
 -   규칙
     1.  "\<?" 로 시작해서 "\?>"로 닫힘
     2.  사이에는 "<", ">", "?" 금지
+    3.  문서에는 하나만
 -   정규식: `<\?[^<>?]+\?>`
 
 #### 주석
@@ -101,6 +102,38 @@
 ### pseudo code
 
 ```js
+function make_parse_tree
+
+    for tag of tags
+        if not exist start_tag
+            start_tag <- tag
+        elif tag is under level to start_tag
+            children <- tag
+        else
+            end_tag <- tag
+
+            elements <- tag.attributes
+            elements <- make_parse_tree(children)
+
+            symbol_table <- start_tag
+            start_tag <- reset
+
+// clear up
+delete_comments()
+
+delete_end_of_line()
+
+// prolog
+json_tree[prolog] <- parse prolog using prolog_regex
+
+// element
+tokens: (< ... >) <- parse xml using token_regex
+
+tags: (tag_name, attributes) <- tokens map to element_regex
+
+tree: ( tag_name: { elements }) <- make_parse_tree(tags)
+
+json_tree[element] <- tree
 
 ```
 
