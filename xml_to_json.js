@@ -38,6 +38,23 @@ function parse_prolog(prolog_xml) {
     return tag_name && { [tag_name]: attributes };
 }
 
+function split_tokens(xml) {
+    const token_regex_str = "<[^>?]+>";
+    const text_regex_str = "[^<>]+";
+    const union_regex_str = `\\s*((?:${token_regex_str})|(?:${text_regex_str}))\\s*`;
+    const union_regex = new RegExp(union_regex_str, "g");
+
+    const tokens = [];
+    while ((match = union_regex.exec(xml)) !== null) {
+        tokens.push(match[1]);
+    }
+    return tokens;
+}
+
+function parse_token(tokens) {
+    return tokens;
+}
+
 async function main() {
     const json_tree = {};
     let xml = await fs.readFile("sample2.xml", "utf8");
@@ -52,8 +69,6 @@ async function main() {
 
     json_tree["prolog"] = parse_prolog(prolog_xml);
 
-
-
-    console.log(json_tree);
+    console.log(parse_token(split_tokens(xml)));
 }
 main();
