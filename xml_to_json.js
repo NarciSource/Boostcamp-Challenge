@@ -103,9 +103,29 @@ function make_parse_tree(tags) {
     }
     return stack[0];
 }
+function treatment({ tag_name, attributes, children, text }) {
+    const tree = {};
+    if (tag_name) {
+        tree.tag_name = tag_name;
+    }
+    if (attributes && Object.keys(attributes).length) {
+        tree.attributes = attributes;
+    }
+    if (children?.length) {
+        tree.children = children.map(treatment);
+    }
+    if (text) {
+        tree.text = text;
+    }
+    return tree;
+}
+
+function display_json(json) {
+    console.log(JSON.stringify(json, null, 2));
+}
 
 async function main() {
-    let xml = await fs.readFile("sample1.xml", "utf8");
+    let xml = await fs.readFile("sample2.xml", "utf8");
 
     // clean up
     xml = delete_comment(xml);
@@ -119,8 +139,9 @@ async function main() {
     // parse element
     const tokens = split_tokens(xml);
     const tags = tokens.map(analyze_lexical);
-    const data = make_parse_tree(tags);
+    const data = treatment(make_parse_tree(tags));
 
     const json = { meta, data };
+    display_json(json);
 }
 main();
