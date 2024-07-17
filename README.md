@@ -4,7 +4,7 @@
 
 -   [x] XML 문서 형식 이해
 
--   [ ] 컴파일러 과정 정리
+-   [x] 컴파일러 과정 정리
 
 -   [ ] 슈도 코드
 
@@ -31,6 +31,32 @@
 -   Valid Documents (유효한 문서) &leftarrow; 🤔해야하나?
     -   DTD
     -   XML Schema
+
+### 컴파일러 과정
+
+1. 형태소 분석
+
+    - 도입부 Prolog
+        - \<?~ >
+    - 주석 Comment
+        - \<!-- ~ -->
+    - 요소 Element
+
+        - \<Element></Element>
+        - \<Element/>
+        - \</Element>
+
+        - 태그
+        - 속성
+        - 값
+
+2. 구문 분석
+    - Well-formed Documents
+    - Valid Documents
+3. 심볼 테이블 구성
+4. 파서 트리 생성 &rightarrow; 하향식 파서
+5. ~~의미 분석~~
+6. 코드 생성
 
 ### pseudo code
 
