@@ -1,19 +1,16 @@
 const fs = require("fs").promises;
+const regex = require("./regex.js").regex;
 
 function delete_comment(xml) {
-    const comment_regex = /<!.*>/gi;
-    return xml.replaceAll(comment_regex, "");
+    return xml.replaceAll(regex.comment, "");
 }
 
 function delete_end_of_line(xml) {
-    const eol_regex = /[\r\n]+/g;
-    return xml.replaceAll(eol_regex, "");
+    return xml.replaceAll(regex.eol, "");
 }
 
 function split_prolog(xml) {
-    const prolog_regex = /<\?([^>?]+)\?>/;
-
-    const match = prolog_regex.exec(xml);
+    const match = regex.prolog.exec(xml);
 
     const before_match_xml = xml.slice(0, match?.index || 0);
     const after_match_xml = xml.slice(match?.index || 0 + match?.[0].length || 0);
@@ -25,13 +22,10 @@ function split_prolog(xml) {
 }
 
 function parse_prolog(prolog_xml) {
-    const split_regex = /(^\w+) (.*)/;
-    const attributes_regex = /(\w+)="(.*?)"/g;
-
-    const [, tag_name, attributes_line] = split_regex.exec(prolog_xml) || [];
+    const [, tag_name, attributes_line] = regex.split.exec(prolog_xml) || [];
 
     const attributes = {};
-    while ((match = attributes_regex.exec(attributes_line)) !== null) {
+    while ((match = regex.attributes.exec(attributes_line)) !== null) {
         const [, key, value] = match;
         attributes[key] = value;
     }
@@ -39,13 +33,8 @@ function parse_prolog(prolog_xml) {
 }
 
 function split_tokens(xml) {
-    const element_regex_str = "<[^>?]+>";
-    const text_regex_str = "[^<>]+";
-    const union_regex_str = `\\s*((?:${element_regex_str})|(?:${text_regex_str}))\\s*`;
-    const union_regex = new RegExp(union_regex_str, "g");
-
     const tokens = [];
-    while ((match = union_regex.exec(xml)) !== null) {
+    while ((match = regex.distinction.exec(xml)) !== null) {
         tokens.push(match[1]);
     }
     return tokens;
@@ -53,11 +42,8 @@ function split_tokens(xml) {
 
 function analyze_lexical(token) {
     // token : element | text
-    const tag_regex = /<(\/)?([^>/\s]+)([^>]*?)(\/)?>/;
-    const attributes_regex = /(\w+)="(.*?)"/g;
-
-    if (tag_regex.test(token)) {
-        const [, first, tag_name, attributes_line, last] = tag_regex.exec(token);
+    if (regex.tag.test(token)) {
+        const [, first, tag_name, attributes_line, last] = regex.tag.exec(token);
 
         if (first == "/") {
             return {
@@ -66,7 +52,7 @@ function analyze_lexical(token) {
             };
         } else {
             const attributes = {};
-            while ((match = attributes_regex.exec(attributes_line)) !== null) {
+            while ((match = regex.attributes.exec(attributes_line)) !== null) {
                 const [, key, value] = match;
                 attributes[key] = value;
             }
