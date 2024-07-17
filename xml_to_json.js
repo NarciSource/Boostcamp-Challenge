@@ -53,15 +53,16 @@ function split_tokens(xml) {
 
 function analyze_lexical(token) {
     // token : element | text
-    const tag_regex = /<(\/)?([^>\s]+)([^>]*)>/;
+    const tag_regex = /<(\/)?([^>/\s]+)([^>]*?)(\/)?>/;
     const attributes_regex = /(\w+)="(.*?)"/g;
 
     if (tag_regex.test(token)) {
-        const [, pattern_start, tag_name, attributes_line] = tag_regex.exec(token);
+        const [, first, tag_name, attributes_line, last] = tag_regex.exec(token);
 
-        if (pattern_start == "/") {
+        if (first == "/") {
             return {
-                [tag_name]: "close_tag",
+                tag_name,
+                type: "close_tag",
             };
         } else {
             const attributes = {};
@@ -69,20 +70,42 @@ function analyze_lexical(token) {
                 const [, key, value] = match;
                 attributes[key] = value;
             }
+
             return {
-                [tag_name]: attributes,
+                tag_name,
+                attributes,
+                type: last == "/" ? "closure_tag" : "open_tag",
             };
         }
     } else {
         return {
-            [token]: "scalar",
+            type: "scalar",
+            text: token,
         };
     }
 }
 
+function make_parse_tree(tags) {
+    stack = [];
+    for (const tag of tags) {
+        if (tag.type != "close_tag") {
+            stack.push(tag);
+        } else {
+            siblings = [];
+            while ((element = stack.pop())?.type != "open_tag") {
+                siblings.push(element);
+            }
+
+            element["children"] = siblings.reverse();
+            element["type"] = "closure";
+            stack.push(element);
+        }
+    }
+    return stack[0];
+}
+
 async function main() {
-    const json_tree = {};
-    let xml = await fs.readFile("sample2.xml", "utf8");
+    let xml = await fs.readFile("sample1.xml", "utf8");
 
     // clean up
     xml = delete_comment(xml);
@@ -91,12 +114,13 @@ async function main() {
     // parse prolog
     let prolog_xml;
     [prolog_xml, xml] = split_prolog(xml);
-
-    json_tree["prolog"] = parse_prolog(prolog_xml);
+    const meta = parse_prolog(prolog_xml);
 
     // parse element
     const tokens = split_tokens(xml);
     const tags = tokens.map(analyze_lexical);
-    console.log(tags);
+    const data = make_parse_tree(tags);
+
+    const json = { meta, data };
 }
 main();
