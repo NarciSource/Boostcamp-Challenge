@@ -1,5 +1,6 @@
 const treatment = (tree) =>
     Object.entries(tree)
+        .filter(([key, value]) => key !== "type")
         .filter(([key, value]) => typeof value != "object" || Object.keys(value).length > 0)
         .reduce((acc, [key, value]) => ({ ...acc, [key]: Array.isArray(value) ? value.map(treatment) : value }), {});
 
