@@ -45,21 +45,23 @@
 
     -   어셈블리 언어 동작
 
-    1. [x] VAR $VarName : $Type
-    2. [x] VAR $VarName : $Type[$Count]
+    1. [x] VAR $VarName : \$Type
+    2. [x] VAR $VarName : \$Type[\$Count]
     3. [x] CALL $FuncName
     4. [x] RETURN $Value
     5. ~~RELEASE $VarName~~
     6. [x] SET $VarName = $Value
-    7. [x] SET $VarName[$Index] = $Value
+    7. [x] SET \$VarName[\$Index] = $Value
 
 ## 문제 해결 과정
 
-### 구조도
+### 짝설계
+
+#### 구조도
 
 ![구조도](https://gist.github.com/user-attachments/assets/eb68cbb6-5cf6-4729-af66-4c16e3ae4f33)
 
-### 흐름도
+#### 흐름도
 
 1.  `locate("main", ["VAR A: BOOL[4]", "VAR B: INT", "CALL foo()", "SET B=$RETURN"])`
 
@@ -154,5 +156,9 @@ function step
 function simulator
     run commands
 ```
+
+### 결과 화면
+
+![Demo](https://gist.github.com/user-attachments/assets/79ea4eec-d45a-4778-9863-7eb5b441e47d)
 
 ## 학습 메모
