@@ -9,7 +9,7 @@
 
 -   [ ] 영역을 미리 확보한다.
 
-    -   [ ] STACK 영역 (512KB) : 어셈블리 코드를 실행하면서 호출할 때마다 필요한 값을 스택 방식으로 Push하거나 Pop하는 영역
+    -   [x] STACK 영역 (512KB) : 어셈블리 코드를 실행하면서 호출할 때마다 필요한 값을 스택 방식으로 Push하거나 Pop하는 영역
 
         -   0x00000 부터 0x7FFFF 까지
 
@@ -32,8 +32,8 @@
 
     1. [x] locate(funcName, codes)
     2. [ ] setSize(type, length)
-    3. [ ] push(address) (internal only)
-    4. [ ] pop() (internal only)
+    3. [x] push(address) (internal only)
+    4. [x] pop() (internal only)
     5. [ ] malloc(type, count) (internal only)
     6. [ ] free(stackAddress) (internal only)
     7. [x] step()

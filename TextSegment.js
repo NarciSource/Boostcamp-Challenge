@@ -1,5 +1,7 @@
+const { Pointer } = require("./Pointer");
+const { StackSegment } = require("./StackSegment");
 const COMMAND_SIZE = 4;
-const stack_segment = [];
+const stack_segment = new StackSegment();
 
 class TextSegment {
     #instructions = [];
@@ -36,15 +38,15 @@ class TextSegment {
 
         if (opcode == "CALL") {
             const { func_name, args } = operand;
-            const return_address = this.#pc + 1;
+            const pointer = new Pointer(this.#pc + 1);
 
-            stack_segment.push(return_address);
+            stack_segment.push(pointer);
 
             this.#pc = this.#func_address[func_name];
         } else if (opcode == "RETURN") {
-            const call_address = stack_segment.pop();
+            const pointer = stack_segment.pop();
 
-            this.#pc = call_address;
+            this.#pc = pointer.address;
         } else {
             this.#pc++;
         }
