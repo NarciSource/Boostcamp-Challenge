@@ -125,7 +125,7 @@ class Stack_Segment
     #size
 
 class Text_Segment
-    #array <- random access
+    #instructions to random access
     #size
     #pc
 
@@ -133,10 +133,23 @@ class Heap_Segment
     #array <- random access
 
 function locate
-    text_segment <- codes
+    func_address[func_name] <- final_position
+    text_segment.instructions <- codes
 
 function step
-    run text.array[text.pc]
+
+    if opcode is CALL
+        return_address = pc+1
+
+        stack_segment <- return_address
+
+        pc = func_address[func_name]
+
+    elif opcode is RETURN
+        pc <- stack_segment.top
+
+    else
+        run to instructions[pc]
 
 function simulator
     run commands
