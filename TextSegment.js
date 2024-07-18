@@ -22,8 +22,6 @@ class TextSegment {
         const split_regex = /^(\w+) (.*)/;
         const [, opcode, operand] = split_regex.exec(instruction);
 
-        console.log(this.#pc, opcode, operand);
-
         switch (opcode) {
             case "VAR": {
                 const var_regex = /(\w+)\s*:\s*(\w+)(?:\[(\d+)\])?/;
@@ -67,8 +65,12 @@ class TextSegment {
             }
         }
     }
+    pc() {
+        return this.#pc;
+    }
 }
 
 const text_segment = new TextSegment();
 export const locate = text_segment.locate.bind(text_segment);
 export const step = text_segment.step.bind(text_segment);
+export const pc = text_segment.pc.bind(text_segment);
