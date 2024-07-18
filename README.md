@@ -31,7 +31,7 @@
     -   함수 요구사항
 
     1. [x] locate(funcName, codes)
-    2. [ ] setSize(type, length)
+    2. [x] setSize(type, length)
     3. [x] push(address) (internal only)
     4. [x] pop() (internal only)
     5. [ ] malloc(type, count) (internal only)
