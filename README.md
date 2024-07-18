@@ -38,7 +38,7 @@
     6. [x] free(stackAddress) (internal only)
     7. [x] step()
     8. [x] usage()
-    9. [ ] callstack()
+    9. [x] callstack()
     10. [x] heapdump()
     11. [ ] garbageCollect()
     12. [ ] reset()

@@ -32,6 +32,10 @@ class StackSegment {
     usage() {
         return [ALLOCATED_STACK_SIZE, this.#size, ALLOCATED_STACK_SIZE - this.#size];
     }
+    dump() {
+        return this.#stack;
+    }
 }
 const stack_segment = new StackSegment();
 export default stack_segment;
+export const dump = stack_segment.dump.bind(stack_segment);
