@@ -5,8 +5,8 @@ const ALLOCATED_HEAP_SIZE = 512 * 1024;
 
 class HeapSegment {
     #size = 0;
-    #hp = 0;
     #allocated = {};
+    #hp = 0;
 
     malloc(type, count) {
         const size = Math.max(get_size(type), 8) * count;
@@ -52,6 +52,11 @@ class HeapSegment {
     }
     heapdump() {
         return Object.values(this.#allocated);
+    }
+    reset() {
+        this.#size = 0;
+        this.#allocated = {};
+        this.#hp = 0;
     }
 }
 

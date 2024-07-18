@@ -12,3 +12,7 @@ export function garbage_collector() {
         }
     }
 }
+export function reset() {
+    stack_segment.reset();
+    heap_segment.reset();
+}

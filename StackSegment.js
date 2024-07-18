@@ -35,7 +35,13 @@ class StackSegment {
     dump() {
         return this.#stack;
     }
+    reset() {
+        this.#size = 0;
+        this.#stack = [];
+        this.#sp = 0;
+    }
 }
+
 const stack_segment = new StackSegment();
 export default stack_segment;
 export const dump = stack_segment.dump.bind(stack_segment);

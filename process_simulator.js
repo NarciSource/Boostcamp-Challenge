@@ -2,7 +2,7 @@ import { malloc, free, heapdump } from "./HeapSegment.js";
 import Pointer from "./Pointer.js";
 import { locate, step } from "./TextSegment.js";
 import { set_size } from "./type_manager.js";
-import { garbage_collector, usage } from "./util.js";
+import { garbage_collector, usage, reset } from "./util.js";
 
 function process_simulator() {
     set_size("INT", 4);
@@ -21,5 +21,6 @@ function process_simulator() {
     step();
     step();
     step();
+    reset();
 }
 process_simulator();

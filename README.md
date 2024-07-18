@@ -41,7 +41,7 @@
     9. [x] callstack()
     10. [x] heapdump()
     11. [x] garbageCollect()
-    12. [ ] reset()
+    12. [x] reset()
 
     -   어셈블리 언어 동작
 
