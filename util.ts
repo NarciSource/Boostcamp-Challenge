@@ -1,6 +1,6 @@
-import Pointer from "./Pointer.js";
-import heap, { free, heapdump } from "./Heap.js";
-import stack from "./Stack.js";
+import Pointer from "./Pointer";
+import heap, { free, heapdump } from "./Heap";
+import stack from "./Stack";
 
 export const usage = () => [...stack.usage(), ...heap.usage()];
 export function garbage_collector() {

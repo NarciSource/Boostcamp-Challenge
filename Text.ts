@@ -1,17 +1,26 @@
-import { PCPointer } from "./Pointer.js";
-import { commands } from "./assembly_machine.js";
-import stack from "./Stack.js";
+import Pointer from "./Pointer";
+import { commands } from "./assembly_machine";
+import stack from "./Stack";
 const COMMAND_SIZE = 4;
 const START_POINT = 0x100000;
 
+export class TextPointer extends Pointer {
+    func_name: string;
+
+    constructor(address: number, name: string) {
+        super(address);
+        this.func_name = name;
+    }
+}
+
 class Text {
-    #instructions = [];
+    #instructions: string[] = [];
     #pc = 0; // program counter
 
-    func_address = {};
+    func_address: { [key: string]: number } = {};
     #final_position = 0;
 
-    locate(func_name, codes) {
+    locate(func_name: string, codes: string[]) {
         this.func_address[func_name] = this.#final_position;
         this.#instructions = [...this.#instructions, ...codes];
         this.#final_position = this.#instructions.length;
@@ -27,7 +36,7 @@ class Text {
                 const var_regex = /(\w+)\s*:\s*(\w+)(?:\[(\d+)\])?/;
                 const [, var_name, type, count] = var_regex.exec(operand);
 
-                commands[opcode](var_name, type, count);
+                commands[opcode](var_name, type, parseInt(count) || 1);
 
                 this.#pc++;
                 break;
@@ -36,7 +45,7 @@ class Text {
                 const func_regex = /(\w+)\(([^)]*)\)/;
                 const [, func_name, func_args] = func_regex.exec(operand);
 
-                const pointer = new PCPointer(this.#pc + 1, func_name);
+                const pointer = new TextPointer(this.#pc + 1, func_name);
 
                 stack.push(pointer);
 
@@ -58,14 +67,14 @@ class Text {
                 const set_regex = /(\w+)(?:\[(\d+)\])?\s*=\s*([$\w]+)/;
                 const [, var_name, index, value] = set_regex.exec(operand);
 
-                commands[opcode](var_name, value, index);
+                commands[opcode](var_name, value, parseInt(index) || 0);
 
                 this.#pc++;
                 break;
             }
         }
     }
-    pc() {
+    pc(): Number {
         return this.#pc;
     }
 }

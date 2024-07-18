@@ -1,12 +1,14 @@
-import Pointer from "./Pointer.js";
+import Pointer from "./Pointer";
 const ALLOCATED_STACK_SIZE = 512 * 1024;
+
+export type StackPointer = Pointer;
 
 class Stack {
     #size = 0;
-    #stack = [];
+    #stack: Pointer[] = [];
     #sp = 0;
 
-    push(value) {
+    push(value: Pointer) {
         if (value.size + this.#size > ALLOCATED_STACK_SIZE) {
             throw "Stack Overflow";
         }
@@ -16,23 +18,23 @@ class Stack {
 
         return new Pointer(this.#sp);
     }
-    pop() {
+    pop(): StackPointer {
         if (this.#sp) {
             return this.#stack.pop();
         } else {
             throw "Stack is empty";
         }
     }
-    get(pointer) {
+    get(pointer: StackPointer): Pointer {
         if (pointer.address > ALLOCATED_STACK_SIZE) {
             throw "Address out of stack range";
         }
         return this.#stack[pointer.address];
     }
-    usage() {
+    usage(): [Number, Number, Number] {
         return [ALLOCATED_STACK_SIZE, this.#size, ALLOCATED_STACK_SIZE - this.#size];
     }
-    dump() {
+    dump(): StackPointer[] {
         return this.#stack;
     }
     reset() {

@@ -1,4 +1,4 @@
-import { set_size, locate, step, reset } from "./monitor.js";
+import { set_size, locate, step, reset } from "./monitor";
 
 function process_simulator() {
     set_size("INT", 4);
