@@ -48,7 +48,7 @@
     1. [x] VAR $VarName : $Type
     2. [x] VAR $VarName : $Type[$Count]
     3. [x] CALL $FuncName
-    4. [ ] RETURN $Value
+    4. [x] RETURN $Value
     5. ~~RELEASE $VarName~~
     6. [x] SET $VarName = $Value
     7. [x] SET $VarName[$Index] = $Value

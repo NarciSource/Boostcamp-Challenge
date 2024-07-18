@@ -1,5 +1,5 @@
 import { commands } from "./assembly_machine.js";
-import Pointer from "./Pointer.js";
+import { PCPointer } from "./Pointer.js";
 import stack_segment from "./StackSegment.js";
 const COMMAND_SIZE = 4;
 const START_POINT = 0x100000;
@@ -36,7 +36,7 @@ class TextSegment {
                 const func_regex = /(\w+)\(([^)]*)\)/;
                 const [, func_name, func_args] = func_regex.exec(operand);
 
-                const pointer = new Pointer(this.#pc + 1);
+                const pointer = new PCPointer(this.#pc + 1, func_name);
 
                 stack_segment.push(pointer);
 
@@ -44,7 +44,7 @@ class TextSegment {
                 break;
             }
             case "RETURN": {
-                const pointer = stack_segment.pop();
+                const pointer = commands[opcode](operand);
 
                 this.#pc = pointer.address;
                 break;

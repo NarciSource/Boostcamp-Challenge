@@ -10,3 +10,12 @@ export default class Pointer {
         return this.#size;
     }
 }
+
+export class PCPointer extends Pointer {
+    name;
+
+    constructor(address, name) {
+        super(address);
+        this.func_name = name;
+    }
+}
