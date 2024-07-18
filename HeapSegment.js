@@ -26,21 +26,25 @@ class HeapSegment {
         this.#size += size;
     }
 
-    free(stack_address) {
-        const heap_pointer = stack_segment.get(stack_address);
+    free(stack_pointer) {
+        const heap_pointer = stack_segment.get(stack_pointer);
 
-        if (heap_pointer.address < ALLOCATED_HEAP_SIZE) {
-            try {
-                const address = heap_pointer.address;
-                const size = this.#allocated[address].size;
+        if (heap_pointer instanceof Pointer) {
+            if (heap_pointer.address < ALLOCATED_HEAP_SIZE) {
+                try {
+                    const address = heap_pointer.address;
+                    const size = this.#allocated[address].size;
 
-                delete this.#allocated[address];
-                this.#size -= size;
-            } catch {
-                throw "No found address";
+                    delete this.#allocated[address];
+                    this.#size -= size;
+                } catch {
+                    throw "No found address";
+                }
+            } else {
+                throw "Address out of heap range";
             }
         } else {
-            throw "Address out of heap range";
+            throw "No pointer on stack";
         }
     }
     usage() {
