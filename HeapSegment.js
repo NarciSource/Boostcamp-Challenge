@@ -11,25 +11,34 @@ class HeapSegment {
     malloc(type, count) {
         const size = Math.max(get_size(type), 8) * count;
 
-        const start_point = this.#hp;
-        const end_point = this.#hp + size;
+        // stack push
+        const stack_pointer = stack_segment.push(new Pointer(this.#hp));
 
-        this.#allocated[start_point] = end_point;
-        stack_segment.push(new Pointer(start_point));
-
+        // heap push
+        const data = {
+            type,
+            address: this.#hp,
+            size,
+            stack_pointer,
+        };
+        this.#allocated[this.#hp] = data;
+        this.#hp += size;
         this.#size += size;
-        this.#hp = end_point;
     }
 
     free(stack_address) {
         const heap_pointer = stack_segment.get(stack_address);
 
         if (heap_pointer.address < ALLOCATED_HEAP_SIZE) {
-            const start_address = heap_pointer.address;
-            const end_address = this.#allocated[heap_pointer.address];
+            try {
+                const address = heap_pointer.address;
+                const size = this.#allocated[address].size;
 
-            delete this.#allocated[start_address];
-            this.#size -= end_address - start_address;
+                delete this.#allocated[address];
+                this.#size -= size;
+            } catch {
+                throw "No found address";
+            }
         } else {
             throw "Address out of heap range";
         }
@@ -37,9 +46,13 @@ class HeapSegment {
     usage() {
         return [ALLOCATED_HEAP_SIZE, this.#size, ALLOCATED_HEAP_SIZE - this.#size];
     }
+    heapdump() {
+        return Object.values(this.#allocated);
+    }
 }
 
 const heap_segment = new HeapSegment();
 export default heap_segment;
 export const malloc = heap_segment.malloc.bind(heap_segment);
 export const free = heap_segment.free.bind(heap_segment);
+export const heapdump = heap_segment.heapdump.bind(heap_segment);

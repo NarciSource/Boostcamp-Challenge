@@ -1,3 +1,4 @@
+import Pointer from "./Pointer.js";
 const ALLOCATED_STACK_SIZE = 512 * 1024;
 
 class StackSegment {
@@ -12,6 +13,8 @@ class StackSegment {
         this.#stack.push(value);
         this.#size += value.size;
         this.#sp++;
+
+        return new Pointer(this.#sp);
     }
     pop() {
         if (this.#sp) {

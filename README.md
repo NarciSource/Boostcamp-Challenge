@@ -39,7 +39,7 @@
     7. [x] step()
     8. [x] usage()
     9. [ ] callstack()
-    10. [ ] heapdump()
+    10. [x] heapdump()
     11. [ ] garbageCollect()
     12. [ ] reset()
 
