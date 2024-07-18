@@ -20,6 +20,12 @@ class StackSegment {
             throw "Stack is empty";
         }
     }
+    get(pointer) {
+        if (pointer.address > ALLOCATED_STACK_SIZE) {
+            throw "Address out of stack range";
+        }
+        return this.#stack[pointer.address];
+    }
 }
 const stack_segment = new StackSegment();
 export default stack_segment;

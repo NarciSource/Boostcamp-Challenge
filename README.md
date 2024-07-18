@@ -7,13 +7,13 @@
     -   [x] 구조도
     -   [x] 흐름도
 
--   [ ] 영역을 미리 확보한다.
+-   [x] 영역을 미리 확보한다.
 
     -   [x] STACK 영역 (512KB) : 어셈블리 코드를 실행하면서 호출할 때마다 필요한 값을 스택 방식으로 Push하거나 Pop하는 영역
 
         -   0x00000 부터 0x7FFFF 까지
 
-    -   [ ] HEAP 영역 (512KB) : 어셈블리 코드를 실행하면서 메모리 할당 요청이 있을 때 사용할 공간을 확보하는 영역
+    -   [x] HEAP 영역 (512KB) : 어셈블리 코드를 실행하면서 메모리 할당 요청이 있을 때 사용할 공간을 확보하는 영역
 
         -   0x80000 부터 0x100000
 
@@ -34,8 +34,8 @@
     2. [x] setSize(type, length)
     3. [x] push(address) (internal only)
     4. [x] pop() (internal only)
-    5. [ ] malloc(type, count) (internal only)
-    6. [ ] free(stackAddress) (internal only)
+    5. [x] malloc(type, count) (internal only)
+    6. [x] free(stackAddress) (internal only)
     7. [x] step()
     8. [ ] usage()
     9. [ ] callstack()
