@@ -1,10 +1,10 @@
-import { commands } from "./assembly_machine.js";
 import { PCPointer } from "./Pointer.js";
-import stack_segment from "./StackSegment.js";
+import { commands } from "./assembly_machine.js";
+import stack from "./Stack.js";
 const COMMAND_SIZE = 4;
 const START_POINT = 0x100000;
 
-class TextSegment {
+class Text {
     #instructions = [];
     #pc = 0; // program counter
 
@@ -38,7 +38,7 @@ class TextSegment {
 
                 const pointer = new PCPointer(this.#pc + 1, func_name);
 
-                stack_segment.push(pointer);
+                stack.push(pointer);
 
                 this.#pc = this.func_address[func_name];
                 break;
@@ -70,7 +70,7 @@ class TextSegment {
     }
 }
 
-const text_segment = new TextSegment();
-export const locate = text_segment.locate.bind(text_segment);
-export const step = text_segment.step.bind(text_segment);
-export const pc = text_segment.pc.bind(text_segment);
+const text = new Text();
+export const locate = text.locate.bind(text);
+export const step = text.step.bind(text);
+export const pc = text.pc.bind(text);

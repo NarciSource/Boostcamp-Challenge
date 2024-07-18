@@ -1,7 +1,7 @@
 import Pointer from "./Pointer.js";
 const ALLOCATED_STACK_SIZE = 512 * 1024;
 
-class StackSegment {
+class Stack {
     #size = 0;
     #stack = [];
     #sp = 0;
@@ -42,6 +42,6 @@ class StackSegment {
     }
 }
 
-const stack_segment = new StackSegment();
-export default stack_segment;
-export const dump = stack_segment.dump.bind(stack_segment);
+const stack = new Stack();
+export default stack;
+export const dump = stack.dump.bind(stack);

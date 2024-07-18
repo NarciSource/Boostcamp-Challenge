@@ -120,33 +120,33 @@ class Type
 class Pointer
     address: string
 
-class Stack_Segment
+class stack
     #sp <- top
     #size
 
-class Text_Segment
+class text
     #instructions to random access
     #size
     #pc
 
-class Heap_Segment
+class heap
     #array <- random access
 
 function locate
     func_address[func_name] <- final_position
-    text_segment.instructions <- codes
+    text.instructions <- codes
 
 function step
 
     if opcode is CALL
         return_address = pc+1
 
-        stack_segment <- return_address
+        stack <- return_address
 
         pc = func_address[func_name]
 
     elif opcode is RETURN
-        pc <- stack_segment.top
+        pc <- stack.top
 
     else
         run to instructions[pc]

@@ -1,7 +1,7 @@
-import Pointer, { PCPointer } from "./Pointer.js";
-import heap_segment, { malloc } from "./HeapSegment.js";
 import { get_size } from "./type_manager.js";
-import stack_segment from "./StackSegment.js";
+import Pointer, { PCPointer } from "./Pointer.js";
+import heap, { malloc } from "./Heap.js";
+import stack from "./Stack.js";
 
 const address_manager = {};
 
@@ -13,20 +13,20 @@ export const commands = {
     },
     RETURN(value) {
         let pointer;
-        while (!((pointer = stack_segment.pop()) instanceof PCPointer)) {}
-        stack_segment.push({ value, size: 4 });
+        while (!((pointer = stack.pop()) instanceof PCPointer)) {}
+        stack.push({ value, size: 4 });
         return pointer;
     },
     SET(var_name, value, index = 0) {
         const heap_pointer = address_manager[var_name];
-        const { type, address } = heap_segment.get(heap_pointer);
+        const { type, address } = heap.get(heap_pointer);
         const indexed_address = address + index * get_size(type);
 
         if (value == "$RETURN") {
-            value = stack_segment.pop().value;
+            value = stack.pop().value;
         }
 
         const pointer = new Pointer(indexed_address);
-        heap_segment.save(pointer, value);
+        heap.save(pointer, value);
     },
 };
