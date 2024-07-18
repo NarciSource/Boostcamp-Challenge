@@ -25,14 +25,17 @@ class HeapSegment {
         const heap_pointer = stack_segment.get(stack_address);
 
         if (heap_pointer.address < ALLOCATED_HEAP_SIZE) {
-            const start_address = heap_pointer.heap_address;
-            const end_address = this.#allocated[heap_pointer.heap_address];
+            const start_address = heap_pointer.address;
+            const end_address = this.#allocated[heap_pointer.address];
 
             delete this.#allocated[start_address];
             this.#size -= end_address - start_address;
         } else {
             throw "Address out of heap range";
         }
+    }
+    usage() {
+        return [ALLOCATED_HEAP_SIZE, this.#size, ALLOCATED_HEAP_SIZE - this.#size];
     }
 }
 

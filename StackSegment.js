@@ -26,6 +26,9 @@ class StackSegment {
         }
         return this.#stack[pointer.address];
     }
+    usage() {
+        return [ALLOCATED_STACK_SIZE, this.#size, ALLOCATED_STACK_SIZE - this.#size];
+    }
 }
 const stack_segment = new StackSegment();
 export default stack_segment;

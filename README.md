@@ -37,7 +37,7 @@
     5. [x] malloc(type, count) (internal only)
     6. [x] free(stackAddress) (internal only)
     7. [x] step()
-    8. [ ] usage()
+    8. [x] usage()
     9. [ ] callstack()
     10. [ ] heapdump()
     11. [ ] garbageCollect()

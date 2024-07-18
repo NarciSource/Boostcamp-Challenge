@@ -6,7 +6,7 @@ export default class Pointer {
         this.address = address;
     }
 
-    get readOnlyProps() {
+    get size() {
         return this.#size;
     }
 }
