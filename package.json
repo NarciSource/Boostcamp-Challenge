@@ -1,0 +1,13 @@
+{
+  "name": "day04",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "process_simulator.js",
+  "scripts": {
+    "start": "node process_simulator.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

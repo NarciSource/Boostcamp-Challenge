@@ -1,17 +1,17 @@
-const { Pointer } = require("./Pointer");
-const { StackSegment } = require("./StackSegment");
+import Pointer from "./Pointer.js";
+import stack_segment from "./StackSegment.js";
 const COMMAND_SIZE = 4;
-const stack_segment = new StackSegment();
+const START_POINT = 0x100000;
 
 class TextSegment {
     #instructions = [];
     #pc = 0; // program counter
 
-    #func_address = {};
+    func_address = {};
     #final_position = 0;
 
     locate(func_name, codes) {
-        this.#func_address[func_name] = this.#final_position;
+        this.func_address[func_name] = this.#final_position;
         this.#instructions = [...this.#instructions, ...codes];
         this.#final_position = this.#instructions.length;
     }
@@ -42,7 +42,7 @@ class TextSegment {
 
             stack_segment.push(pointer);
 
-            this.#pc = this.#func_address[func_name];
+            this.#pc = this.func_address[func_name];
         } else if (opcode == "RETURN") {
             const pointer = stack_segment.pop();
 
@@ -53,4 +53,6 @@ class TextSegment {
     }
 }
 
-exports.TextSegment = TextSegment;
+const text_segment = new TextSegment();
+export const locate = text_segment.locate.bind(text_segment);
+export const step = text_segment.step.bind(text_segment);

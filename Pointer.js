@@ -1,4 +1,4 @@
-class Pointer {
+export default class Pointer {
     #size = 4;
     address;
 
@@ -10,5 +10,3 @@ class Pointer {
         return this.#size;
     }
 }
-
-exports.Pointer = Pointer;

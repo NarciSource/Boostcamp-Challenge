@@ -21,5 +21,5 @@ class StackSegment {
         }
     }
 }
-
-exports.StackSegment = StackSegment;
+const stack_segment = new StackSegment();
+export default stack_segment;
