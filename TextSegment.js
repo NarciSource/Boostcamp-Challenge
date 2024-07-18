@@ -1,3 +1,4 @@
+import { commands } from "./assembly_machine.js";
 import Pointer from "./Pointer.js";
 import stack_segment from "./StackSegment.js";
 const COMMAND_SIZE = 4;
@@ -16,39 +17,54 @@ class TextSegment {
         this.#final_position = this.#instructions.length;
     }
 
-    parse(instruction) {
-        const [opcode, operand] = instruction.split(" ");
-
-        if (opcode == "CALL") {
-            const func_regex = /(\w+)\(([^)]*)\)/;
-            const [, func_name, func_args] = func_regex.exec(operand);
-
-            const args = func_args.split(/,\s*/);
-
-            return { opcode, operand: { func_name, args } };
-        }
-        return { opcode, operand };
-    }
-
     step() {
         const instruction = this.#instructions[this.#pc];
-        const { opcode, operand } = this.parse(instruction);
+        const split_regex = /^(\w+) (.*)/;
+        const [, opcode, operand] = split_regex.exec(instruction);
 
         console.log(this.#pc, opcode, operand);
 
-        if (opcode == "CALL") {
-            const { func_name, args } = operand;
-            const pointer = new Pointer(this.#pc + 1);
+        switch (opcode) {
+            case "VAR": {
+                const var_regex = /(\w+)\s*:\s*(\w+)(?:\[(\d+)\])?/;
+                const [, var_name, type, count] = var_regex.exec(operand);
 
-            stack_segment.push(pointer);
+                commands[opcode](var_name, type, count);
 
-            this.#pc = this.func_address[func_name];
-        } else if (opcode == "RETURN") {
-            const pointer = stack_segment.pop();
+                this.#pc++;
+                break;
+            }
+            case "CALL": {
+                const func_regex = /(\w+)\(([^)]*)\)/;
+                const [, func_name, func_args] = func_regex.exec(operand);
 
-            this.#pc = pointer.address;
-        } else {
-            this.#pc++;
+                const pointer = new Pointer(this.#pc + 1);
+
+                stack_segment.push(pointer);
+
+                this.#pc = this.func_address[func_name];
+                break;
+            }
+            case "RETURN": {
+                const pointer = stack_segment.pop();
+
+                this.#pc = pointer.address;
+                break;
+            }
+            case "RELEASE": {
+                commands[opcode]();
+                this.#pc++;
+                break;
+            }
+            case "SET": {
+                const set_regex = /(\w+)(?:\[(\d+)\])?\s*=\s*([$\w]+)/;
+                const [, var_name, index, value] = set_regex.exec(operand);
+
+                commands[opcode](var_name, value, index);
+
+                this.#pc++;
+                break;
+            }
         }
     }
 }

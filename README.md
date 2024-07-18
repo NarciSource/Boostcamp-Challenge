@@ -45,13 +45,13 @@
 
     -   어셈블리 언어 동작
 
-    1. [ ] VAR $VarName : $Type
-    2. [ ] VAR $VarName : $Type[$Count]
+    1. [x] VAR $VarName : $Type
+    2. [x] VAR $VarName : $Type[$Count]
     3. [x] CALL $FuncName
     4. [ ] RETURN $Value
-    5. [ ] RELEASE $VarName
-    6. [ ] SET $VarName = $Value
-    7. [ ] SET $VarName[$Index] = $Value
+    5. ~~RELEASE $VarName~~
+    6. [x] SET $VarName = $Value
+    7. [x] SET $VarName[$Index] = $Value
 
 ## 문제 해결 과정
 

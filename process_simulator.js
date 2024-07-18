@@ -20,7 +20,6 @@ function process_simulator() {
     step();
     step();
     step();
-    step();
     reset();
 }
 process_simulator();

@@ -24,6 +24,7 @@ class HeapSegment {
         this.#allocated[this.#hp] = data;
         this.#hp += size;
         this.#size += size;
+        return new Pointer(data.address);
     }
 
     free(stack_pointer) {
@@ -47,6 +48,21 @@ class HeapSegment {
             throw "No pointer on stack";
         }
     }
+
+    get(pointer) {
+        if (pointer.address > ALLOCATED_HEAP_SIZE) {
+            throw "Address out of heap range";
+        }
+        return this.#allocated[pointer.address];
+    }
+
+    save(pointer, value, type) {
+        const data = this.#allocated[pointer.address] || { type };
+        data.value = value;
+
+        this.#allocated[pointer.address] = data;
+    }
+
     usage() {
         return [ALLOCATED_HEAP_SIZE, this.#size, ALLOCATED_HEAP_SIZE - this.#size];
     }
