@@ -17,7 +17,7 @@
 
         -   0x80000 부터 0x100000
 
-    -   [ ] TEXT 영역 (문자열배열) : 입력으로 주어지는 어셈블리 코드가 저장되는 영역
+    -   [x] TEXT 영역 (문자열배열) : 입력으로 주어지는 어셈블리 코드가 저장되는 영역
 
         -   0x100000부터 명령어 한 줄(배열 인덱스 1개)이 4바이트씩이라고 가정한다.
 
@@ -30,13 +30,13 @@
 
     -   함수 요구사항
 
-    1. [ ] locate(funcName, codes)
+    1. [x] locate(funcName, codes)
     2. [ ] setSize(type, length)
     3. [ ] push(address) (internal only)
     4. [ ] pop() (internal only)
     5. [ ] malloc(type, count) (internal only)
     6. [ ] free(stackAddress) (internal only)
-    7. [ ] step()
+    7. [x] step()
     8. [ ] usage()
     9. [ ] callstack()
     10. [ ] heapdump()
@@ -47,7 +47,7 @@
 
     1. [ ] VAR $VarName : $Type
     2. [ ] VAR $VarName : $Type[$Count]
-    3. [ ] CALL $FuncName
+    3. [x] CALL $FuncName
     4. [ ] RETURN $Value
     5. [ ] RELEASE $VarName
     6. [ ] SET $VarName = $Value
