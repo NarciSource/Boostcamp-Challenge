@@ -136,7 +136,7 @@ class Text
     #pc
 
 class Heap
-    #allocated: { key: HeapData }
+    #allocated: { key: HeapPointer }
     #array <- random access
     #size
 

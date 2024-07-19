@@ -1,48 +1,52 @@
 import { get_size, type } from "./type_manager";
 import Pointer from "./Pointer";
 import stack, { StackPointer } from "./Stack";
+import Scalar from "./Scalar";
 const ALLOCATED_HEAP_SIZE = 512 * 1024;
 
-export type HeapPointer = Pointer;
+export class HeapPointer extends Pointer {
+    #type: string;
+    #size: number;
+    #stack_pointer: StackPointer;
+    value: string;
 
-interface HeapData {
-    type: type;
-    address: number;
-    size: number;
-    stack_pointer: StackPointer;
-    value?: string;
+    constructor(address: number, type: string, size: number, stack_pointer?: StackPointer) {
+        super(address);
+        this.#type = type;
+        this.#size = size;
+        this.#stack_pointer = stack_pointer;
+    }
+
+    get type() {
+        return this.#type;
+    }
+    get stack_pointer() {
+        return this.#stack_pointer;
+    }
 }
 
 class Heap {
     #size = 0;
-    #allocated: { [key: string]: HeapData } = {};
+    #allocated: { [key: string]: HeapPointer } = {};
     #hp = 0;
 
-    malloc(type: type, count: number = 1): Pointer {
+    malloc(type: type, count: number = 1): HeapPointer {
         const size = Math.max(get_size(type), 8) * count;
 
         // stack push
         const stack_pointer = stack.push(new Pointer(this.#hp));
 
         // heap push
-        const data: HeapData = {
-            type,
-            address: this.#hp,
-            size,
-            stack_pointer,
-        };
-        this.#allocated[this.#hp] = data;
+        const pointer = new HeapPointer(this.#hp, type, size, stack_pointer);
+        this.#allocated[this.#hp] = pointer;
         this.#hp += size;
         this.#size += size;
-        return new Pointer(data.address);
+        return pointer;
     }
 
     free(stack_pointer: StackPointer) {
-        const pointer: HeapPointer = stack.get(stack_pointer);
+        const pointer: Pointer | Scalar = stack.get(stack_pointer);
 
-        if (!(pointer instanceof Pointer)) {
-            throw "No pointer on stack";
-        }
         if (pointer.address > ALLOCATED_HEAP_SIZE) {
             throw "Address out of heap range";
         }
@@ -57,7 +61,7 @@ class Heap {
         }
     }
 
-    get(pointer: HeapPointer): HeapData {
+    get(pointer: HeapPointer): HeapPointer {
         if (pointer.address > ALLOCATED_HEAP_SIZE) {
             throw "Address out of heap range";
         }
@@ -65,7 +69,7 @@ class Heap {
     }
 
     save(pointer: Pointer, value: string, type: type) {
-        const data = this.#allocated[pointer.address] || ({ type, address: pointer.address, size: 4 } as HeapData);
+        const data = this.#allocated[pointer.address] || new HeapPointer(pointer.address, type, 4);
         data.value = value;
 
         this.#allocated[pointer.address] = data;
@@ -74,8 +78,8 @@ class Heap {
     usage(): [Number, Number, Number] {
         return [ALLOCATED_HEAP_SIZE, this.#size, ALLOCATED_HEAP_SIZE - this.#size];
     }
-    heapdump(): HeapData[] {
-        return Object.values(this.#allocated);
+    heapdump(): Object[] {
+        return Object.values(this.#allocated).map(({ type, size, value }) => ({ type, size, value }));
     }
     reset() {
         this.#size = 0;

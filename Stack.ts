@@ -35,8 +35,12 @@ class Stack {
     usage(): [Number, Number, Number] {
         return [ALLOCATED_STACK_SIZE, this.#size, ALLOCATED_STACK_SIZE - this.#size];
     }
-    dump(): (Pointer | Scalar)[] {
-        return this.#stack;
+    dump(): Object[] {
+        if (this.#stack instanceof Pointer) {
+            return (this.#stack as Pointer[]).map(({ size, address }) => ({ size, address }));
+        } else {
+            return (this.#stack as Scalar[]).map(({ size, address, value }) => ({ size, address, value }));
+        }
     }
     reset() {
         this.#size = 0;

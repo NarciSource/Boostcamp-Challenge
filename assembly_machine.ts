@@ -1,11 +1,11 @@
 import { get_size, type } from "./type_manager";
 import Pointer from "./Pointer";
-import heap, { malloc } from "./Heap";
+import heap, { HeapPointer, malloc } from "./Heap";
 import stack from "./Stack";
 import { TextPointer } from "./Text";
 import Scalar from "./Scalar";
 
-const address_manager: { [key: string]: Pointer } = {};
+const address_manager: { [key: string]: HeapPointer } = {};
 
 export const commands = {
     VAR(var_name: string, type: type, count = 1) {
@@ -25,7 +25,7 @@ export const commands = {
         const indexed_address = address + index * get_size(type);
 
         if (value == "$RETURN") {
-            value = (stack.pop() as ReturnPointer).value;
+            value = (stack.pop() as Scalar).value;
         }
 
         const pointer = new Pointer(indexed_address);
