@@ -1,8 +1,9 @@
 import { get_size, type } from "./type_manager";
-import Pointer, { ReturnPointer } from "./Pointer";
+import Pointer from "./Pointer";
 import heap, { malloc } from "./Heap";
 import stack from "./Stack";
 import { TextPointer } from "./Text";
+import Scalar from "./Scalar";
 
 const address_manager: { [key: string]: Pointer } = {};
 
@@ -13,9 +14,9 @@ export const commands = {
         address_manager[var_name] = heap_pointer;
     },
     RETURN(value: string): Pointer {
-        let pointer: Pointer;
+        let pointer: (Pointer | Scalar);
         while (!((pointer = stack.pop()) instanceof TextPointer)) {}
-        stack.push(new ReturnPointer(4, value));
+        stack.push(new Scalar(4, value));
         return pointer;
     },
     SET(var_name: string, value: string, index = 0) {

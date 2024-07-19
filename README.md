@@ -120,19 +120,25 @@ class Type
     #size
 
 class Pointer
-    address: string
+    #address: string
 
-class stack
+class Scalar
+    #address
+
+class Stack
+    #stack: (pointer | scalar)
     #sp <- top
     #size
 
-class text
+class Text
     #instructions to random access
     #size
     #pc
 
-class heap
+class Heap
+    #allocated: { key: HeapData }
     #array <- random access
+    #size
 
 function locate
     func_address[func_name] <- final_position
