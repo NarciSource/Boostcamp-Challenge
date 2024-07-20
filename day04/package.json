@@ -1,0 +1,16 @@
+{
+  "name": "day04",
+  "version": "1.0.0",
+  "description": "",
+  "main": "process_simulator",
+  "scripts": {
+    "start": "ts-node process_simulator",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  }
+}
