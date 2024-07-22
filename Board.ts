@@ -1,6 +1,7 @@
 import Character from "./Character";
 import Player from "./Player";
 import Position from "./Position";
+import Ultron from "./Ultron";
 
 const ROW_SIZE = 5;
 const COLUMN_SIZE = 6;
@@ -18,9 +19,12 @@ export default class Board {
         this.#owner = owner;
     }
 
-    score() {
-        const value_sum = this.#board.reduce((acc, columns) => acc + columns.filter((i) => i).reduce((acc, cur) => acc + cur.hp(), 0), 0);
+    score(): number {
+        const value_sum = this.#board.map((columns) => columns.filter((i) => i)).reduce((acc, columns) => acc + columns.reduce((acc, cur) => acc + cur.hp(), 0), 0);
         return value_sum;
+    }
+    ultron_score(): number {
+        return this.#board.map((columns) => columns.filter((i) => i).filter((space) => space instanceof Ultron)).reduce((acc, columns) => acc + columns.reduce((acc, cur) => acc + cur.hp(), 0), 0);
     }
 
     set_piece_init(position: Position, character: Character) {

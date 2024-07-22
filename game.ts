@@ -37,7 +37,11 @@ const main = async () => {
         const opponent = turn_switch[turn];
         let nick_name: string, row: string, column: number;
 
+        if (boards[turn].ultron_score() === 0 || boards[opponent].ultron_score() === 0) {
+            break;
+        }
         console.log();
+
         try {
             switch (turn) {
                 case Player.user:
