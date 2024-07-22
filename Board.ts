@@ -113,6 +113,18 @@ export default class Board {
         }
     }
 
+    just_one_question = true;
+    question(): Character[] {
+        if (this.just_one_question) {
+            this.just_one_question = false;
+
+            const max_row = this.#board.map((columns) => columns.filter((i) => i)).reduce((max_row, columns, row, board) => (columns.length > board[max_row].length ? row : max_row), 0);
+            return this.#board[max_row];
+        } else {
+            throw "한 번만 사용할 수 있습니다.";
+        }
+    }
+
     display(line_num) {
         return this.#board[line_num];
     }

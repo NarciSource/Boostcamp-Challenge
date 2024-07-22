@@ -31,14 +31,19 @@ const main = async () => {
     let turn = Player.user;
 
     while (true) {
+        const opponent = turn_switch[turn];
         let nick_name: string, row: string, column: number;
-        console.log(boards[0].board());
+        console.log(boards[1].board());
 
         try {
             switch (turn) {
                 case Player.user:
                     const input = await get_input("명령을 입력하세요> ");
 
+                    if (input === "?") {
+                        console.log(boards[opponent].question());
+                        continue;
+                    }
                     if (input === "move") {
                         const input_second = await get_input("움직이세요> ");
 
@@ -66,11 +71,10 @@ const main = async () => {
                     nick_name = choice(Object.keys(get_character));
                     row = choice(Object.values(Row).filter((value) => typeof value !== "number"));
                     column = choice(Object.values(Column).filter((value) => typeof value !== "number"));
-                    console.log(nick_name, row,column)
+                    console.log(nick_name, row, column);
                     break;
             }
 
-            const opponent = turn_switch[turn];
             const character_type: typeof Character = get_character[nick_name];
             const position = new Position(Row[row], Column[`0${column}`]);
 
@@ -78,7 +82,7 @@ const main = async () => {
                 console.log(boards[opponent].attack(character_type, position));
             }
             turn = opponent;
-            console.log("-------")
+            console.log("-------");
         } catch (e) {
             console.error(e);
         }
