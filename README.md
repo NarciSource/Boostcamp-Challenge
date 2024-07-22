@@ -135,6 +135,75 @@
 
 ### pseudo code
 
+```js
+class Character
+    hp
+    power
+    reduce_hp
+        hp <- hp - damage
+
+class BlackWidow extends Character
+class CaptainAmerica extends Character
+class HawkEye extends Character
+...
+
+
+class Position
+    row
+    column
+
+
+class Board
+    board: Character[][]
+
+    score
+        sums of all characters hp in board
+
+    attack
+        target.reduce_hp( character.power )
+
+    move
+        if hit >= 5
+        and is_valid of from_position and to_position
+        and can_move to character
+            set_piece( to_position, character )
+
+    question
+        if just_one_time
+            return find max_row
+
+
+function game
+    boards <- initial_board
+
+    while not exist_condition
+        case user
+            input <- prompt
+
+            if input === ?
+            then print( computer_board.max_row )
+
+            if input === MOVE
+            then move character on user_board
+
+            if input === ATTACK
+            then position, character <- prompt
+
+        case computer
+            position, character <- random choice
+
+
+        opponent_board.attack( character.power, position )
+
+        turn <- switch to turn
+```
+
 ### 출력한 결과
 
+![demo](https://gist.github.com/user-attachments/assets/084f8cbc-33f7-4d39-9040-8b208e7f5a28)
+![exit](https://gist.github.com/user-attachments/assets/3863bac8-9644-477f-ab8a-d16a4e1d564d)
+
 ## 학습 메모
+
+-   [enums](https://www.typescriptlang.org/ko/docs/handbook/enums.html)
+-   [abstract class](https://www.typescriptlang.org/docs/handbook/2/classes.html#abstract-classes-and-members)

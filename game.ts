@@ -97,6 +97,7 @@ async function main() {
 
         turn = opponent;
     }
+    console.log("게임이 종료되었습니다.");
     process.stdin.pause();
 }
 process.stdin.setEncoding("utf8");
