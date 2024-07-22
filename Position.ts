@@ -31,4 +31,8 @@ export default class Position {
 
         return new Position(row, column);
     }
+
+    static distance(pos1: Position, pos2: Position): { y: number; x: number } {
+        return { y: pos2.row - pos1.row, x: pos2.column - pos1.column };
+    }
 }

@@ -11,6 +11,8 @@ export default class Board {
         .map(() => Array(COLUMN_SIZE).fill(null));
 
     #owner: Player;
+    #hit_time = 0;
+    #can_move = false;
 
     constructor(owner: Player) {
         this.#owner = owner;
@@ -38,12 +40,25 @@ export default class Board {
 
         this.#board[row][column] = character;
     }
+    set_piece(position: Position, character: Character) {
+        const { row, column } = position;
+        if (this.#board[row][column]) {
+            throw "해당 위치에 다른 말이 있습니다.";
+        } else {
+            this.#board[row][column] = character;
+        }
+    }
 
     has(character_type: typeof Character) {
         return this.#board
             .flat()
             .filter((space) => space instanceof Character)
             .find((character: Character) => character instanceof character_type);
+    }
+
+    get(position: Position): Character {
+        const { row, column } = position;
+        return this.#board[row][column];
     }
 
     attack(character_type: typeof Character, position: Position): string {
@@ -53,6 +68,7 @@ export default class Board {
 
         if (target) {
             target.reduce_hp(character_type.power);
+            this.hit();
 
             if (target.hp() === 0) {
                 this.#board[row][column] = null;
@@ -60,6 +76,41 @@ export default class Board {
             return "Attack";
         }
         return "Miss";
+    }
+
+    hit() {
+        if (this.#hit_time === 5) {
+            this.#can_move = true;
+        } else {
+            this.#hit_time++;
+        }
+    }
+
+    move(from_position: Position, to_position: Position) {
+        if (this.#can_move) {
+            const character = this.get(from_position);
+            const target_position = this.get(to_position);
+            const distance = Position.distance(from_position, to_position);
+
+            if (character) {
+                if (!target_position) {
+                    if (character.can_move(distance)) {
+                        this.set_piece(to_position, character);
+                        this.#board[from_position.row][from_position.column] = null;
+
+                        this.#hit_time = 0;
+                    } else {
+                        throw "캐릭터가 이동할 수 없는 움직임입니다.";
+                    }
+                } else {
+                    throw "움직이려는 위치에 다른 캐릭터가 있습니다.";
+                }
+            } else {
+                throw "캐릭터가 존재하지 않습니다.";
+            }
+        } else {
+            throw "조건을 만족하지 못했습니다.";
+        }
     }
 
     display(line_num) {

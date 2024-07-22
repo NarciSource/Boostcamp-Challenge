@@ -5,4 +5,8 @@ export default class Hulk extends Character {
     constructor() {
         super({ hp: 700 });
     }
+
+    can_move({ y, x }: { y: number; x: number }): boolean {
+        return x === 0;
+    }
 }

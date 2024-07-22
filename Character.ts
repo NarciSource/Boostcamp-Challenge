@@ -1,7 +1,7 @@
 import Player from "./Player";
 import Position from "./Position";
 
-export default class Character {
+export default abstract class Character {
     #position: Position;
     #hp: number;
     #player: Player;
@@ -21,4 +21,6 @@ export default class Character {
     player() {
         return this.#player;
     }
+
+    abstract can_move({ y, x }: { y: number; x: number }): boolean;
 }

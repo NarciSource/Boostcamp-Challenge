@@ -5,4 +5,8 @@ export default class Ultron extends Character {
     constructor() {
         super({ hp: 400 });
     }
+
+    can_move({ y, x }: { y: number; x: number }): boolean {
+        return y === 0;
+    }
 }

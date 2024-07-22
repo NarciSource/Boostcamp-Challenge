@@ -21,45 +21,67 @@ const get_input = (prompt: string): Promise<string> =>
     });
 process.stdin.setEncoding("utf8");
 const command_regex = /([\w+]{2})->(\w)(\d)/;
+const move_regex = /(\w)(\d)->(\w)(\d)/;
 
 const main = async () => {
-    const board: { [key in Player]: Board } = {
+    const boards: { [key in Player]: Board } = {
         [Player.user]: initial_board(Player.user),
         [Player.computer]: initial_board(Player.computer),
     };
     let turn = Player.user;
-    console.log(board[1].board());
 
     while (true) {
         let nick_name: string, row: string, column: number;
+        console.log(boards[0].board());
 
-        switch (turn) {
-            case Player.user:
-                const input = await get_input("명령을 입력하세요> ");
+        try {
+            switch (turn) {
+                case Player.user:
+                    const input = await get_input("명령을 입력하세요> ");
 
-                if (!command_regex.test(input)) {
-                    console.log("입력 형식이 틀렸습니다.");
-                    continue;
-                } else {
-                    [, nick_name, row, column] = command_regex.exec(input) as unknown as [any, string, string, number];
-                }
-                break;
+                    if (input === "move") {
+                        const input_second = await get_input("움직이세요> ");
 
-            case Player.computer:
-                nick_name = choice(Object.keys(get_character));
-                row = choice(Object.values(Row).filter((value) => typeof value !== "number"));
-                column = choice(Object.values(Column).filter((value) => typeof value !== "number"));
-                break;
+                        if (!move_regex.test(input_second)) {
+                            console.log("입력 형식이 틀렸습니다.");
+                        } else {
+                            const [_, from_row, from_column, to_row, to_column] = move_regex.exec(input_second);
+                            const from_position = new Position(Row[from_row], Column[`0${from_column}`]);
+                            const to_position = new Position(Row[to_row], Column[`0${to_column}`]);
+
+                            boards[turn].move(from_position, to_position);
+                        }
+                        continue;
+                    }
+
+                    if (!command_regex.test(input)) {
+                        console.log("입력 형식이 틀렸습니다.");
+                        continue;
+                    } else {
+                        [, nick_name, row, column] = command_regex.exec(input) as unknown as [any, string, string, number];
+                    }
+                    break;
+
+                case Player.computer:
+                    nick_name = choice(Object.keys(get_character));
+                    row = choice(Object.values(Row).filter((value) => typeof value !== "number"));
+                    column = choice(Object.values(Column).filter((value) => typeof value !== "number"));
+                    console.log(nick_name, row,column)
+                    break;
+            }
+
+            const opponent = turn_switch[turn];
+            const character_type: typeof Character = get_character[nick_name];
+            const position = new Position(Row[row], Column[`0${column}`]);
+
+            if (boards[turn].has(character_type)) {
+                console.log(boards[opponent].attack(character_type, position));
+            }
+            turn = opponent;
+            console.log("-------")
+        } catch (e) {
+            console.error(e);
         }
-
-        const opponent = turn_switch[turn];
-        const character_type: typeof Character = get_character[nick_name];
-        const position = new Position(Row[row], Column[`0${column}`]);
-
-        if (board[turn].has(character_type)) {
-            console.log(board[opponent].attack(character_type, position));
-        }
-        turn = opponent;
     }
     process.stdin.pause();
 };
