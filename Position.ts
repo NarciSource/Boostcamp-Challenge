@@ -1,3 +1,5 @@
+import { choice } from "./utils";
+
 export enum Row {
     A,
     B,
@@ -24,14 +26,8 @@ export default class Position {
     }
 
     static random() {
-        function random_of(_enum: typeof Row | typeof Column): Row | Column {
-            const values = Object.values(_enum).filter((value) => typeof value === "number");
-            const random_index = Math.floor(Math.random() * values.length);
-            return values[random_index];
-        }
-
-        const row = random_of(Row) as Row;
-        const column = random_of(Column) as Column;
+        const row: Row = choice(Object.values(Row).filter((value) => typeof value === "number")); // random_of(Row) as Row;
+        const column: Column = choice(Object.values(Column).filter((value) => typeof value === "number"));
 
         return new Position(row, column);
     }
