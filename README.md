@@ -4,7 +4,7 @@
 
 ### 핵심기능
 
--   [ ] Board 클래스부터 구현하고 Ultron, BlackWidow, Hulk, CaptainAmerica, IronMan, HawkEye, Thor 클래스를 각각 다른 파일로 저장한다.
+-   [x] Board 클래스부터 구현하고 Ultron, BlackWidow, Hulk, CaptainAmerica, IronMan, HawkEye, Thor 클래스를 각각 다른 파일로 저장한다.
 
     -   파일을 추가하거나 기능을 추가할 때마다 소스 파일을 gist에 커밋한다.
 
