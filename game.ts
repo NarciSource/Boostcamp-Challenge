@@ -10,6 +10,7 @@ import Player from "./Player";
 import Position, { Column, Row } from "./Position";
 import Thor from "./Thor";
 import Ultron from "./Ultron";
+import { choice } from "./utils";
 
 const turn_switch = { [Player.user]: Player.computer, [Player.computer]: Player.user };
 const get_character = { UL: Ultron, BW: BlackWidow, HK: Hulk, CA: CaptainAmerica, IM: IronMan, HE: HawkEye, TH: Thor };
@@ -27,21 +28,28 @@ const main = async () => {
         [Player.computer]: initial_board(Player.computer),
     };
     let turn = Player.user;
-    console.log(board[1].board())
+    console.log(board[1].board());
 
     while (true) {
         let nick_name: string, row: string, column: number;
 
-        if (turn === Player.user) {
-            const input = await get_input("명령을 입력하세요> ");
+        switch (turn) {
+            case Player.user:
+                const input = await get_input("명령을 입력하세요> ");
 
-            if (!command_regex.test(input)) {
-                console.log("입력 형식이 틀렸습니다.");
-                continue;
-            } else {
-                [, nick_name, row, column] = command_regex.exec(input) as unknown as [any, string, string, number];
-            }
-        } else {
+                if (!command_regex.test(input)) {
+                    console.log("입력 형식이 틀렸습니다.");
+                    continue;
+                } else {
+                    [, nick_name, row, column] = command_regex.exec(input) as unknown as [any, string, string, number];
+                }
+                break;
+
+            case Player.computer:
+                nick_name = choice(Object.keys(get_character));
+                row = choice(Object.values(Row).filter((value) => typeof value !== "number"));
+                column = choice(Object.values(Column).filter((value) => typeof value !== "number"));
+                break;
         }
 
         const opponent = turn_switch[turn];
@@ -49,7 +57,7 @@ const main = async () => {
         const position = new Position(Row[row], Column[`0${column}`]);
 
         if (board[turn].has(character_type)) {
-           console.log(board[opponent].attack(character_type, position));
+            console.log(board[opponent].attack(character_type, position));
         }
         turn = opponent;
     }
