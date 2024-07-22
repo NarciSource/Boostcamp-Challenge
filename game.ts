@@ -17,9 +17,9 @@ const get_input = (prompt: string): Promise<string> =>
         process.stdin.once("data", (data) => resolve(data.toString().trim()));
     });
 
-const exit_condition = (turn: Player) =>
-    boards[turn].ultron_score() === 0 ||
-    boards[switch_turn(turn)].ultron_score() === 0;
+const exit_condition = () =>
+    boards[Player.user].ultron_score() === 0 ||
+    boards[Player.computer].ultron_score() === 0;
 
 function move(input: string, turn: Player) {
     const [_, from_row, from_column, to_row, to_column] =
@@ -39,7 +39,7 @@ async function main() {
 
     console.log("어벤저스 보드를 초기화했습니다.");
 
-    while (exit_condition) {
+    while (!exit_condition()) {
         console.log();
 
         const opponent = switch_turn(turn);
