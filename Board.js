@@ -18,12 +18,9 @@ export default class Board {
         return value_sum;
     }
 
-    set(position, character) {
-        const { column, row } = position;
+    set({ column, row }, character) {
+        this.#is_valid(position);
 
-        if (row<0 || column<0 || row>=ROW_SIZE || column >=COLUMN_SIZE) {
-            throw "보드 범위를 벗어나 있습니다."
-        }
         if (this.#board[row][column]) {
             throw "해당 위치에 다른 말이 있습니다.";
         }
@@ -31,7 +28,23 @@ export default class Board {
         this.#board[row][column] = character;
     }
 
+    attack({ column, row }, character) {
+        this.#is_valid(position);
+
+        if (this.#board[row][column]) {
+            return "HP";
+        }
+    }
+
     display(line_num) {
         return this.#board[line_num];
+    }
+
+    #is_valid(position) {
+        const { column, row } = position;
+
+        if (row < 0 || column < 0 || row >= ROW_SIZE || column >= COLUMN_SIZE) {
+            throw "보드 범위를 벗어나 있습니다.";
+        }
     }
 }
