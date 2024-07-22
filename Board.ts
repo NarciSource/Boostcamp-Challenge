@@ -32,6 +32,9 @@ export default class Board {
         if (this.#board[row][column]) {
             throw "해당 위치에 다른 말이 있습니다.";
         }
+        if (this.#board[row].filter((i) => i).length >= 3) {
+            throw "행에는 최대 3개까지만 배치할 수 있습니다.";
+        }
 
         this.#board[row][column] = character;
     }
