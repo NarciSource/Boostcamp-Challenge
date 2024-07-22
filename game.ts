@@ -1,5 +1,7 @@
 import { choice } from "./utils";
-import Position, { Column, get_keys, Row } from "./Position";
+import Position, { get_keys } from "./Position";
+import { Row } from "./Position.Row";
+import { Column } from "./Position.Column";
 import Player from "./Player";
 import Character from "./Character";
 import { get_character, nicknames } from "./nickname_character";

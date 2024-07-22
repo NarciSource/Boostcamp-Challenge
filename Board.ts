@@ -1,6 +1,8 @@
 import Character from "./Character";
 import Player from "./Player";
-import Position, { COLUMN_SIZE, ROW_SIZE } from "./Position";
+import Position from "./Position";
+import { ROW_SIZE } from "./Position.Row";
+import { COLUMN_SIZE } from "./Position.Column";
 import Ultron from "./Character.Ultron";
 import { identity } from "./utils";
 
