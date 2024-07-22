@@ -1,10 +1,11 @@
 import Character from "./Character";
+import Player from "./Player";
 
 export default class Thor extends Character {
     static power = 50;
 
-    constructor() {
-        super({ hp: 900 });
+    constructor({ player }: { player: Player }) {
+        super({ hp: 900, player });
     }
 
     can_move({ y, x }: { y: number; x: number }): boolean {

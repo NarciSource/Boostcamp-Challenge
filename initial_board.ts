@@ -10,24 +10,24 @@ import Position from "./Position";
 import Thor from "./Character.Thor";
 import Ultron from "./Character.Ultron";
 
-function team_formation(): Character[] {
+function team_formation(player: Player): Character[] {
     const shuffle = (list: Character[]) => list.sort(() => 0.5 - Math.random());
 
     const fixed_characters: Character[] = [
-        new Ultron(),
-        new Ultron(),
-        new Ultron(),
-        new BlackWidow(),
-        new CaptainAmerica(),
-        new Thor(),
+        new Ultron({ player }),
+        new Ultron({ player }),
+        new Ultron({ player }),
+        new BlackWidow({ player }),
+        new CaptainAmerica({ player }),
+        new Thor({ player }),
     ];
     const candidate: Character[] = [
-        new Hulk(),
-        new BlackWidow(),
-        new IronMan(),
-        new IronMan(),
-        new HawkEye(),
-        new HawkEye(),
+        new Hulk({ player }),
+        new BlackWidow({ player }),
+        new IronMan({ player }),
+        new IronMan({ player }),
+        new HawkEye({ player }),
+        new HawkEye({ player }),
     ];
 
     return fixed_characters.concat(shuffle(candidate).slice(0, 4));
@@ -35,7 +35,7 @@ function team_formation(): Character[] {
 
 export default function initial_board(owner: Player): Board {
     const board = new Board(owner);
-    const team = team_formation();
+    const team = team_formation(owner);
 
     for (const character of team) {
         while (true) {

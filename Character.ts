@@ -5,8 +5,9 @@ export default abstract class Character {
     #player: Player;
     static power: number;
 
-    constructor({ hp }) {
+    constructor({ hp, player }) {
         this.#hp = hp;
+        this.#player = player;
     }
 
     hp() {
