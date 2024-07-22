@@ -48,7 +48,7 @@ async function main() {
         switch (turn) {
             case Player.user:
                 console.log(`HP = ${boards[turn].score()}`);
-                output(boards[opponent].display());
+                output(boards[turn].display());
                 console.log();
 
                 try {

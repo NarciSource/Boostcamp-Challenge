@@ -96,12 +96,13 @@ export default class Board {
     hit(setting?: number) {
         if (setting) {
             this.#hit_time = setting;
-        }
-
-        if (this.#hit_time === 5 - 1) {
-            this.#can_move = true;
         } else {
             this.#hit_time++;
+        }
+
+        if (this.#hit_time >= 5) {
+            this.#can_move = true;
+        } else {
             this.#can_move = false;
         }
     }
