@@ -1,15 +1,11 @@
-import Player from "./Player.js";
-import Position from "./Position.js";
+import Player from "./Player";
+import Position from "./Position";
 
 export default class Character {
     #position: Position;
     #hp: number;
     #power: number;
     #player: Player;
-
-    constructor(player: Player) {
-        this.#player = player;
-    }
 
     hp() {
         return this.#hp;

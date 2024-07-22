@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "어벤저스 보드게임",
   "main": "game.ts",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node game.ts"

@@ -17,6 +17,10 @@ export default class Board {
         opponent: {},
     };
 
+    constructor(owner: Player) {
+        this.#owner = owner;
+    }
+
     // please remove this
     board() {
         return this.#board;
@@ -27,10 +31,8 @@ export default class Board {
         return value_sum;
     }
 
-    set(position: Position, character: Character) {
+    set_piece_init(position: Position, character: Character) {
         const { column, row } = position;
-
-        this.#is_valid(position);
 
         if (this.#board[row][column]) {
             throw "해당 위치에 다른 말이 있습니다.";
@@ -41,7 +43,6 @@ export default class Board {
 
     attack(character: string, position: Position) {
         const { column, row } = position;
-        this.#is_valid(position);
 
         if (this.#characters.opponent[character]) {
             const target = this.#board[row][column];
@@ -56,13 +57,5 @@ export default class Board {
 
     display(line_num) {
         return this.#board[line_num];
-    }
-
-    #is_valid(position: Position) {
-        const { column, row } = position;
-
-        if (row < 0 || column < 0 || row >= ROW_SIZE || column >= COLUMN_SIZE) {
-            throw "보드 범위를 벗어나 있습니다.";
-        }
     }
 }
