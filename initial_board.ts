@@ -1,14 +1,14 @@
-import BlackWidow from "./BlackWidow";
+import BlackWidow from "./Character.BlackWidow";
 import Board from "./Board";
-import CaptainAmerica from "./CaptainAmerica";
+import CaptainAmerica from "./Character.CaptainAmerica";
 import Character from "./Character";
-import HawkEye from "./HawkEye";
-import Hulk from "./Hulk";
-import IronMan from "./IronMan";
+import HawkEye from "./Character.HawkEye";
+import Hulk from "./Character.Hulk";
+import IronMan from "./Character.IronMan";
 import Player from "./Player";
 import Position from "./Position";
-import Thor from "./Thor";
-import Ultron from "./Ultron";
+import Thor from "./Character.Thor";
+import Ultron from "./Character.Ultron";
 
 function team_formation(): Character[] {
     const shuffle = (list: Character[]) => list.sort(() => 0.5 - Math.random());

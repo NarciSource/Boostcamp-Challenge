@@ -1,11 +1,11 @@
 import Character from "./Character";
-import BlackWidow from "./BlackWidow";
-import CaptainAmerica from "./CaptainAmerica";
-import HawkEye from "./HawkEye";
-import Hulk from "./Hulk";
-import IronMan from "./IronMan";
-import Thor from "./Thor";
-import Ultron from "./Ultron";
+import BlackWidow from "./Character.BlackWidow";
+import CaptainAmerica from "./Character.CaptainAmerica";
+import HawkEye from "./Character.HawkEye";
+import Hulk from "./Character.Hulk";
+import IronMan from "./Character.IronMan";
+import Thor from "./Character.Thor";
+import Ultron from "./Character.Ultron";
 
 const character_dictionary: { [key: string]: typeof Character } = {
     UL: Ultron,

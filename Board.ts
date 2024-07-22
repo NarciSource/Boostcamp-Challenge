@@ -1,7 +1,7 @@
 import Character from "./Character";
 import Player from "./Player";
 import Position from "./Position";
-import Ultron from "./Ultron";
+import Ultron from "./Character.Ultron";
 import { identity } from "./utils";
 
 const ROW_SIZE = 5;
