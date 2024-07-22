@@ -21,7 +21,7 @@ const get_input = (prompt: string): Promise<string> =>
         process.stdin.once("data", (data) => resolve(data.toString().trim()));
     });
 process.stdin.setEncoding("utf8");
-const command_regex = /([\w+]{2})->(\w)(\d)/;
+const command_regex = /(UL|BW|HK|CA|IM|HE|TH)->(\w)(\d)/;
 const move_regex = /(\w)(\d)->(\w)(\d)/;
 
 const main = async () => {
@@ -37,6 +37,7 @@ const main = async () => {
         const opponent = turn_switch[turn];
         let nick_name: string, row: string, column: number;
 
+        console.log();
         try {
             switch (turn) {
                 case Player.user:
@@ -88,7 +89,6 @@ const main = async () => {
             if (boards[turn].has(character_type)) {
                 console.log(boards[opponent].attack(character_type, position));
             }
-            console.log();
 
             turn = opponent;
         } catch (e) {
