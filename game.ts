@@ -8,8 +8,8 @@ import { get_character, nicknames } from "./nickname_character";
 import output from "./output";
 import { boards, switch_turn } from "./manager";
 
-const attack_command_regex = /(UL|BW|HK|CA|IM|HE|TH)->(\w)(\d)/;
-const move_command_regex = /MOVE\s(\w)(\d)->(\w)(\d)/;
+const attack_command_regex = /^(UL|BW|HK|CA|IM|HE|TH)->(\w)(\d)$/;
+const move_command_regex = /^MOVE\s(\w)(\d)->(\w)(\d)$/;
 
 const get_input = (prompt: string): Promise<string> =>
     new Promise((resolve) => {
@@ -53,6 +53,7 @@ async function main() {
 
                 try {
                     const input = await get_input("명령을 입력하세요> ");
+                    console.clear();
 
                     if (input === "?") {
                         console.log(boards[opponent].question());
@@ -65,10 +66,11 @@ async function main() {
                             input,
                         ) as unknown as [any, string, string, number];
                     } else {
-                        console.log("입력 형식이 틀렸습니다.");
+                        throw "입력 형식이 틀렸습니다.";
                     }
                 } catch (e) {
                     console.error(e);
+                    continue;
                 }
                 break;
 
