@@ -2,11 +2,11 @@
   "name": "day05",
   "version": "1.0.0",
   "description": "어벤저스 보드게임",
-  "main": "game.js",
+  "main": "game.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node game.js"
+    "start": "ts-node game.ts"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://gist.github.com/fdb8154bd23161da310b8bd5d27d8954"
   },
-  "homepage": "https://gist.github.com/fdb8154bd23161da310b8bd5d27d8954"
+  "homepage": "https://gist.github.com/fdb8154bd23161da310b8bd5d27d8954",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  }
 }

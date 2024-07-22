@@ -1,8 +1,11 @@
+import Character from "./Character";
+import Position from "./Position";
+
 const ROW_SIZE = 5;
 const COLUMN_SIZE = 6;
 
 export default class Board {
-    #board = Array(ROW_SIZE)
+    #board: (Character | null)[][] = Array(ROW_SIZE)
         .fill(null)
         .map(() => Array(COLUMN_SIZE).fill(null));
 
@@ -14,11 +17,13 @@ export default class Board {
     }
 
     score() {
-        const value_sum = this.#board.reduce((acc, columns) => acc + columns.filter((i) => i).reduce((acc, cur) => acc + cur, 0), 0);
+        const value_sum = this.#board.reduce((acc, columns) => acc + columns.filter((i) => i).reduce((acc, cur) => acc + cur.hp(), 0), 0);
         return value_sum;
     }
 
-    set({ column, row }, character) {
+    set(position: Position, character: Character) {
+        const { column, row } = position;
+
         this.#is_valid(position);
 
         if (this.#board[row][column]) {
@@ -28,8 +33,8 @@ export default class Board {
         this.#board[row][column] = character;
     }
 
-    attack({ column, row }, character) {
-        this.#is_valid(position);
+    attack({ column, row }, character: Character) {
+        this.#is_valid({ column, row });
 
         if (this.#board[row][column]) {
             return "HP";
@@ -40,7 +45,7 @@ export default class Board {
         return this.#board[line_num];
     }
 
-    #is_valid(position) {
+    #is_valid(position: Position) {
         const { column, row } = position;
 
         if (row < 0 || column < 0 || row >= ROW_SIZE || column >= COLUMN_SIZE) {
