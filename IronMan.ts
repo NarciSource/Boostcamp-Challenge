@@ -1,6 +1,8 @@
 import Character from "./Character";
 
 export default class IronMan extends Character {
-    #hp = 600;
-    #power = 40;
+    static power = 40;
+    constructor() {
+        super({ hp: 600 });
+    }
 }

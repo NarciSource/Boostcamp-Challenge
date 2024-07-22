@@ -1,6 +1,8 @@
 import Character from "./Character";
 
 export default class Ultron extends Character {
-    #hp = 400;
-    #power = 40;
+    static power = 40;
+    constructor() {
+        super({ hp: 400 });
+    }
 }

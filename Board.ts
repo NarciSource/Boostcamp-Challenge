@@ -12,11 +12,6 @@ export default class Board {
 
     #owner: Player;
 
-    #characters = {
-        player: {},
-        opponent: {},
-    };
-
     constructor(owner: Player) {
         this.#owner = owner;
     }
@@ -32,7 +27,7 @@ export default class Board {
     }
 
     set_piece_init(position: Position, character: Character) {
-        const { column, row } = position;
+        const { row, column } = position;
 
         if (this.#board[row][column]) {
             throw "해당 위치에 다른 말이 있습니다.";
@@ -41,18 +36,23 @@ export default class Board {
         this.#board[row][column] = character;
     }
 
-    attack(character: string, position: Position) {
-        const { column, row } = position;
+    has(character_type: typeof Character) {
+        return this.#board
+            .flat()
+            .filter((space) => space instanceof Character)
+            .find((character: Character) => character instanceof character_type);
+    }
 
-        if (this.#characters.opponent[character]) {
-            const target = this.#board[row][column];
-            if (target.player() === this.#owner) {
-                const damage = 0; // temporally
-                target.reduce_hp(damage);
-                return target.hp();
-            }
+    attack(character_type: typeof Character, position: Position): string {
+        const { row, column } = position;
+
+        const target = this.#board[row][column];
+
+        if (target) {
+            target.reduce_hp(character_type.power);
+            return "Attack";
         }
-        return 0;
+        return "Miss";
     }
 
     display(line_num) {
