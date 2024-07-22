@@ -50,6 +50,10 @@ export default class Board {
 
         if (target) {
             target.reduce_hp(character_type.power);
+
+            if (target.hp() === 0) {
+                this.#board[row][column] = null;
+            }
             return "Attack";
         }
         return "Miss";

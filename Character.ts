@@ -15,10 +15,8 @@ export default class Character {
         return this.#hp;
     }
 
-    reduce_hp(damage: number) {
-        if (damage > 0) {
-            this.#hp -= damage;
-        }
+    reduce_hp(damage: number): void {
+        this.#hp = Math.max(this.#hp - damage, 0);
     }
     player() {
         return this.#player;
