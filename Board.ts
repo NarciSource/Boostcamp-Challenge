@@ -1,4 +1,5 @@
 import Character from "./Character";
+import Player from "./Player";
 import Position from "./Position";
 
 const ROW_SIZE = 5;
@@ -9,7 +10,12 @@ export default class Board {
         .fill(null)
         .map(() => Array(COLUMN_SIZE).fill(null));
 
-    #characters;
+    #owner: Player;
+
+    #characters = {
+        player: {},
+        opponent: {},
+    };
 
     // please remove this
     board() {
@@ -33,12 +39,19 @@ export default class Board {
         this.#board[row][column] = character;
     }
 
-    attack({ column, row }, character: Character) {
-        this.#is_valid({ column, row });
+    attack(character: string, position: Position) {
+        const { column, row } = position;
+        this.#is_valid(position);
 
-        if (this.#board[row][column]) {
-            return "HP";
+        if (this.#characters.opponent[character]) {
+            const target = this.#board[row][column];
+            if (target.player() === this.#owner) {
+                const damage = 0; // temporally
+                target.reduce_hp(damage);
+                return target.hp();
+            }
         }
+        return 0;
     }
 
     display(line_num) {
