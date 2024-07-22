@@ -16,6 +16,9 @@ export enum Column {
     "06",
 }
 
+export const ROW_SIZE = 5;
+export const COLUMN_SIZE = 6;
+
 export default class Position {
     row: Row;
     column: Column;
@@ -26,12 +29,8 @@ export default class Position {
     }
 
     static random(): Position {
-        const row: Row = choice(
-            Object.values(Row).filter((value) => typeof value === "number"),
-        );
-        const column: Column = choice(
-            Object.values(Column).filter((value) => typeof value === "number"),
-        );
+        const row: Row = choice(get_values(Row));
+        const column: Column = choice(get_values(Column));
 
         return new Position(row, column);
     }
@@ -40,3 +39,9 @@ export default class Position {
         return { y: pos2.row - pos1.row, x: pos2.column - pos1.column };
     }
 }
+
+export const get_values = (cls: typeof Column | typeof Row) =>
+    Object.values(cls).filter((value) => typeof value === "number");
+
+export const get_keys = (cls: typeof Column | typeof Row) =>
+    Object.values(cls).filter((value) => typeof value !== "number");

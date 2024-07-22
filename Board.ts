@@ -1,11 +1,8 @@
 import Character from "./Character";
 import Player from "./Player";
-import Position from "./Position";
+import Position, { COLUMN_SIZE, ROW_SIZE } from "./Position";
 import Ultron from "./Character.Ultron";
 import { identity } from "./utils";
-
-const ROW_SIZE = 5;
-const COLUMN_SIZE = 6;
 
 export default class Board {
     #board: (Character | null)[][] = Array(ROW_SIZE)
