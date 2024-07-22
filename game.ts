@@ -6,6 +6,7 @@ import HawkEye from "./HawkEye";
 import Hulk from "./Hulk";
 import initial_board from "./initial_board";
 import IronMan from "./IronMan";
+import output from "./output";
 import Player from "./Player";
 import Position, { Column, Row } from "./Position";
 import Thor from "./Thor";
@@ -30,14 +31,19 @@ const main = async () => {
     };
     let turn = Player.user;
 
+    console.log("어벤저스 보드를 초기화했습니다.");
+
     while (true) {
         const opponent = turn_switch[turn];
         let nick_name: string, row: string, column: number;
-        console.log(boards[1].board());
 
         try {
             switch (turn) {
                 case Player.user:
+                    console.log(`HP = ${boards[turn].score()}`);
+                    output(boards[opponent].display());
+                    console.log();
+
                     const input = await get_input("명령을 입력하세요> ");
 
                     if (input === "?") {
@@ -70,8 +76,9 @@ const main = async () => {
                 case Player.computer:
                     nick_name = choice(Object.keys(get_character));
                     row = choice(Object.values(Row).filter((value) => typeof value !== "number"));
-                    column = choice(Object.values(Column).filter((value) => typeof value !== "number"));
-                    console.log(nick_name, row, column);
+                    column = Number(choice(Object.values(Column).filter((value) => typeof value !== "number")));
+
+                    console.log("컴퓨터가 입력합니다>", `${nick_name}->${row}${column}`);
                     break;
             }
 
@@ -81,8 +88,9 @@ const main = async () => {
             if (boards[turn].has(character_type)) {
                 console.log(boards[opponent].attack(character_type, position));
             }
+            console.log();
+
             turn = opponent;
-            console.log("-------");
         } catch (e) {
             console.error(e);
         }

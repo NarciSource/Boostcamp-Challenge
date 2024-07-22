@@ -18,11 +18,6 @@ export default class Board {
         this.#owner = owner;
     }
 
-    // please remove this
-    board() {
-        return this.#board;
-    }
-
     score() {
         const value_sum = this.#board.reduce((acc, columns) => acc + columns.filter((i) => i).reduce((acc, cur) => acc + cur.hp(), 0), 0);
         return value_sum;
@@ -73,7 +68,7 @@ export default class Board {
             if (target.hp() === 0) {
                 this.#board[row][column] = null;
             }
-            return "Attack";
+            return `HIT (${this.#hit_time})`;
         }
         return "Miss";
     }
@@ -125,7 +120,7 @@ export default class Board {
         }
     }
 
-    display(line_num) {
-        return this.#board[line_num];
+    display(): Character[][] {
+        return this.#board;
     }
 }

@@ -30,7 +30,7 @@ export default function initial_board(owner: Player): Board {
                 board.set_piece_init(position, character);
                 break;
             } catch (e) {
-                console.error(e);
+                // console.debug(e);
             }
         }
     }
