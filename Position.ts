@@ -25,9 +25,13 @@ export default class Position {
         this.column = column;
     }
 
-    static random() {
-        const row: Row = choice(Object.values(Row).filter((value) => typeof value === "number")); // random_of(Row) as Row;
-        const column: Column = choice(Object.values(Column).filter((value) => typeof value === "number"));
+    static random(): Position {
+        const row: Row = choice(
+            Object.values(Row).filter((value) => typeof value === "number"),
+        );
+        const column: Column = choice(
+            Object.values(Column).filter((value) => typeof value === "number"),
+        );
 
         return new Position(row, column);
     }

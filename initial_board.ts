@@ -13,8 +13,22 @@ import Ultron from "./Ultron";
 function team_formation(): Character[] {
     const shuffle = (list: Character[]) => list.sort(() => 0.5 - Math.random());
 
-    const fixed_characters: Character[] = [new Ultron(), new Ultron(), new Ultron(), new BlackWidow(), new CaptainAmerica(), new Thor()];
-    const candidate: Character[] = [new Hulk(), new BlackWidow(), new IronMan(), new IronMan(), new HawkEye(), new HawkEye()];
+    const fixed_characters: Character[] = [
+        new Ultron(),
+        new Ultron(),
+        new Ultron(),
+        new BlackWidow(),
+        new CaptainAmerica(),
+        new Thor(),
+    ];
+    const candidate: Character[] = [
+        new Hulk(),
+        new BlackWidow(),
+        new IronMan(),
+        new IronMan(),
+        new HawkEye(),
+        new HawkEye(),
+    ];
 
     return fixed_characters.concat(shuffle(candidate).slice(0, 4));
 }
