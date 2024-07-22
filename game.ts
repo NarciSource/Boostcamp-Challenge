@@ -1,16 +1,10 @@
 import { choice } from "./utils";
 import Position, { Column, Row } from "./Position";
 import Player from "./Player";
-import Board from "./Board";
-import initial_board from "./initial_board";
 import Character from "./Character";
 import { get_character, nicknames } from "./nickname_character";
 import output from "./output";
-
-const turn_switch = {
-    [Player.user]: Player.computer,
-    [Player.computer]: Player.user,
-};
+import { boards, switch_turn } from "./manager";
 
 const get_input = (prompt: string): Promise<string> =>
     new Promise((resolve) => {
@@ -22,16 +16,12 @@ const command_regex = /(UL|BW|HK|CA|IM|HE|TH)->(\w)(\d)/;
 const move_regex = /(\w)(\d)->(\w)(\d)/;
 
 const main = async () => {
-    const boards: { [key in Player]: Board } = {
-        [Player.user]: initial_board(Player.user),
-        [Player.computer]: initial_board(Player.computer),
-    };
     let turn = Player.user;
 
     console.log("어벤저스 보드를 초기화했습니다.");
 
     while (true) {
-        const opponent = turn_switch[turn];
+        const opponent = switch_turn(turn);
         let nick_name: string, row: string, column: number;
 
         if (
