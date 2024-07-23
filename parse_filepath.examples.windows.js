@@ -17,10 +17,11 @@ export default path_examples = [
             ],
             absolute_string:
                 "C:/home/user/boost/camp/challenge/day8/problem.md",
+            exist_file: false,
         },
     },
     {
-        input: "C:\\home\\user\\boost\\camp\\challenge\\day8\\problem.md",
+        input: "C:\\Users\\jwch1\\Repository\\boostcamp\\challenge\\day07\\problem.md",
         output: {
             root: "C:",
             base: "problem.md",
@@ -28,15 +29,16 @@ export default path_examples = [
             ext: ".md",
             components: [
                 "C:",
-                "home",
-                "user",
-                "boost",
-                "camp",
+                "Users",
+                "jwch1",
+                "Repository",
+                "boostcamp",
                 "challenge",
-                "day8",
+                "day07",
             ],
             absolute_string:
-                "C:/home/user/boost/camp/challenge/day8/problem.md",
+                "C:/Users/jwch1/Repository/boostcamp/challenge/day07/problem.md",
+            exist_file: true,
         },
     },
     {
@@ -48,6 +50,7 @@ export default path_examples = [
             ext: ".txt",
             components: ["C:", "home", "user", "Documents", "Project"],
             absolute_string: "C:/home/user/Documents/Project/file.txt",
+            exist_file: false,
         },
     },
     {
@@ -68,6 +71,7 @@ export default path_examples = [
             ],
             absolute_string:
                 "C:/Users/jwch1/Repository/boostcamp/day07/boost/camp",
+            exist_file: false,
         },
     },
     {
@@ -88,6 +92,7 @@ export default path_examples = [
             ],
             absolute_string:
                 "C:/Users/jwch1/Repository/boostcamp/user/boost/camp",
+            exist_file: false,
         },
     },
     {
@@ -108,6 +113,7 @@ export default path_examples = [
             ],
             absolute_string:
                 "C:/Users/jwch1/Repository/boostcamp/day07/boost/camp",
+            exist_file: false,
         },
     },
     {
@@ -119,6 +125,7 @@ export default path_examples = [
             ext: undefined,
             components: ["C:"],
             absolute_string: "C:/home",
+            exist_file: false,
         },
     },
     {
@@ -137,6 +144,7 @@ export default path_examples = [
                 "day07",
             ],
             absolute_string: "C:/Users/jwch1/Repository/boostcamp/day07/home",
+            exist_file: false,
         },
     },
 ];

@@ -1,3 +1,5 @@
+import fs from "fs";
+
 const path_regex = /^(\/|\w:\\)?([\w\/\.\\]+(?:\/|\\))?([^./]+)(\.\w+)?$/;
 
 function get_absolute(components = ["."]) {
@@ -21,6 +23,16 @@ function get_absolute(components = ["."]) {
     }
     return current_dir.concat(components.slice(index));
 }
+
+function is_exist_file(absolute_string) {
+    try {
+        fs.accessSync(absolute_string, fs.constants.F_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
+
 export function parse_filepath(path_string) {
     if (path_regex.test(path_string)) {
         let [, root, components_string, name, ext] =
@@ -46,6 +58,7 @@ export function parse_filepath(path_string) {
         const middle_separator = middle_path ? "/" : "";
         const base = `${name}${ext || ""}`;
         const absolute_string = `${root}${root_separator}${middle_path}${middle_separator}${base}`;
+        const exist_file = is_exist_file(absolute_string);
 
         return {
             root,
@@ -54,6 +67,7 @@ export function parse_filepath(path_string) {
             ext,
             components,
             absolute_string,
+            exist_file,
         };
     } else {
         throw "경로에 오류가 있습니다.";

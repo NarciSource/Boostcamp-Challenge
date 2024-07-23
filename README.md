@@ -16,7 +16,7 @@
 
     -   본인 컴퓨터 운영체제와 상관없이 UNIX나 윈도우 형식을 모두 동작하도록 구현해야 한다.
 
--   [ ] 파일 경로를 생성하면 경로를 분석하고, 해당 파일이 있는지 여부를 판단해야 한다.
+-   [x] 파일 경로를 생성하면 경로를 분석하고, 해당 파일이 있는지 여부를 판단해야 한다.
 -   [x] Path 파싱을 위해서 정규표현식(regular expression)을 학습하고 필수적으로 사용한다.
     -   [x] 단위 테스트
 -   [ ] 다음과 같은 Path 요소에 접근해서 읽고, 변경할 수 있어야 한다.
@@ -26,7 +26,7 @@
     -   [x] ext : String
     -   [x] components : [String]
     -   [x] absoluteString : String //readonly. 직접 저장하면 안되고 분석한 내용으로 조합해서 만들어야 함
-    -   [ ] existFile : Bool //readonly. 생성 시점을 기준으로 파일이 존재하는지 여부를 판단
+    -   [x] existFile : Bool //readonly. 생성 시점을 기준으로 파일이 존재하는지 여부를 판단
     -   [ ] fileSize : Int //readonly. 생성 시점을 기준으로 파일의 크기
 
 ## 문제 해결 과정
