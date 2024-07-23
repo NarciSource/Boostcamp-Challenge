@@ -35,9 +35,7 @@ function is_exist_file(absolute_string) {
 
 function get_file_size(absolute_string) {
     try {
-        console.log(absolute_string)
         const stats = fs.statSync(absolute_string);
-        console.log(stats)
         return stats.size;
     } catch (error) {
         throw error;
