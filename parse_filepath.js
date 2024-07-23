@@ -1,4 +1,4 @@
-const path_regex = /^(\/|\w:\\)?([\w\/\.]+(?:\/|\\))?([^./]+)(\.\w+)?$/;
+const path_regex = /^(\/|\w:\\)?([\w\/\.\\]+(?:\/|\\))?([^./]+)(\.\w+)?$/;
 
 function get_absolute(components = ["."]) {
     const current_dir = process.cwd().split(/\/|\\/);
