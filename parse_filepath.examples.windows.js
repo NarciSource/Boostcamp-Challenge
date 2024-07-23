@@ -62,12 +62,12 @@ export default path_examples = [
                 "Users",
                 "jwch1",
                 "Repository",
-                "bootstcamp",
+                "boostcamp",
                 "day07",
                 "boost",
             ],
             absolute_string:
-                "C:/Users/jwch1/Repository/bootstcamp/day07/boost/camp",
+                "C:/Users/jwch1/Repository/boostcamp/day07/boost/camp",
         },
     },
     {
@@ -82,12 +82,12 @@ export default path_examples = [
                 "Users",
                 "jwch1",
                 "Repository",
-                "bootstcamp",
+                "boostcamp",
                 "user",
                 "boost",
             ],
             absolute_string:
-                "C:/Users/jwch1/Repository/bootstcamp/user/boost/camp",
+                "C:/Users/jwch1/Repository/boostcamp/user/boost/camp",
         },
     },
     {
@@ -102,12 +102,12 @@ export default path_examples = [
                 "Users",
                 "jwch1",
                 "Repository",
-                "bootstcamp",
+                "boostcamp",
                 "day07",
                 "boost",
             ],
             absolute_string:
-                "C:/Users/jwch1/Repository/bootstcamp/day07/boost/camp",
+                "C:/Users/jwch1/Repository/boostcamp/day07/boost/camp",
         },
     },
     {
@@ -133,10 +133,10 @@ export default path_examples = [
                 "Users",
                 "jwch1",
                 "Repository",
-                "bootstcamp",
+                "boostcamp",
                 "day07",
             ],
-            absolute_string: "C:/Users/jwch1/Repository/bootstcamp/day07/home",
+            absolute_string: "C:/Users/jwch1/Repository/boostcamp/day07/home",
         },
     },
 ];

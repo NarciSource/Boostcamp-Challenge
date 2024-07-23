@@ -1,0 +1,106 @@
+export default path_examples = [
+    {
+        input: "/home/user/boost/camp/challenge/day8/problem.md",
+        output: {
+            root: "/",
+            base: "problem.md",
+            name: "problem",
+            ext: ".md",
+            components: [
+                "/",
+                "home",
+                "user",
+                "boost",
+                "camp",
+                "challenge",
+                "day8",
+            ],
+            absolute_string: "/home/user/boost/camp/challenge/day8/problem.md",
+        },
+    },
+    {
+        input: "C:\\home\\user\\boost\\camp\\challenge\\day8\\problem.md",
+        output: {
+            root: "/",
+            base: "problem.md",
+            name: "problem",
+            ext: ".md",
+            components: [
+                "/",
+                "home",
+                "user",
+                "boost",
+                "camp",
+                "challenge",
+                "day8",
+            ],
+            absolute_string: "/home/user/boost/camp/challenge/day8/problem.md",
+        },
+    },
+    {
+        input: "/home/user/Documents/Project/file.txt",
+        output: {
+            root: "/",
+            base: "file.txt",
+            name: "file",
+            ext: ".txt",
+            components: ["/", "home", "user", "Documents", "Project"],
+            absolute_string: "/home/user/Documents/Project/file.txt",
+        },
+    },
+    {
+        input: "./boost/camp",
+        output: {
+            root: "/",
+            base: "camp",
+            name: "camp",
+            ext: undefined,
+            components: ["/", "home", "user", "day07", "boost"],
+            absolute_string: "/home/user/day07/boost/camp",
+        },
+    },
+    {
+        input: "../user/boost/camp",
+        output: {
+            root: "/",
+            base: "camp",
+            name: "camp",
+            ext: undefined,
+            components: ["/", "home", "user", "user", "boost"],
+            absolute_string: "/home/user/user/boost/camp",
+        },
+    },
+    {
+        input: "boost/camp",
+        output: {
+            root: "/",
+            base: "camp",
+            name: "camp",
+            ext: undefined,
+            components: ["/", "home", "user", "day07", "boost"],
+            absolute_string: "/home/user/day07/boost/camp",
+        },
+    },
+    {
+        input: "/home",
+        output: {
+            root: "/",
+            base: "home",
+            name: "home",
+            ext: undefined,
+            components: ["/"],
+            absolute_string: "/home",
+        },
+    },
+    {
+        input: "home",
+        output: {
+            root: "/",
+            base: "home",
+            name: "home",
+            ext: undefined,
+            components: ["/", "home", "user", "day07"],
+            absolute_string: "/home/user/day07/home",
+        },
+    },
+];

@@ -3,6 +3,10 @@ const path_regex = /^(\/|\w:\\)?([\w\/\.\\]+(?:\/|\\))?([^./]+)(\.\w+)?$/;
 function get_absolute(components = ["."]) {
     const current_dir = process.cwd().split(/\/|\\/);
 
+    if (process.platform === "linux") {
+        current_dir[0] = "/";
+    }
+
     let index;
     for (const [i, component] of Object.entries(components)) {
         index = i;
@@ -30,13 +34,18 @@ export function parse_filepath(path_string) {
             components = get_absolute(components);
             root = components[0];
         } else {
-            root = process.cwd().split(/\/|\\/)[0];
+            root =
+                process.platform === "linux"
+                    ? "/"
+                    : process.cwd().split(/\/|\\/)[0];
             components = [root].concat(components || []);
         }
 
-        let base = `${name}${ext || ""}`;
-
-        let absolute_string = `${components.join("/")}/${base}`;
+        const root_separator = process.platform === "win32" ? "/" : "";
+        const middle_path = components.slice(1).join("/");
+        const middle_separator = middle_path ? "/" : "";
+        const base = `${name}${ext || ""}`;
+        const absolute_string = `${root}${root_separator}${middle_path}${middle_separator}${base}`;
 
         return {
             root,
@@ -47,7 +56,6 @@ export function parse_filepath(path_string) {
             absolute_string,
         };
     } else {
-        console.log(path_string);
         throw "경로에 오류가 있습니다.";
     }
 }
