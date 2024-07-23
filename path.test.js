@@ -22,3 +22,23 @@ describe("Filepath Regex Test", () => {
         expect(result).toStrictEqual({ root, name, ext, components });
     });
 });
+
+describe("getter/setter 테스트", () => {
+    it("base getter/setter 테스트", () => {
+        const path = new Path(path_examples[0].input);
+
+        path.base = "Hello.world";
+
+        expect(path.name).toBe("Hello");
+        expect(path.ext).toBe("world");
+    });
+
+    it("components 테스트", () => {
+        const path = new Path(path_examples[0].input);
+
+        path.components = ["a", "b"];
+
+        expect(path.components).toStrictEqual(["a", "b"]);
+        expect(path.components.length).toBe(2);
+    });
+});
