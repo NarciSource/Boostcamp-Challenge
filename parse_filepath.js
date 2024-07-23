@@ -1,5 +1,5 @@
 const path_regex =
-    /^(\/|\.\/|\.\.\/|\w:\\)?([^.]+(?:\/|\\))?([^./]+)(?:\.(\w+))?$/;
+    /^(\/|\.\/|\.\.\/|\w:\\)?([^.]+(?:\/|\\))?([^./]+)(\.\w+)?$/;
 
 export function parse_filepath(path_string) {
     if (path_regex.test(path_string)) {

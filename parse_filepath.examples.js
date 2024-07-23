@@ -5,7 +5,7 @@ export default path_examples = [
             root: "/",
             components: ["home", "user", "boost", "camp", "challenge", "day8"],
             name: "problem",
-            ext: "md",
+            ext: ".md",
         },
     },
     {
@@ -14,7 +14,7 @@ export default path_examples = [
             root: "C:\\",
             components: ["home", "user", "boost", "camp", "challenge", "day8"],
             name: "problem",
-            ext: "md",
+            ext: ".md",
         },
     },
     {
@@ -23,7 +23,7 @@ export default path_examples = [
             root: "/",
             components: ["home", "user", "Documents", "Project"],
             name: "file",
-            ext: "txt",
+            ext: ".txt",
         },
     },
     {
