@@ -40,10 +40,41 @@
 
 ## 문제 해결 과정
 
+### pseudo code
+
+```js
+class Path
+    root
+    name
+    ext
+    #components
+
+    base <- name + ext
+
+    setter absolute_string
+        renew to root, name, ext and components
+```
+
+### unit test
+
+-   정규식 테스트
+
+    -   파일 이름 파싱 기능을 가진 함수를 테스트
+
+-   getter/setter 테스트
+
+    -   setter로 값 수정 후 계산된 값이 나오는지 테스트
+
+### 테스트 결과
+
+![test](https://gist.github.com/user-attachments/assets/2ab2f9cb-f141-4973-8699-96e8ffe966be)
+
 ## 학습 메모
 
 -   파일 경로 파싱 정규식: ^(\/|\w:\\)?([\w\/\.\\]+(?:\/|\\))?([^./]+)(\.\w+)?$
 -   [Node Process 모듈](https://nodejs.org/api/process.html)
+-   [Windows 시스템의 파일 경로 형식](https://learn.microsoft.com/ko-kr/dotnet/standard/io/file-path-formats)
+-   [Absolute Path vs Relative Path](https://www.linuxfoundation.org/blog/blog/classic-sysadmin-absolute-path-vs-relative-path-in-linux-unix)
 
 ### 파일 경로 용어
 
