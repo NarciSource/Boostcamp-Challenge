@@ -18,6 +18,7 @@ export default path_examples = [
             absolute_string:
                 "C:/home/user/boost/camp/challenge/day8/problem.md",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -39,6 +40,7 @@ export default path_examples = [
             absolute_string:
                 "C:/Users/jwch1/Repository/boostcamp/challenge/day07/problem.md",
             exist_file: true,
+            file_size: 24,
         },
     },
     {
@@ -51,6 +53,7 @@ export default path_examples = [
             components: ["C:", "home", "user", "Documents", "Project"],
             absolute_string: "C:/home/user/Documents/Project/file.txt",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -72,6 +75,7 @@ export default path_examples = [
             absolute_string:
                 "C:/Users/jwch1/Repository/boostcamp/day07/boost/camp",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -93,6 +97,7 @@ export default path_examples = [
             absolute_string:
                 "C:/Users/jwch1/Repository/boostcamp/user/boost/camp",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -114,6 +119,7 @@ export default path_examples = [
             absolute_string:
                 "C:/Users/jwch1/Repository/boostcamp/day07/boost/camp",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -126,6 +132,7 @@ export default path_examples = [
             components: ["C:"],
             absolute_string: "C:/home",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -145,6 +152,7 @@ export default path_examples = [
             ],
             absolute_string: "C:/Users/jwch1/Repository/boostcamp/day07/home",
             exist_file: false,
+            file_size: 0,
         },
     },
 ];

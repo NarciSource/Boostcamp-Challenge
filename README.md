@@ -27,7 +27,7 @@
     -   [x] components : [String]
     -   [x] absoluteString : String //readonly. 직접 저장하면 안되고 분석한 내용으로 조합해서 만들어야 함
     -   [x] existFile : Bool //readonly. 생성 시점을 기준으로 파일이 존재하는지 여부를 판단
-    -   [ ] fileSize : Int //readonly. 생성 시점을 기준으로 파일의 크기
+    -   [x] fileSize : Int //readonly. 생성 시점을 기준으로 파일의 크기
 
 ## 문제 해결 과정
 

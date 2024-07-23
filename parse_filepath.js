@@ -33,6 +33,17 @@ function is_exist_file(absolute_string) {
     }
 }
 
+function get_file_size(absolute_string) {
+    try {
+        console.log(absolute_string)
+        const stats = fs.statSync(absolute_string);
+        console.log(stats)
+        return stats.size;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export function parse_filepath(path_string) {
     if (path_regex.test(path_string)) {
         let [, root, components_string, name, ext] =
@@ -59,6 +70,7 @@ export function parse_filepath(path_string) {
         const base = `${name}${ext || ""}`;
         const absolute_string = `${root}${root_separator}${middle_path}${middle_separator}${base}`;
         const exist_file = is_exist_file(absolute_string);
+        const file_size = exist_file ? get_file_size(absolute_string) : 0;
 
         return {
             root,
@@ -68,6 +80,7 @@ export function parse_filepath(path_string) {
             components,
             absolute_string,
             exist_file,
+            file_size,
         };
     } else {
         throw "경로에 오류가 있습니다.";

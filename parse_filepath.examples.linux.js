@@ -17,6 +17,7 @@ export default path_examples = [
             ],
             absolute_string: "/home/user/boost/camp/challenge/day8/problem.md",
             exist_file: true,
+            file_size: 21,
         },
     },
     {
@@ -37,6 +38,7 @@ export default path_examples = [
             ],
             absolute_string: "/home/user/boost/camp/challenge/day8/problem.md",
             exist_file: true,
+            file_size: 21,
         },
     },
     {
@@ -49,6 +51,7 @@ export default path_examples = [
             components: ["/", "home", "user", "Documents", "Project"],
             absolute_string: "/home/user/Documents/Project/file.txt",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -61,6 +64,7 @@ export default path_examples = [
             components: ["/", "home", "user", "day07", "boost"],
             absolute_string: "/home/user/day07/boost/camp",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -73,6 +77,7 @@ export default path_examples = [
             components: ["/", "home", "user", "user", "boost"],
             absolute_string: "/home/user/user/boost/camp",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -85,6 +90,7 @@ export default path_examples = [
             components: ["/", "home", "user", "day07", "boost"],
             absolute_string: "/home/user/day07/boost/camp",
             exist_file: false,
+            file_size: 0,
         },
     },
     {
@@ -97,6 +103,7 @@ export default path_examples = [
             components: ["/"],
             absolute_string: "/home",
             exist_file: true,
+            file_size: 4096,
         },
     },
     {
@@ -109,6 +116,7 @@ export default path_examples = [
             components: ["/", "home", "user", "day07"],
             absolute_string: "/home/user/day07/home",
             exist_file: false,
+            file_size: 0,
         },
     },
 ];
