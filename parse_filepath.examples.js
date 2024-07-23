@@ -3,7 +3,7 @@ export default path_examples = [
         input: "/home/user/boost/camp/challenge/day8/problem.md",
         output: {
             root: "/",
-            components: "home/user/boost/camp/challenge/day8/",
+            components: ["home", "user", "boost", "camp", "challenge", "day8"],
             name: "problem",
             ext: "md",
         },
@@ -12,7 +12,7 @@ export default path_examples = [
         input: "C:\\home\\user\\boost\\camp\\challenge\\day8\\problem.md",
         output: {
             root: "C:\\",
-            components: "home\\user\\boost\\camp\\challenge\\day8\\",
+            components: ["home", "user", "boost", "camp", "challenge", "day8"],
             name: "problem",
             ext: "md",
         },
@@ -21,7 +21,7 @@ export default path_examples = [
         input: "/home/user/Documents/Project/file.txt",
         output: {
             root: "/",
-            components: "home/user/Documents/Project/",
+            components: ["home", "user", "Documents", "Project"],
             name: "file",
             ext: "txt",
         },
@@ -30,7 +30,7 @@ export default path_examples = [
         input: "./boost/camp",
         output: {
             root: "./",
-            components: "boost/",
+            components: ["boost"],
             name: "camp",
             ext: undefined,
         },
@@ -39,7 +39,7 @@ export default path_examples = [
         input: "../user/boost/camp",
         output: {
             root: "../",
-            components: "user/boost/",
+            components: ["user", "boost"],
             name: "camp",
             ext: undefined,
         },
@@ -48,7 +48,7 @@ export default path_examples = [
         input: "boost/camp",
         output: {
             root: undefined,
-            components: "boost/",
+            components: ["boost"],
             name: "camp",
             ext: undefined,
         },
