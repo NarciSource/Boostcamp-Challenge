@@ -7,7 +7,7 @@ export default class Path {
     #components;
 
     constructor(src) {
-        const { root, name, ext, components } = this.#parse_filepath(src);
+        const { root, name, ext, components } = Path.parse_filepath(src);
 
         this.root = root;
         this.name = name;
@@ -87,7 +87,7 @@ export default class Path {
         this.components.pop();
     }
 
-    #get_absolute(components = ["."]) {
+    static get_absolute(components = ["."]) {
         const current_dir = process.cwd().split(/\/|\\/);
 
         if (process.platform === "linux") {
@@ -109,7 +109,7 @@ export default class Path {
         return current_dir.concat(components.slice(index));
     }
 
-    #parse_filepath(path_string) {
+    static parse_filepath(path_string) {
         if (path_regex.test(path_string)) {
             let [, root, components_string, name, ext] =
                 path_regex.exec(path_string);
@@ -119,7 +119,7 @@ export default class Path {
                 .filter((i) => i.length > 0);
 
             if (!root) {
-                components = this.#get_absolute(components);
+                components = Path.get_absolute(components);
                 root = components[0];
             } else {
                 root =
