@@ -7,6 +7,10 @@ export default class Path {
     #components;
 
     constructor(src) {
+        this.#init(src);
+    }
+
+    #init(src) {
         const { root, name, ext, components } = Path.parse_filepath(src);
 
         this.root = root;
@@ -47,6 +51,9 @@ export default class Path {
         const middle_separator = middle_path ? "/" : "";
 
         return `${this.root}${root_separator}${middle_path}${middle_separator}${this.base}`;
+    }
+    set absolute_string(src) {
+        this.#init(src);
     }
 
     get exist_file() {
