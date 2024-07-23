@@ -20,6 +20,7 @@
 -   [x] Path 파싱을 위해서 정규표현식(regular expression)을 학습하고 필수적으로 사용한다.
     -   [x] 단위 테스트
 -   [x] 다음과 같은 Path 요소에 접근해서 읽고, 변경할 수 있어야 한다.
+
     -   [x] root : String
     -   [x] base : String
     -   [x] name : String
@@ -28,6 +29,12 @@
     -   [x] absoluteString : String //readonly. 직접 저장하면 안되고 분석한 내용으로 조합해서 만들어야 함
     -   [x] existFile : Bool //readonly. 생성 시점을 기준으로 파일이 존재하는지 여부를 판단
     -   [x] fileSize : Int //readonly. 생성 시점을 기준으로 파일의 크기
+
+-   [ ] pathComponents는 읽기만 가능하도록 만들고 변경하는 것은 메소드를 만든다.
+
+-   [x] 경로에 요소를 추가하는 메소드 : appendComponent()
+
+-   [x] base를 제외한 마지막 경로 제거하는 메소드 : deleteLastComponent()
 
 ## 문제 해결 과정
 

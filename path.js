@@ -43,4 +43,11 @@ export default class Path {
             file_size: this.#file_size,
         });
     }
+
+    append_component(component) {
+        this.components.push(component);
+    }
+    deleteLast_component() {
+        this.components.pop();
+    }
 }
