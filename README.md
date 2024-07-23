@@ -30,7 +30,7 @@
     -   [x] existFile : Bool //readonly. 생성 시점을 기준으로 파일이 존재하는지 여부를 판단
     -   [x] fileSize : Int //readonly. 생성 시점을 기준으로 파일의 크기
 
--   [ ] pathComponents는 읽기만 가능하도록 만들고 변경하는 것은 메소드를 만든다.
+-   [x] pathComponents는 읽기만 가능하도록 만들고 변경하는 것은 메소드를 만든다.
 
 -   [x] 경로에 요소를 추가하는 메소드 : appendComponent()
 

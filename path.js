@@ -4,7 +4,7 @@ export default class Path {
     root;
     name;
     ext;
-    components;
+    #components;
 
     constructor(src) {
         const { root, name, ext, components } = this.#parse_filepath(src);
@@ -13,6 +13,58 @@ export default class Path {
         this.name = name;
         this.ext = ext;
         this.components = components;
+    }
+
+    get components() {
+        return this.#components;
+    }
+    set components(components) {
+        const is_valid = (value) => true;
+
+        if (is_valid(components)) {
+            this.#components = components;
+        }
+    }
+
+    get base() {
+        `${this.name}${this.ext || ""}`;
+    }
+    set base(base) {
+        const regex = /(\w+).(\w+)/;
+
+        if (regex.test(base)) {
+            const [, name, ext] = regex.exec(base);
+            this.name = name;
+            this.ext = ext;
+        } else {
+            throw "올바르지 않은 파일 형식입니다.";
+        }
+    }
+
+    get absolute_string() {
+        const root_separator = process.platform === "win32" ? "/" : "";
+        const middle_path = this.components.slice(1).join("/");
+        const middle_separator = middle_path ? "/" : "";
+
+        return `${this.root}${root_separator}${middle_path}${middle_separator}${this.base}`;
+    }
+
+    get exist_file() {
+        try {
+            fs.accessSync(this.absolute_string(), fs.constants.F_OK);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    get file_size() {
+        try {
+            const stats = fs.statSync(this.absolute_string());
+            return stats.size;
+        } catch (error) {
+            throw error;
+        }
     }
 
     stringify() {
