@@ -1,3 +1,4 @@
+import fs from "fs";
 const path_regex = /^(\/|\w:\\)?([\w\/\.\\]+(?:\/|\\))?([^./]+)(\.\w+)?$/;
 
 export default class Path {
@@ -31,7 +32,7 @@ export default class Path {
     }
 
     get base() {
-        `${this.name}${this.ext || ""}`;
+        return `${this.name}${this.ext || ""}`;
     }
     set base(base) {
         const regex = /^([^/.]+)(?:\.([^/]+))?$/;
@@ -58,7 +59,7 @@ export default class Path {
 
     get exist_file() {
         try {
-            fs.accessSync(this.absolute_string(), fs.constants.F_OK);
+            fs.accessSync(this.absolute_string, fs.constants.F_OK);
             return true;
         } catch (err) {
             return false;
@@ -66,31 +67,35 @@ export default class Path {
     }
 
     get file_size() {
-        try {
-            const stats = fs.statSync(this.absolute_string());
-            return stats.size;
-        } catch (error) {
-            throw error;
+        if (this.exist_file) {
+            try {
+                const stats = fs.statSync(this.absolute_string);
+                return stats.size;
+            } catch (error) {
+                throw error;
+            }
+        } else {
+            return 0;
         }
     }
 
     stringify() {
-        JSON.stringify({
+        return JSON.stringify({
             root: this.root,
             base: this.base,
             name: this.name,
             ext: this.ext,
             components: this.components,
-            absolute_string: this.absolute_string(),
-            exist_file: this.exist_file(),
-            file_size: this.file_size(),
+            absolute_string: this.absolute_string,
+            exist_file: this.exist_file,
+            file_size: this.file_size,
         });
     }
 
     append_component(component) {
         this.components.push(component);
     }
-    deleteLast_component() {
+    delete_last_component() {
         this.components.pop();
     }
 

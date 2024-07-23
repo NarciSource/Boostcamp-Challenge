@@ -23,9 +23,10 @@ path.absolute_string = "/home/user/boost/camp/challenge/day8/problem.md";
 path.append_component("base");
 path.append_component("camp");
 //path.absolute_string = "/home/user/boost/camp/challenge/day12/base/camp/problem.md"
-path.deleteLast_component();
+path.delete_last_component();
 //path.absolute_string = "/home/user/boost/camp/challenge/day12/base/problem.md"
 
 const path1 = new Path("/first/second/last/problem.md");
 
-console.log(path, path1);
+console.log(path.stringify());
+console.log(path1.stringify());
