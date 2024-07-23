@@ -1,6 +1,6 @@
 import path_examples_windows from "./examples.windows.js";
 import path_examples_linux from "./examples.linux.js";
-import Path from "./path";
+import Path from "./Path.js";
 
 let path_examples;
 if (process.platform === "win32") {
