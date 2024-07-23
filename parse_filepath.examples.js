@@ -3,72 +3,80 @@ export default path_examples = [
         input: "/home/user/boost/camp/challenge/day8/problem.md",
         output: {
             root: "/",
-            components: ["home", "user", "boost", "camp", "challenge", "day8"],
+            base: "problem.md",
             name: "problem",
             ext: ".md",
+            components: ["home", "user", "boost", "camp", "challenge", "day8"],
         },
     },
     {
         input: "C:\\home\\user\\boost\\camp\\challenge\\day8\\problem.md",
         output: {
             root: "C:\\",
-            components: ["home", "user", "boost", "camp", "challenge", "day8"],
+            base: "problem.md",
             name: "problem",
             ext: ".md",
+            components: ["home", "user", "boost", "camp", "challenge", "day8"],
         },
     },
     {
         input: "/home/user/Documents/Project/file.txt",
         output: {
             root: "/",
-            components: ["home", "user", "Documents", "Project"],
+            base: "file.txt",
             name: "file",
             ext: ".txt",
+            components: ["home", "user", "Documents", "Project"],
         },
     },
     {
         input: "./boost/camp",
         output: {
             root: "./",
-            components: ["boost"],
+            base: "camp",
             name: "camp",
             ext: undefined,
+            components: ["boost"],
         },
     },
     {
         input: "../user/boost/camp",
         output: {
             root: "../",
-            components: ["user", "boost"],
+            base: "camp",
             name: "camp",
             ext: undefined,
+            components: ["user", "boost"],
         },
     },
     {
         input: "boost/camp",
         output: {
             root: undefined,
-            components: ["boost"],
+            base: "camp",
             name: "camp",
             ext: undefined,
+            components: ["boost"],
         },
     },
     {
         input: "/home",
         output: {
             root: "/",
-            components: undefined,
+            base: "home",
             name: "home",
             ext: undefined,
+            components: undefined,
         },
     },
     {
         input: "home",
         output: {
             root: undefined,
-            components: undefined,
+            base: "home",
             name: "home",
             ext: undefined,
+            components: undefined,
         },
     },
 ];

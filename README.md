@@ -20,14 +20,14 @@
 -   [x] Path 파싱을 위해서 정규표현식(regular expression)을 학습하고 필수적으로 사용한다.
     -   [x] 단위 테스트
 -   [ ] 다음과 같은 Path 요소에 접근해서 읽고, 변경할 수 있어야 한다.
-    -   root : String
-    -   base : String
-    -   name : String
-    -   ext : String
-    -   components : [String]
-    -   absoluteString : String //readonly. 직접 저장하면 안되고 분석한 내용으로 조합해서 만들어야 함
-    -   existFile : Bool //readonly. 생성 시점을 기준으로 파일이 존재하는지 여부를 판단
-    -   fileSize : Int //readonly. 생성 시점을 기준으로 파일의 크기
+    -   [x] root : String
+    -   [x] base : String
+    -   [x] name : String
+    -   [x] ext : String
+    -   [x] components : [String]
+    -   [ ] absoluteString : String //readonly. 직접 저장하면 안되고 분석한 내용으로 조합해서 만들어야 함
+    -   [ ] existFile : Bool //readonly. 생성 시점을 기준으로 파일이 존재하는지 여부를 판단
+    -   [ ] fileSize : Int //readonly. 생성 시점을 기준으로 파일의 크기
 
 ## 문제 해결 과정
 
@@ -42,13 +42,11 @@
     -   Unix/Linux: /
     -   Windows: 각 드라이브 C:\ D:\
 
--   base (베이스): 파일 경로의 기본 부분을 의미합니다. 예를 들어, C:\Users\Username\Documents\file.txt에서 Documents가 베이스가 될 수 있습니다. 종종 전체 경로에서 특정 디렉토리까지의 부분을 지칭할 때 사용됩니다.
+-   base (베이스): 경로에서 확장자와 파일 이름을 포함한 부분을 지칭. name + ext
+
+-   name (이름): 파일 또는 디렉토리의 이름.
 
 -   ext (확장자): 파일 이름의 마지막 부분으로, 파일의 유형이나 형식.
-
--   name (이름): 파일 또는 디렉토리의 이름. 경로에서 확장자와 파일 이름을 포함한 부분을 지칭.
-
--   lastDirectory (마지막 디렉토리): 경로의 끝에 위치한 디렉토리.
 
 -   components (구성 요소): 파일 경로를 구성하는 각각의 디렉토리와 파일 이름.
 
