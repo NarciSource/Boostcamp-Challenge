@@ -24,18 +24,28 @@ describe("Filepath Regex Test", () => {
 });
 
 describe("getter/setter 테스트", () => {
-    it("base getter/setter 테스트", () => {
-        const path = new Path(path_examples[0].input);
+    let path;
+    beforeEach(() => {
+        // given
+        path = new Path(path_examples[0].input);
+    });
 
+    it("base 테스트", () => {
+        // when
         path.base = "Hello.world";
 
+        // then
         expect(path.name).toBe("Hello");
         expect(path.ext).toBe("world");
     });
 
-    it("components 테스트", () => {
-        const path = new Path(path_examples[0].input);
+    it("base 테스트 2", () => {
+        expect(() => {
+            path.base = "Hello/world.js";
+        }).toThrow("올바르지 않은 파일 형식입니다.");
+    });
 
+    it("components 테스트", () => {
         path.components = ["a", "b"];
 
         expect(path.components).toStrictEqual(["a", "b"]);

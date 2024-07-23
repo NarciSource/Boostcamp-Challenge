@@ -30,7 +30,7 @@ export default class Path {
         `${this.name}${this.ext || ""}`;
     }
     set base(base) {
-        const regex = /(\w+).(\w+)/;
+        const regex = /^([^/.]+)(?:\.([^/]+))?$/;
 
         if (regex.test(base)) {
             const [, name, ext] = regex.exec(base);
