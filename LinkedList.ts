@@ -8,9 +8,6 @@ export default class LinkedList {
     constructor() {}
 
     add(movie: Movie): LinkedList {
-        const node = new LinkedListNode({ movie });
-        const new_list = new LinkedList();
-
         for (const node of this) {
             const movie_record = node.movie;
             if (movie_record.title === movie.title) {
@@ -18,16 +15,22 @@ export default class LinkedList {
             }
         }
 
-        new_list.head = this.head;
-        new_list.tail = this.tail;
+        let prev_head = emptyNode;
+        let prev_node = prev_head;
+        for (const node of this) {
+            const new_node = node.copy();
 
-        if (!new_list.head) {
-            new_list.head = node;
-        } else {
-            new_list.tail.next_node = node;
+            new_node.prev_node = prev_node;
+            prev_node.next_node = new_node;
+            prev_node = new_node;
         }
+        let last_node = prev_node;
 
-        new_list.tail = node;
+        const node = new LinkedListNode({ movie });
+        last_node.next_node = node;
+
+        const new_list = new LinkedList();
+        new_list.head = prev_head.next_node;
 
         return new_list;
     }
