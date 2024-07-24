@@ -5,14 +5,15 @@ export default class Movie {
     main_actor_A: string;
     main_actor_B: string;
     tickets: number;
-    number_of_theaters: number;
+    theaters: number;
 
-    constructor({ title, tickets }: { title: string; tickets?: number }) {
+    constructor({ title, tickets, theaters }: { title: string; tickets?: number; theaters?: number }) {
         this.title = title;
         this.tickets = tickets;
+        this.theaters = theaters;
     }
 
-    update(tickets?: number) {
-        return tickets ? new Movie({ ...this, tickets }) : this;
+    update({ tickets, theaters }: { tickets?: number; theaters?: number }) {
+        return tickets || theaters ? new Movie({ ...this, tickets, theaters }) : this;
     }
 }
