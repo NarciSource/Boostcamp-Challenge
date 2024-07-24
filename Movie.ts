@@ -7,8 +7,9 @@ export default class Movie {
     tickets: number;
     theaters: number;
 
-    constructor({ title, tickets, theaters }: { title: string; tickets?: number; theaters?: number }) {
+    constructor({ title, release_year, tickets, theaters }: { title: string; release_year: number; tickets?: number; theaters?: number }) {
         this.title = title;
+        this.release_year = release_year;
         this.tickets = tickets;
         this.theaters = theaters;
     }

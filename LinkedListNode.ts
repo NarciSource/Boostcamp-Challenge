@@ -16,4 +16,4 @@ export default class LinkedListNode {
     }
 }
 
-export const emptyNode = new LinkedListNode({ movie: new Movie({ title: "" }) });
+export const emptyNode = new LinkedListNode({ movie: new Movie({ title: "", release_year: 0 }) });

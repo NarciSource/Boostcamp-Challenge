@@ -55,6 +55,10 @@ export default class LinkedList {
         return new_list;
     }
 
+    sort_by_date() {
+        return [...this].map((node) => node.movie).sort((movie_a, movie_b) => movie_a.release_year - movie_b.release_year);
+    }
+
     get length(): number {
         return [...this].length;
     }
