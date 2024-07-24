@@ -1,4 +1,4 @@
-import LinkedListNode from "./LinkedListNode";
+import LinkedListNode, { emptyNode } from "./LinkedListNode";
 import Movie from "./Movie";
 
 export default class LinkedList {
@@ -8,11 +8,11 @@ export default class LinkedList {
     constructor() {}
 
     add(movie: Movie): LinkedList {
-        const node = new LinkedListNode(movie);
+        const node = new LinkedListNode({ movie });
         const new_list = new LinkedList();
 
         for (const node of this) {
-            const movie_record = node.value;
+            const movie_record = node.movie;
             if (movie_record.title === movie.title) {
                 throw "같은 영화가 존재합니다.";
             }
@@ -30,6 +30,30 @@ export default class LinkedList {
         new_list.tail = node;
 
         return new_list;
+    }
+
+    delete(title: string): LinkedList {
+        let prev_head = emptyNode;
+        let prev_node = prev_head;
+        for (const node of this) {
+            if (node.movie.title !== title) {
+                const new_node = node.copy();
+
+                new_node.prev_node = prev_node;
+                prev_node.next_node = new_node;
+                prev_node = new_node;
+            }
+        }
+        prev_node.next_node = null;
+
+        const new_list = new LinkedList();
+        new_list.head = prev_head.next_node;
+
+        return new_list;
+    }
+
+    get length(): number {
+        return [...this].length;
     }
 
     [Symbol.iterator]() {

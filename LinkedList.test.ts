@@ -6,12 +6,20 @@ describe("리스트 불변성 검사", () => {
 
     beforeEach(() => {
         original_list = new LinkedList();
+        original_list = original_list.add(new Movie({ title: "Movie#1" })).add(new Movie({ title: "Movie#2" }));
     });
 
     test("add", () => {
-        const new_list = original_list.add(new Movie({ title: "" }));
+        const new_list = original_list.add(new Movie({ title: "Movie#3" }));
 
         expect(new_list).not.toEqual(original_list);
+    });
+
+    test("delete", () => {
+        const new_list = original_list.delete("Movie#2");
+
+        expect(new_list).not.toEqual(original_list);
+        expect(new_list.length).toBe(1)
     });
 });
 
@@ -27,7 +35,6 @@ describe("영화 불변성 검사", () => {
         const movie = new Movie({ title: "Movie#1" });
         const new_movie = movie.update({ theaters: 10 });
 
-        console.log(movie, new_movie);
         expect(new_movie).not.toEqual(movie);
     });
 
