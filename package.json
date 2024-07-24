@@ -24,9 +24,8 @@
     "typescript": "^5.5.4"
   },
   "jest": {
-    "testEnvironment": "ts-node",
-    "transform": {
-      "^.+\\.js$": "esbuild-jest"
-    }
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": ["**/?(*.)+(spec|test).[tj]s?(x)"]
   }
 }
