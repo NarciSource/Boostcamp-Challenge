@@ -56,11 +56,30 @@ export default class LinkedList {
     }
 
     sort_by_date() {
-        return this.movies.sort((movie_a, movie_b) => movie_a.release_year - movie_b.release_year);
+        return this.movies.sort(
+            (movie_a, movie_b) => movie_a.release_year - movie_b.release_year,
+        );
     }
 
     top_10_tickets() {
-        return this.movies.sort((movie_a, movie_b) => movie_b.tickets - movie_a.tickets).slice(0, 10);
+        return this.movies
+            .sort((movie_a, movie_b) => movie_b.tickets - movie_a.tickets)
+            .slice(0, 10);
+    }
+
+    find_by({ director, actor }: { director?: string; actor?: string }) {
+        return [
+            ...this.movies.filter((movie) => movie.main_actor_A === actor),
+            ...this.movies.filter((movie) => movie.main_actor_B === actor),
+            ...this.movies.filter((movie) => movie.director === director),
+        ].map((movie) => movie.title);
+    }
+
+    total_theaters() {
+        return this.movies
+            .map((movie) => movie.theaters)
+            .filter((i) => i)
+            .reduce((acc, cur) => acc + cur, 0);
     }
 
     get movies(): Movie[] {
