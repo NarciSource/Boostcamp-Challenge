@@ -56,7 +56,15 @@ export default class LinkedList {
     }
 
     sort_by_date() {
-        return [...this].map((node) => node.movie).sort((movie_a, movie_b) => movie_a.release_year - movie_b.release_year);
+        return this.movies.sort((movie_a, movie_b) => movie_a.release_year - movie_b.release_year);
+    }
+
+    top_10_tickets() {
+        return this.movies.sort((movie_a, movie_b) => movie_b.tickets - movie_a.tickets).slice(0, 10);
+    }
+
+    get movies(): Movie[] {
+        return [...this].map((node) => node.movie);
     }
 
     get length(): number {
