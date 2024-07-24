@@ -4,7 +4,7 @@
   "description": "함수형 코드로 구현하기",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "repository": {
     "type": "git",

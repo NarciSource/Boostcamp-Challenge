@@ -7,7 +7,17 @@ export default class Movie {
     tickets: number;
     theaters: number;
 
-    constructor({ title, release_year, tickets, theaters }: { title: string; release_year: number; tickets?: number; theaters?: number }) {
+    constructor({
+        title,
+        release_year,
+        tickets,
+        theaters,
+    }: {
+        title: string;
+        release_year: number;
+        tickets?: number;
+        theaters?: number;
+    }) {
         this.title = title;
         this.release_year = release_year;
         this.tickets = tickets;
@@ -15,6 +25,8 @@ export default class Movie {
     }
 
     update({ tickets, theaters }: { tickets?: number; theaters?: number }) {
-        return tickets || theaters ? new Movie({ ...this, tickets, theaters }) : this;
+        return tickets || theaters
+            ? new Movie({ ...this, tickets, theaters })
+            : this;
     }
 }

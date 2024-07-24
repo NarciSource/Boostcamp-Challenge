@@ -1,26 +1,41 @@
-import LinkedListNode, { emptyNode } from "./LinkedListNode";
+import LinkedListNode, { null_node } from "./LinkedListNode";
 import Movie from "./Movie";
 
 export default class LinkedList {
-    head: LinkedListNode;
-    tail: LinkedListNode;
+    #head: LinkedListNode;
 
-    constructor() {}
+    constructor(
+        movie_list?: { title: string; release_year: number; tickets: number }[],
+    ) {
+        if (movie_list) {
+            let prev_head = null_node;
+            let prev_node = prev_head;
+
+            for (const node of movie_list
+                .map((each) => new Movie(each))
+                .map((movie) => new LinkedListNode({ movie }))) {
+                prev_node.next_node = node;
+                prev_node = node;
+            }
+            this.#head = prev_head.next_node;
+        }
+    }
 
     add(movie: Movie): LinkedList {
         for (const node of this) {
             const movie_record = node.movie;
+
             if (movie_record.title === movie.title) {
                 throw "같은 영화가 존재합니다.";
             }
         }
 
-        let prev_head = emptyNode;
+        let prev_head = null_node;
         let prev_node = prev_head;
+
         for (const node of this) {
             const new_node = node.copy();
 
-            new_node.prev_node = prev_node;
             prev_node.next_node = new_node;
             prev_node = new_node;
         }
@@ -30,19 +45,19 @@ export default class LinkedList {
         last_node.next_node = node;
 
         const new_list = new LinkedList();
-        new_list.head = prev_head.next_node;
+        new_list.#head = prev_head.next_node;
 
         return new_list;
     }
 
     delete(title: string): LinkedList {
-        let prev_head = emptyNode;
+        let prev_head = null_node;
         let prev_node = prev_head;
+
         for (const node of this) {
             if (node.movie.title !== title) {
                 const new_node = node.copy();
 
-                new_node.prev_node = prev_node;
                 prev_node.next_node = new_node;
                 prev_node = new_node;
             }
@@ -50,24 +65,30 @@ export default class LinkedList {
         prev_node.next_node = null;
 
         const new_list = new LinkedList();
-        new_list.head = prev_head.next_node;
+        new_list.#head = prev_head.next_node;
 
         return new_list;
     }
 
-    sort_by_date() {
+    sort_by_date(): Movie[] {
         return this.movies.sort(
             (movie_a, movie_b) => movie_a.release_year - movie_b.release_year,
         );
     }
 
-    top_10_tickets() {
+    top_10_tickets(): Movie[] {
         return this.movies
             .sort((movie_a, movie_b) => movie_b.tickets - movie_a.tickets)
             .slice(0, 10);
     }
 
-    find_by({ director, actor }: { director?: string; actor?: string }) {
+    find_by({
+        director,
+        actor,
+    }: {
+        director?: string;
+        actor?: string;
+    }): string[] {
         return [
             ...this.movies.filter((movie) => movie.main_actor_A === actor),
             ...this.movies.filter((movie) => movie.main_actor_B === actor),
@@ -75,7 +96,7 @@ export default class LinkedList {
         ].map((movie) => movie.title);
     }
 
-    total_theaters() {
+    total_theaters(): number {
         return this.movies
             .map((movie) => movie.theaters)
             .filter((i) => i)
@@ -91,7 +112,7 @@ export default class LinkedList {
     }
 
     [Symbol.iterator]() {
-        let iter: LinkedListNode = this.head;
+        let iter: LinkedListNode = this.#head;
 
         return {
             next: () => {
