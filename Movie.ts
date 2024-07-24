@@ -6,4 +6,8 @@ export default class Movie {
     main_actor_B: string;
     number_of_audience: number;
     number_of_theaters: number;
+
+    constructor(title: string) {
+        this.title = title;
+    }
 }
