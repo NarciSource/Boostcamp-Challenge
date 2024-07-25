@@ -1,14 +1,15 @@
 import EventManager from "./EventManager.js";
+import Subscriber from "./Subscriber.js";
+import Publisher from "./Publisher.js";
+import Event from "./event.js";
 
 const eventManager = EventManager.sharedInstance();
+const publisherA = new Publisher("albumModel");
+const subscriberA = new Subscriber("subscriberA");
 
-const subscriberA = {
-    handler: (event) => {
-        console.log(event);
-    },
-};
+eventManager.add(subscriberA, "eventA", publisherA, new Event("eventA", publisherA));
+eventManager.add(subscriberA, "eventB", publisherA, new Event("eventB", publisherA));
 
-eventManager.add(subscriberA, "eventA", "albumModel", subscriberA.handler);
-eventManager.add(subscriberA, "eventB", "albumModel", subscriberA.handler);
+ console.log(eventManager.stringify());
 
-console.log(eventManager.stringify());
+eventManager.postEvent("eventA", undefined);

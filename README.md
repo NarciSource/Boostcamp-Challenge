@@ -33,7 +33,7 @@
 
 -   [x] EventManager 내부에는 그림처럼 이벤트 조건을 비교할 수 있는 규칙 데이터가 있어야 한다. 이벤트가 발생했을 때 Subscriber 구독자를 찾기 위한 데이터 구조와 표를 readme에 추가한다
 
--   [ ] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다.
+-   [x] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다.
 
 ## 문제 해결 과정
 
@@ -41,7 +41,7 @@
 
     -   subscriber: 이벤트를 구독하려는 객체. 특정 이벤트가 발생할 때 호출될 핸들러 함수를 제공하는 객체
     -   sender: 이벤트를 발행하는 객체. = publisher
-    -   handler: 이벤트가 발생할 때 호출될 구독자의 함수
+    -   handler: 이벤트가 발생할 때 호출될 구독자의 함수 = event
 
 -   함수
     -   add: 구독자 등록

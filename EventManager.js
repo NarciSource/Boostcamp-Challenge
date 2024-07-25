@@ -25,14 +25,15 @@ export default class EventManager {
         this.table.set({ subscriber, eventName, sender }, handler);
     }
 
-    // 수정필요
     remove(subscriber) {
-        this.table = this.table.filter((sub) => sub.subscriber !== subscriber);
+        const keys = Array.from(this.table.keys()).filter(
+            (row) => row.subscriber === subscriber,
+        );
+
+        keys.forEach((key) => this.table.delete(key));
     }
 
     postEvent(eventName, sender, userInfo = undefined) {
-        const event = new Event(eventName, sender, userInfo);
-
         const matched = Array.from(this.table.keys())
             .filter((row) => {
                 return (
@@ -43,6 +44,22 @@ export default class EventManager {
                 );
             })
             .map((key) => ({ ...key, handler: this.table.get(key) }));
+
+        matched.forEach((m) => {
+            const worker = new Worker("./worker.js");
+
+            const { subscriber, eventName, sender, handler } = m;
+
+            worker.postMessage({
+                subscriber,
+                eventName,
+                sender,
+                handler,
+            });
+            worker.on("message", (message) => {
+                if (message === "done") worker.terminate();
+            });
+        });
     }
 
     stringify() {

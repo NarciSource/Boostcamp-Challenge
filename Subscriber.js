@@ -1,8 +1,6 @@
 export default class Subscriber {
     name;
-    handler;
-    constructor(name, handler) {
+    constructor(name) {
         this.name = name;
-        this.handler = handler;
     }
 }
