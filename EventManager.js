@@ -94,12 +94,25 @@ export default class EventManager {
     }
 
     stringify() {
-        return Array.from(this.table.keys())
-            .map(({ eventName, publisher }, index) => {
-                return `Subscriber#${
-                    index + 1
-                } : event name = "${eventName}", publisher = ${publisher.name}`;
-            })
+        return [
+            ...this.syncQueue
+                .getKeys()
+                .map((arg) => ({ emit: "sync", ...arg })),
+            ...this.asyncQueue
+                .getKeys()
+                .map((arg) => ({ emit: "async", ...arg })),
+            ...this.delayQueue
+                .getKeys()
+                .map((arg) => ({ emit: "delay", ...arg })),
+        ]
+            .map(
+                ({ emit, eventName, publisher }, index) =>
+                    `Subscriber#${
+                        index + 1
+                    } : ${emit}, event name = ${eventName}, publisher = ${
+                        publisher.name
+                    }`,
+            )
             .join("\n");
     }
 }

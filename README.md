@@ -16,13 +16,9 @@
 
 -   [x] postEvent(eventName, sender, userInfo)
 
-    -   이벤트를 발행할 때는 이벤트 이름을 꼭 명시해야 한다.
-
-    -   이벤트를 발생하고 전송하는 Publisher 객체 인스턴스를 꼭 넘겨야한다.
-
     -   [x] Object 타입으로 userData를 전달할 수 있다. undefined으로 생략가능하다.
 
-    -   내부에서 Event 객체를 생성하고 구독 핸들러에 전달한다.
+    -   [x] 내부에서 Event 객체를 생성하고 구독 핸들러에 전달한다.
 
 -   [x] stringify()
 
