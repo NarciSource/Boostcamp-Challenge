@@ -21,14 +21,14 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberA,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-A", loginComponent),
+        handler: new Event("click-sync-A", loginComponent),
         emitter_type: "sync",
     });
     eventManager.add({
         subscriber: subscriberB,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-B", loginComponent),
+        handler: new Event("click-sync-B", loginComponent),
         emitter_type: "sync",
     });
 
@@ -44,20 +44,47 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberA,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-A", loginComponent),
+        handler: new Event("click-async-C", loginComponent),
         emitter_type: "async",
+    });
+
+    eventManager.add({
+        subscriber: subscriberB,
+        eventName: "hover",
+        publisher: loginComponent,
+        handler: new Event("hover-async-D", loginComponent),
+        emitter_type: "async",
+    });
+
+    worker.postMessage({
+        eventName: "click",
+        publisher: loginComponent,
+        userInfo: "userInfo",
+    });
+})();
+
+
+(function delay_test() {
+    eventManager.add({
+        subscriber: subscriberA,
+        eventName: "hover",
+        publisher: loginComponent,
+        handler: new Event("hover-delay-E", loginComponent),
+        emitter_type: "delay",
+        delay: 5000,
     });
 
     eventManager.add({
         subscriber: subscriberB,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-B", loginComponent),
-        emitter_type: "async",
+        handler: new Event("click-delay-F", loginComponent),
+        emitter_type: "delay",
+        delay: 1000,
     });
 
     worker.postMessage({
-        eventName: "click",
+        eventName: "hover",
         publisher: loginComponent,
         userInfo: "userInfo",
     });

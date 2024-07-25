@@ -47,7 +47,7 @@
 
 -   [x] 비동기방식 postEvent()는 특정한 Event Emitter에 코드를 넣고, 곧바로 리턴한다.
 
--   [ ] 지연 혹은 예약 방식 postEvent()는 비동기 방식처럼 특정한 Event Emitter에 코드를 넣고, 지정한 시각에 해당 코드가 실행되야 한다.
+-   [x] 지연 혹은 예약 방식 postEvent()는 비동기 방식처럼 특정한 Event Emitter에 코드를 넣고, 지정한 시각에 해당 코드가 실행되야 한다.
 
 -   [ ] Subscriber 핸들러를 실행하는 Event Emitter를 구분해서 출력한다.
 

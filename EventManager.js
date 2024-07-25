@@ -1,17 +1,18 @@
 import AsyncEventEmitter from "./EventEmitter.Async.js";
+import DelayEventEmitter from "./EventEmitter.Delay.js";
 import SyncEventEmitter from "./EventEmitter.Sync.js";
 
 export default class EventManager {
-    table;
+    table = new Map();
     syncQueue = new SyncEventEmitter();
     asyncQueue = new AsyncEventEmitter();
+    delayQueue = new DelayEventEmitter();
 
     constructor() {
         if (EventManager.instance) {
             return EventManager.instance;
         }
 
-        this.table = new Map();
         EventManager.instance = this;
     }
 
@@ -23,15 +24,34 @@ export default class EventManager {
         return EventManager.instance;
     }
 
-    add({ subscriber, eventName, publisher, handler, emitter_type = "sync" }) {
+    add({
+        subscriber,
+        eventName,
+        publisher,
+        handler,
+        emitter_type = "sync",
+        delay,
+    }) {
         this.table.set({ subscriber, eventName, publisher }, handler);
 
-        const emitter =
-            emitter_type === "sync" ? this.syncQueue : this.asyncQueue;
+        const emitter = (() => {
+            switch (emitter_type) {
+                case "sync":
+                    return this.syncQueue;
+                case "async":
+                    return this.asyncQueue;
+                case "delay":
+                    return this.delayQueue;
+            }
+        })();
 
-        emitter.on({ eventName, publisher }, (data) => {
-            console.log(handler, data);
-        });
+        emitter.on(
+            { eventName, publisher },
+            (data) => {
+                console.log(handler, data);
+            },
+            delay,
+        );
     }
 
     remove(subscriber) {
@@ -67,6 +87,7 @@ export default class EventManager {
         matched.forEach(({ eventName, publisher }) => {
             this.syncQueue.emit({ eventName, publisher }, userInfo);
             this.asyncQueue.emit({ eventName, publisher }, userInfo);
+            this.delayQueue.emit({ eventName, publisher }, userInfo);
         });
     }
 
