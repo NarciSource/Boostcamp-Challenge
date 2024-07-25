@@ -35,6 +35,22 @@
 
 -   [x] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다.
 
+-   [ ] Promise와 Event Emitter를 활용해서 구현해야 한다.
+
+-   [ ] 동기방식은 postEvent()는 기존과 동일하게 모든 subscriber에 이벤트 브로드캐스트 동작이 끝나고 나서 리턴한다.
+
+-   [ ] 비동기방식 postEvent()는 특정한 Event Emitter에 코드를 넣고, 곧바로 리턴한다.
+
+-   [ ] 지연 혹은 예약 방식 postEvent()는 비동기 방식처럼 특정한 Event Emitter에 코드를 넣고, 지정한 시각에 해당 코드가 실행되야 한다.
+
+-   [ ] Subscriber 핸들러를 실행하는 Event Emitter를 구분해서 출력한다.
+
+-   [ ] 비동기방식이나 지연 방식을 테스트하려면 main에서 기다리는 코드가 필요하다.
+
+-   [ ] 비동기와 지연 방식을 확인하기 위해서 이벤트 전송 시각과 subscriber 코드 동작 시각을 출력한다.
+
+-   [ ] 모든 Subscriber 조건과 실행 결과도 함께 출력해서 gist에 저장한다.
+
 ## 문제 해결 과정
 
 -   파라미터
