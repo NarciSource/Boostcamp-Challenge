@@ -100,9 +100,9 @@ const handler = (event, userInfo, managersGuide) => {
 })();
 
 // trigger
+const click_worker = new Worker("./worker.js");
 const keyboard_worker = new Worker("./worker.js");
 const focus_worker = new Worker("./worker.js");
-const click_worker = new Worker("./worker.js");
 const hover_worker = new Worker("./worker.js");
 
 const workers = [keyboard_worker, focus_worker, click_worker, hover_worker];
@@ -115,15 +115,16 @@ for (const worker of workers) {
     });
 }
 
-hover_worker.postMessage({
-    eventName: "hover",
-    publisher: loginComponent,
-    userInfo: "smooth",
-});
 click_worker.postMessage({
     eventName: "click",
     publisher: loginComponent,
     userInfo: "right",
+});
+
+hover_worker.postMessage({
+    eventName: "hover",
+    publisher: loginComponent,
+    userInfo: "smooth",
 });
 
 keyboard_worker.postMessage({

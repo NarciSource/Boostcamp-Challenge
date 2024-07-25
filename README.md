@@ -48,7 +48,7 @@
 
 -   [x] 비동기와 지연 방식을 확인하기 위해서 이벤트 전송 시각과 subscriber 코드 동작 시각을 출력한다.
 
--   [ ] 모든 Subscriber 조건과 실행 결과도 함께 출력해서 gist에 저장한다.
+-   [x] 모든 Subscriber 조건과 실행 결과도 함께 출력해서 gist에 저장한다.
 
 ## 문제 해결 과정
 
@@ -76,6 +76,39 @@
         -   key: [Subscriber, EventName, Sender] 를 묶음
         -   value: Handler
 
+### pseudo code
+
+```js
+class EventManager
+    table
+    eventMap
+    syncQueue <- SyncEventEmitter <- EventEmitter
+    asyncQueue <- AsyncEventEmitter
+    delayQueue <- DelayEventEmitter
+
+    sharedInstance: singleton
+
+    function add
+        table <- [key: subscriber, eventName, publisher], value: handler
+        emitter <- [key: eventName, publisher], value: handler
+
+        emitter.on -> handler
+
+    function postEvent
+        table
+            filter
+            forEach
+                delayQueue.emit <- key
+                syncQueue.emit <- key
+                asyncQueue.emit <- key
+```
+
 ### 결과
 
+![event](https://gist.github.com/user-attachments/assets/cacd32f2-dc15-4f2a-a427-e41f3e016fe8)
+
 ## 학습 메모
+
+-   [Worker threads](https://nodejs.org/api/worker_threads.html#worker-threads)
+-   [EventEmitter](https://nodejs.org/docs/latest/api/events.html#class-eventemitter)
+-   [Publisher-Subscriber](https://learn.microsoft.com/ko-kr/azure/architecture/patterns/publisher-subscriber)
