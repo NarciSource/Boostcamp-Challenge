@@ -7,8 +7,8 @@
 -   [x] add(subscriber, eventName, sender, handler) Subscriber를 추가할 때는 subscriber 객체와 이벤트 이름, 이벤트 발행 객체를 모두 합쳐서 고유한 키로 봐야한다.
 
     -   [x] subscriber 와 sender 모두 객체 인스턴스를 인자값으로 전달한다
-    -   [ ] sender가 undefined: 모든 객체가 보내는 eventName 이벤트는 해당 구독자가 모든 알림을 받는다.
-    -   [ ] eventName이 빈 문자열: sender의 모든 이벤트를 받는다.
+    -   [x] sender가 undefined: 모든 객체가 보내는 eventName 이벤트는 해당 구독자가 모든 알림을 받는다.
+    -   [x] eventName이 빈 문자열: sender의 모든 이벤트를 받는다.
 
     -   eventName 은 이벤트를 지칭하는 이름이다. "" 빈값도 가능하다
 
@@ -55,7 +55,11 @@
 
 -   규칙 데이터 구조 표
 
-![규칙데이터](https://lucas-image.codesquad.kr/1627350268761Screen%20Shot%202021-07-27%20at%2010.43.32%20AM.png)
+    ![규칙데이터](https://lucas-image.codesquad.kr/1627350268761Screen%20Shot%202021-07-27%20at%2010.43.32%20AM.png)
+
+    -   Map 자료구조를 사용
+        -   key: [Subscriber, EventName, Sender] 를 묶음
+        -   value: Handler
 
 ### 결과
 

@@ -1,14 +1,15 @@
 import Event from "./event.js";
+import { Worker } from "worker_threads";
 
 export default class EventManager {
-    subscribers = [];
+    table;
 
     constructor() {
         if (EventManager.instance) {
             return EventManager.instance;
         }
 
-        this.subscribers = [];
+        this.table = new Map();
         Event.instance = this;
     }
 
@@ -21,37 +22,36 @@ export default class EventManager {
     }
 
     add(subscriber, eventName, sender, handler) {
-        this.subscribers.push({ subscriber, eventName, sender, handler });
+        this.table.set({ subscriber, eventName, sender }, handler);
     }
 
+    // 수정필요
     remove(subscriber) {
-        this.subscribers = this.subscribers.filter(
-            (sub) => sub.subscriber !== subscriber,
-        );
+        this.table = this.table.filter((sub) => sub.subscriber !== subscriber);
     }
 
     postEvent(eventName, sender, userInfo = undefined) {
         const event = new Event(eventName, sender, userInfo);
-        this.subscribers.forEach((sub) => {
-            if (
-                sub.eventName === eventName ||
-                sub.eventName === "" ||
-                sub.sender === sender ||
-                sub.sender === undefined
-            ) {
-                sub.handler(event);
-            }
-        });
+
+        const matched = Array.from(this.table.keys())
+            .filter((row) => {
+                return (
+                    row.eventName === eventName ||
+                    row.eventName === "" ||
+                    row.sender === sender ||
+                    row.sender === undefined
+                );
+            })
+            .map((key) => ({ ...key, handler: this.table.get(key) }));
     }
 
     stringify() {
-        return this.subscribers
-            .map(
-                (sub, index) =>
-                    `Subscriber#${index + 1} : event name = "${
-                        sub.eventName
-                    }", sender = ${sub.sender}`,
-            )
+        return Array.from(this.table.keys())
+            .map(({ eventName, sender }, index) => {
+                return `Subscriber#${
+                    index + 1
+                } : event name = "${eventName}", sender = ${sender.name}`;
+            })
             .join("\n");
     }
 }
