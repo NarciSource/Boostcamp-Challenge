@@ -35,6 +35,12 @@
 
 -   [x] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; postEvent
 
+-   [x] post() 이벤트를 보낼 때 동기 방식을 위한 SyncQueue, 비동기 처리를 위한 AsyncQueue, 일정 시간에 맞춰서 delay 혹은 예약 발송이 가능한 DelayQueue를 선택할 수 있도록 개선한다.
+
+-   [x] subscriber도 handler를 처리하는 Event Emitter를 지정할 수 있도록 개선한다
+
+-   [ ] handler에 Event 와 함께 이벤트가 종료를 의미하는 completed flag를 전달한다
+
 -   [x] Promise와 Event Emitter를 활용해서 구현해야 한다.
 
 -   [x] 동기방식은 postEvent()는 기존과 동일하게 모든 subscriber에 이벤트 브로드캐스트 동작이 끝나고 나서 리턴한다.

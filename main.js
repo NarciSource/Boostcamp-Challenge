@@ -16,7 +16,7 @@ worker.on("message", (args) => {
 const subscriberA = new Subscriber("subscriberA");
 const subscriberB = new Subscriber("subscriberB");
 
-;(function sync_test() {
+(function sync_test() {
     eventManager.add({
         subscriber: subscriberA,
         eventName: "click",
@@ -32,7 +32,6 @@ const subscriberB = new Subscriber("subscriberB");
         emitter_type: "sync",
     });
 
-    // sync test
     worker.postMessage({
         eventName: "click",
         publisher: loginComponent,
@@ -40,7 +39,7 @@ const subscriberB = new Subscriber("subscriberB");
     });
 })();
 
-;(function async_test() {
+(function async_test() {
     eventManager.add({
         subscriber: subscriberA,
         eventName: "click",
@@ -61,7 +60,6 @@ const subscriberB = new Subscriber("subscriberB");
         eventName: "click",
         publisher: loginComponent,
         userInfo: "userInfo",
-        async: true,
     });
 })();
 

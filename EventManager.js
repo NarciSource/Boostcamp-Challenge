@@ -1,10 +1,10 @@
-import EventEmitter from "events";
-import PromiseEventEmitter from "./PromiseEventEmitter.js";
+import AsyncEventEmitter from "./EventEmitter.Async.js";
+import SyncEventEmitter from "./EventEmitter.Sync.js";
 
 export default class EventManager {
     table;
-    syncEmitter;
-    asyncEmitter;
+    syncQueue = new SyncEventEmitter();
+    asyncQueue = new AsyncEventEmitter();
 
     constructor() {
         if (EventManager.instance) {
@@ -12,8 +12,6 @@ export default class EventManager {
         }
 
         this.table = new Map();
-        this.syncEmitter = new EventEmitter();
-        this.asyncEmitter = new PromiseEventEmitter();
         EventManager.instance = this;
     }
 
@@ -25,11 +23,11 @@ export default class EventManager {
         return EventManager.instance;
     }
 
-    add({ subscriber, eventName, publisher, handler, emitter_type }) {
+    add({ subscriber, eventName, publisher, handler, emitter_type = "sync" }) {
         this.table.set({ subscriber, eventName, publisher }, handler);
 
         const emitter =
-            emitter_type === "sync" ? this.syncEmitter : this.asyncEmitter;
+            emitter_type === "sync" ? this.syncQueue : this.asyncQueue;
 
         emitter.on({ eventName, publisher }, (data) => {
             console.log(handler, data);
@@ -44,7 +42,7 @@ export default class EventManager {
         keys.forEach((key) => this.table.delete(key));
     }
 
-    postEvent({ eventName, publisher, userInfo = undefined, async = false }) {
+    postEvent({ eventName, publisher, userInfo = undefined }) {
         const matched = new Map();
 
         Array.from(this.table.keys())
@@ -66,11 +64,10 @@ export default class EventManager {
                 }),
             );
 
-        const emitter = async ? this.asyncEmitter : this.syncEmitter;
-
-        matched.forEach(({ eventName, publisher }) =>
-            emitter.emit({ eventName, publisher }, userInfo),
-        );
+        matched.forEach(({ eventName, publisher }) => {
+            this.syncQueue.emit({ eventName, publisher }, userInfo);
+            this.asyncQueue.emit({ eventName, publisher }, userInfo);
+        });
     }
 
     stringify() {
