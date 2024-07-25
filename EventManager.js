@@ -1,5 +1,4 @@
 import Event from "./event.js";
-import { Worker } from "worker_threads";
 
 export default class EventManager {
     table;
@@ -37,28 +36,18 @@ export default class EventManager {
         const matched = Array.from(this.table.keys())
             .filter((row) => {
                 return (
-                    row.eventName === eventName ||
-                    row.eventName === "" ||
-                    row.sender === sender ||
-                    row.sender === undefined
+                    (row.sender === sender && row.eventName === eventName) ||
+                    (row.sender === sender && row.eventName === "") ||
+                    (row.sender === undefined && row.eventName === eventName) ||
+                    (row.sender === undefined && row.eventName === "")
                 );
             })
             .map((key) => ({ ...key, handler: this.table.get(key) }));
 
         matched.forEach((m) => {
-            const worker = new Worker("./worker.js");
-
             const { subscriber, eventName, sender, handler } = m;
 
-            worker.postMessage({
-                subscriber,
-                eventName,
-                sender,
-                handler,
-            });
-            worker.on("message", (message) => {
-                if (message === "done") worker.terminate();
-            });
+            console.log("Event 실행", subscriber.name, handler);
         });
     }
 
