@@ -2,10 +2,12 @@ import { setTimeout } from "timers/promises";
 import SyncEventEmitter from "./EventEmitter.Sync.js";
 
 export default class DelayEventEmitter extends SyncEventEmitter {
-    delay;
+    delayMap = new Map();
 
     on(key, listeners, delay) {
-        this.delay = delay;
+        const key_string = JSON.stringify(key);
+        this.delayMap.set(key_string, delay);
+
         super.on(key, listeners);
     }
 
@@ -14,7 +16,7 @@ export default class DelayEventEmitter extends SyncEventEmitter {
         const handlers = this.listeners(key_string);
 
         for (const handler of handlers) {
-            await setTimeout(this.delay);
+            await setTimeout(this.delayMap.get(key_string));
             await handler(...args);
         }
     }

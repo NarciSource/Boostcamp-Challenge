@@ -32,6 +32,10 @@ const subscriberB = new Subscriber("subscriberB");
         emitter_type: "sync",
     });
 
+    console.log(
+        `click event from loginComponent:`,
+        new Date().toLocaleTimeString(),
+    );
     worker.postMessage({
         eventName: "click",
         publisher: loginComponent,
@@ -56,13 +60,16 @@ const subscriberB = new Subscriber("subscriberB");
         emitter_type: "async",
     });
 
+    console.log(
+        `click event from loginComponent:`,
+        new Date().toLocaleTimeString(),
+    );
     worker.postMessage({
         eventName: "click",
         publisher: loginComponent,
         userInfo: "userInfo",
     });
 })();
-
 
 (function delay_test() {
     eventManager.add({
@@ -80,9 +87,13 @@ const subscriberB = new Subscriber("subscriberB");
         publisher: loginComponent,
         handler: new Event("click-F", loginComponent),
         emitter_type: "delay",
-        delay: 1000,
+        delay: 2000,
     });
 
+    console.log(
+        `hover event from loginComponent:`,
+        new Date().toLocaleTimeString(),
+    );
     worker.postMessage({
         eventName: "hover",
         publisher: loginComponent,

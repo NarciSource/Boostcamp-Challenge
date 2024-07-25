@@ -51,7 +51,7 @@ export default class EventManager {
                 console.log(
                     `${subscriber.name}: ${handler.run(data)} ${emitter_type} ${
                         delay || ""
-                    }`,
+                    } ${new Date().toLocaleTimeString()}`,
                 );
             },
             delay,
