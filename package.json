@@ -1,0 +1,27 @@
+{
+  "name": "day09",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "이벤트 매니저",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gist.github.com/4f05252a2d7ca0834f310dd2280db618.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/4f05252a2d7ca0834f310dd2280db618"
+  },
+  "homepage": "https://gist.github.com/4f05252a2d7ca0834f310dd2280db618",
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.js$": "esbuild-jest"
+    }
+  }
+}
