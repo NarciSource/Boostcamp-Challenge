@@ -49,7 +49,7 @@
 
 -   [x] 지연 혹은 예약 방식 postEvent()는 비동기 방식처럼 특정한 Event Emitter에 코드를 넣고, 지정한 시각에 해당 코드가 실행되야 한다.
 
--   [ ] Subscriber 핸들러를 실행하는 Event Emitter를 구분해서 출력한다.
+-   [x] Subscriber 핸들러를 실행하는 Event Emitter를 구분해서 출력한다.
 
 -   [ ] 비동기방식이나 지연 방식을 테스트하려면 main에서 기다리는 코드가 필요하다.
 

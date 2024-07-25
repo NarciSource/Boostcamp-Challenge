@@ -48,7 +48,11 @@ export default class EventManager {
         emitter.on(
             { eventName, publisher },
             (data) => {
-                console.log(handler, data);
+                console.log(
+                    `${subscriber.name}: ${handler.run(data)} ${emitter_type} ${
+                        delay || ""
+                    }`,
+                );
             },
             delay,
         );

@@ -21,14 +21,14 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberA,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-sync-A", loginComponent),
+        handler: new Event("click-A", loginComponent),
         emitter_type: "sync",
     });
     eventManager.add({
         subscriber: subscriberB,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-sync-B", loginComponent),
+        handler: new Event("click-B", loginComponent),
         emitter_type: "sync",
     });
 
@@ -44,7 +44,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberA,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-async-C", loginComponent),
+        handler: new Event("click-C", loginComponent),
         emitter_type: "async",
     });
 
@@ -52,7 +52,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberB,
         eventName: "hover",
         publisher: loginComponent,
-        handler: new Event("hover-async-D", loginComponent),
+        handler: new Event("hover-D", loginComponent),
         emitter_type: "async",
     });
 
@@ -69,7 +69,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberA,
         eventName: "hover",
         publisher: loginComponent,
-        handler: new Event("hover-delay-E", loginComponent),
+        handler: new Event("hover-E", loginComponent),
         emitter_type: "delay",
         delay: 5000,
     });
@@ -78,7 +78,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberB,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-delay-F", loginComponent),
+        handler: new Event("click-F", loginComponent),
         emitter_type: "delay",
         delay: 1000,
     });
