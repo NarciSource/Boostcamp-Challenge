@@ -1,4 +1,4 @@
-import Event from "./event.js";
+import EventEmitter from "events";
 
 export default class EventManager {
     table;
@@ -9,7 +9,8 @@ export default class EventManager {
         }
 
         this.table = new Map();
-        Event.instance = this;
+        this.eventEmitter = new EventEmitter();
+        EventManager.instance = this;
     }
 
     static instance;
@@ -22,6 +23,10 @@ export default class EventManager {
 
     add(subscriber, eventName, sender, handler) {
         this.table.set({ subscriber, eventName, sender }, handler);
+
+        this.eventEmitter.on({ eventName, sender }, (data) => {
+            console.log(handler, data);
+        });
     }
 
     remove(subscriber) {
@@ -33,22 +38,27 @@ export default class EventManager {
     }
 
     postEvent(eventName, sender, userInfo = undefined) {
-        const matched = Array.from(this.table.keys())
+        const matched = new Map();
+
+        Array.from(this.table.keys())
             .filter((row) => {
                 return (
                     (row.sender === sender && row.eventName === eventName) ||
-                    (row.sender === sender && row.eventName === "") ||
+                    (row.sender === sender && eventName === "") ||
                     (row.sender === undefined && row.eventName === eventName) ||
-                    (row.sender === undefined && row.eventName === "")
+                    (row.sender === undefined && eventName === "")
                 );
             })
-            .map((key) => ({ ...key, handler: this.table.get(key) }));
+            .forEach(({ sender, eventName }) =>
+                matched.set(JSON.stringify({ sender, eventName }), {
+                    sender,
+                    eventName,
+                }),
+            );
 
-        matched.forEach((m) => {
-            const { subscriber, eventName, sender, handler } = m;
-
-            console.log("Event 실행", subscriber.name, handler);
-        });
+        matched.forEach(({ eventName, sender }) =>
+            this.eventEmitter.emit({ eventName, sender }, userInfo),
+        );
     }
 
     stringify() {
