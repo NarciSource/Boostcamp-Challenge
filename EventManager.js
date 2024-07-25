@@ -21,7 +21,7 @@ export default class EventManager {
         return EventManager.instance;
     }
 
-    add(subscriber, eventName, publisher, handler) {
+    add({ subscriber, eventName, publisher, handler }) {
         this.table.set({ subscriber, eventName, publisher }, handler);
 
         this.eventEmitter.on({ eventName, publisher }, (data) => {
@@ -37,18 +37,19 @@ export default class EventManager {
         keys.forEach((key) => this.table.delete(key));
     }
 
-    postEvent(eventName, publisher, userInfo = undefined) {
+    postEvent({ eventName, publisher, userInfo = undefined, async = false }) {
         const matched = new Map();
 
         Array.from(this.table.keys())
             .filter((row) => {
                 return (
-                    (row.publisher === publisher &&
+                    (row.publisher.name === publisher.name &&
                         row.eventName === eventName) ||
-                    (row.publisher === publisher && eventName === "") ||
-                    (row.publisher === undefined &&
+                    (row.publisher.name === publisher.name &&
+                        eventName === "") ||
+                    (row.publisher.name === undefined &&
                         row.eventName === eventName) ||
-                    (row.publisher === undefined && eventName === "")
+                    (row.publisher.name === undefined && eventName === "")
                 );
             })
             .forEach(({ eventName, publisher }) =>
