@@ -6,7 +6,7 @@
 
 -   [x] add(subscriber, eventName, sender, handler) Subscriber를 추가할 때는 subscriber 객체와 이벤트 이름, 이벤트 발행 객체를 모두 합쳐서 고유한 키로 봐야한다.
 
-    -   [ ] subscriber 와 sender 모두 객체 인스턴스를 인자값으로 전달한다
+    -   [x] subscriber 와 sender 모두 객체 인스턴스를 인자값으로 전달한다
     -   [ ] sender가 undefined: 모든 객체가 보내는 eventName 이벤트는 해당 구독자가 모든 알림을 받는다.
     -   [ ] eventName이 빈 문자열: sender의 모든 이벤트를 받는다.
 
