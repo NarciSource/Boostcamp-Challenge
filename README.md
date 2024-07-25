@@ -35,11 +35,11 @@
 
 -   [x] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; postEvent
 
--   [ ] Promise와 Event Emitter를 활용해서 구현해야 한다.
+-   [x] Promise와 Event Emitter를 활용해서 구현해야 한다.
 
--   [ ] 동기방식은 postEvent()는 기존과 동일하게 모든 subscriber에 이벤트 브로드캐스트 동작이 끝나고 나서 리턴한다.
+-   [x] 동기방식은 postEvent()는 기존과 동일하게 모든 subscriber에 이벤트 브로드캐스트 동작이 끝나고 나서 리턴한다.
 
--   [ ] 비동기방식 postEvent()는 특정한 Event Emitter에 코드를 넣고, 곧바로 리턴한다.
+-   [x] 비동기방식 postEvent()는 특정한 Event Emitter에 코드를 넣고, 곧바로 리턴한다.
 
 -   [ ] 지연 혹은 예약 방식 postEvent()는 비동기 방식처럼 특정한 Event Emitter에 코드를 넣고, 지정한 시각에 해당 코드가 실행되야 한다.
 

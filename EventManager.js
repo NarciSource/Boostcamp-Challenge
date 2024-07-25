@@ -59,9 +59,20 @@ export default class EventManager {
                 }),
             );
 
-        matched.forEach(({ eventName, publisher }) =>
-            this.eventEmitter.emit({ eventName, publisher }, userInfo),
-        );
+        if (async) {
+            matched.forEach(({ eventName, publisher }) =>
+                new Promise((resolve) => {
+                    this.eventEmitter.emit({ eventName, publisher }, userInfo);
+                    resolve(true);
+                }).then(() => {
+                    console.log("success");
+                }),
+            );
+        } else {
+            matched.forEach(({ eventName, publisher }) =>
+                this.eventEmitter.emit({ eventName, publisher }, userInfo),
+            );
+        }
     }
 
     stringify() {

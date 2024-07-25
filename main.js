@@ -24,15 +24,24 @@ eventManager.add({
 });
 
 const worker = new Worker("./worker.js");
-worker.on("message", ({ eventName, publisher, userInfo }) => {
-    eventManager.postEvent({ eventName, publisher, userInfo });
+worker.on("message", (pass_data) => {
+    eventManager.postEvent(pass_data);
     worker.terminate();
 });
 
+// sync test
 worker.postMessage({
     eventName: "click",
     publisher: loginComponent,
     userInfo: "userInfo",
+});
+
+// async test
+worker.postMessage({
+    eventName: "click",
+    publisher: loginComponent,
+    userInfo: "userInfo",
+    async: true,
 });
 
 console.log(eventManager.stringify());
