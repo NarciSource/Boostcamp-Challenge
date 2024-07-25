@@ -1,3 +1,5 @@
+import { sleep } from "./utils.js";
+
 export default class Event {
     constructor(eventName, publisher, userInfo = undefined, completed = false) {
         this.eventName = eventName;
@@ -7,6 +9,7 @@ export default class Event {
     }
 
     run(userData) {
+        sleep(2000);
         return `${this.eventName} event from ${
             this.publisher.name
         } userData = ${JSON.stringify(userData)}`;
