@@ -9,10 +9,7 @@
     -   [x] subscriber 와 sender 모두 객체 인스턴스를 인자값으로 전달한다
     -   [x] sender가 undefined: 모든 객체가 보내는 eventName 이벤트는 해당 구독자가 모든 알림을 받는다.
     -   [x] eventName이 빈 문자열: sender의 모든 이벤트를 받는다.
-
-    -   eventName 은 이벤트를 지칭하는 이름이다. "" 빈값도 가능하다
-
-    -   handler는 클로저로 이벤트를 받을 때 실행되어야 한다. 매개변수로 이벤트를 전달 받는다.
+    -   [x] handler는 클로저로 이벤트를 받을 때 실행되어야 한다. 매개변수로 이벤트를 전달 받는다.
 
 -   [x] remove(subscriber)
         subscriber를 제거할 때는 subscriber로 등록된 모든 조건을 제거한다.
@@ -23,7 +20,7 @@
 
     -   이벤트를 발생하고 전송하는 Publisher 객체 인스턴스를 꼭 넘겨야한다.
 
-    -   Object 타입으로 userData를 전달할 수 있다. undefined으로 생략가능하다.
+    -   [x] Object 타입으로 userData를 전달할 수 있다. undefined으로 생략가능하다.
 
     -   내부에서 Event 객체를 생성하고 구독 핸들러에 전달한다.
 

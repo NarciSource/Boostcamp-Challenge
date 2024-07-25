@@ -1,6 +1,7 @@
 import AsyncEventEmitter from "./EventEmitter.Async.js";
 import DelayEventEmitter from "./EventEmitter.Delay.js";
 import SyncEventEmitter from "./EventEmitter.Sync.js";
+import Event from "./event.js";
 
 export default class EventManager {
     table = new Map();
@@ -47,13 +48,8 @@ export default class EventManager {
 
         emitter.on(
             { eventName, publisher },
-            (data) => {
-                console.log(
-                    `${subscriber.name}: ${handler.run(data)} ${emitter_type} ${
-                        delay || ""
-                    } ${new Date().toLocaleTimeString()}`,
-                );
-            },
+            (event, userInfo) =>
+                handler(event, subscriber, emitter_type, delay, userInfo),
             delay,
         );
     }
@@ -68,6 +64,8 @@ export default class EventManager {
 
     postEvent({ eventName, publisher, userInfo = undefined }) {
         const matched = new Map();
+
+        const event = new Event(eventName, publisher);
 
         Array.from(this.table.keys())
             .filter((row) => {
@@ -89,9 +87,9 @@ export default class EventManager {
             );
 
         matched.forEach(({ eventName, publisher }) => {
-            this.syncQueue.emit({ eventName, publisher }, userInfo);
-            this.asyncQueue.emit({ eventName, publisher }, userInfo);
-            this.delayQueue.emit({ eventName, publisher }, userInfo);
+            this.syncQueue.emit({ eventName, publisher }, event, userInfo);
+            this.asyncQueue.emit({ eventName, publisher }, event, userInfo);
+            this.delayQueue.emit({ eventName, publisher }, event, userInfo);
         });
     }
 

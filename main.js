@@ -1,7 +1,6 @@
 import EventManager from "./EventManager.js";
 import Subscriber from "./Subscriber.js";
 import Publisher from "./Publisher.js";
-import Event from "./event.js";
 import { Worker } from "worker_threads";
 
 const eventManager = EventManager.sharedInstance();
@@ -16,19 +15,27 @@ worker.on("message", (args) => {
 const subscriberA = new Subscriber("subscriberA");
 const subscriberB = new Subscriber("subscriberB");
 
+const handler = (event, subscriber, emitter_type, delay, userInfo) => {
+    console.log(
+        `${subscriber.name}: ${event.run(userInfo)} ${emitter_type} ${
+            delay || ""
+        } ${new Date().toLocaleTimeString()}`,
+    );
+};
+
 (function sync_test() {
     eventManager.add({
         subscriber: subscriberA,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-A", loginComponent),
+        handler,
         emitter_type: "sync",
     });
     eventManager.add({
         subscriber: subscriberB,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-B", loginComponent),
+        handler,
         emitter_type: "sync",
     });
 
@@ -39,7 +46,7 @@ const subscriberB = new Subscriber("subscriberB");
     worker.postMessage({
         eventName: "click",
         publisher: loginComponent,
-        userInfo: "userInfo",
+        userInfo: "left",
     });
 })();
 
@@ -48,7 +55,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberA,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-C", loginComponent),
+        handler,
         emitter_type: "async",
     });
 
@@ -56,7 +63,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberB,
         eventName: "hover",
         publisher: loginComponent,
-        handler: new Event("hover-D", loginComponent),
+        handler,
         emitter_type: "async",
     });
 
@@ -67,7 +74,7 @@ const subscriberB = new Subscriber("subscriberB");
     worker.postMessage({
         eventName: "click",
         publisher: loginComponent,
-        userInfo: "userInfo",
+        userInfo: "right",
     });
 })();
 
@@ -76,7 +83,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberA,
         eventName: "hover",
         publisher: loginComponent,
-        handler: new Event("hover-E", loginComponent),
+        handler,
         emitter_type: "delay",
         delay: 5000,
     });
@@ -85,7 +92,7 @@ const subscriberB = new Subscriber("subscriberB");
         subscriber: subscriberB,
         eventName: "click",
         publisher: loginComponent,
-        handler: new Event("click-F", loginComponent),
+        handler,
         emitter_type: "delay",
         delay: 2000,
     });
@@ -97,7 +104,7 @@ const subscriberB = new Subscriber("subscriberB");
     worker.postMessage({
         eventName: "hover",
         publisher: loginComponent,
-        userInfo: "userInfo",
+        userInfo: "smooth",
     });
 })();
 
