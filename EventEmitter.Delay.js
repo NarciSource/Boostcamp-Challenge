@@ -1,7 +1,7 @@
-import EventEmitter from "events";
 import { setTimeout } from "timers/promises";
+import SyncEventEmitter from "./EventEmitter.Sync.js";
 
-export default class DelayEventEmitter extends EventEmitter {
+export default class DelayEventEmitter extends SyncEventEmitter {
     delay;
 
     on(key, listeners, delay) {
@@ -10,7 +10,8 @@ export default class DelayEventEmitter extends EventEmitter {
     }
 
     async emit(key, ...args) {
-        const handlers = this.listeners(key);
+        const key_string = JSON.stringify(key);
+        const handlers = this.listeners(key_string);
 
         for (const handler of handlers) {
             await setTimeout(this.delay);
