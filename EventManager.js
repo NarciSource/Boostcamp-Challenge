@@ -5,6 +5,7 @@ import Event from "./event.js";
 
 export default class EventManager {
     table = new Map();
+    eventMap = new Map();
     syncQueue = new SyncEventEmitter();
     asyncQueue = new AsyncEventEmitter();
     delayQueue = new DelayEventEmitter();
@@ -46,10 +47,11 @@ export default class EventManager {
             }
         })();
 
+        const managersGuide = { subscriber, emitter_type, delay };
+
         emitter.on(
             { eventName, publisher },
-            (event, userInfo) =>
-                handler(event, subscriber, emitter_type, delay, userInfo),
+            (event, userInfo) => handler(event, userInfo, managersGuide),
             delay,
         );
     }
@@ -62,11 +64,16 @@ export default class EventManager {
         keys.forEach((key) => this.table.delete(key));
     }
 
-    postEvent({ eventName, publisher, userInfo = undefined }) {
+    postEvent({ eventName, publisher, completed, userInfo = undefined }) {
+        const key_string = JSON.stringify({ eventName, publisher });
+
+        if (this.eventMap.get(key_string)?.completed) {
+            return true;
+        }
+        const event = new Event(eventName, publisher, completed);
+        this.eventMap.set(key_string, event);
+
         const matched = new Map();
-
-        const event = new Event(eventName, publisher);
-
         Array.from(this.table.keys())
             .filter((row) => {
                 return (
@@ -87,9 +94,9 @@ export default class EventManager {
             );
 
         matched.forEach(({ eventName, publisher }) => {
+            this.delayQueue.emit({ eventName, publisher }, event, userInfo);
             this.syncQueue.emit({ eventName, publisher }, event, userInfo);
             this.asyncQueue.emit({ eventName, publisher }, event, userInfo);
-            this.delayQueue.emit({ eventName, publisher }, event, userInfo);
         });
     }
 

@@ -14,12 +14,16 @@ const triggerHandler = ({ eventName, publisher }) => {
         new Date().toLocaleTimeString(),
     );
 };
-const handler = (event, subscriber, emitter_type, delay, userInfo) => {
+const handler = (event, userInfo, managersGuide) => {
+    const { subscriber, emitter_type, delay } = managersGuide;
+
     console.log(
-        `${subscriber.name}: ${event.run(userInfo)} ${emitter_type} ${
-            delay || ""
-        } ${new Date().toLocaleTimeString()}`,
+        `${subscriber.name}: ${event.run(
+            userInfo,
+        )} ${new Date().toLocaleTimeString()} ${emitter_type} ${delay || ""}`,
     );
+
+    event.completed = true;
 };
 
 // subscribe
@@ -39,7 +43,7 @@ const handler = (event, subscriber, emitter_type, delay, userInfo) => {
         publisher: loginComponent,
         handler,
         emitter_type: "delay",
-        delay: 2000,
+        delay: 100,
     });
 })();
 
@@ -116,6 +120,11 @@ hover_worker.postMessage({
     publisher: loginComponent,
     userInfo: "smooth",
 });
+click_worker.postMessage({
+    eventName: "click",
+    publisher: loginComponent,
+    userInfo: "right",
+});
 
 keyboard_worker.postMessage({
     eventName: "keyboard",
@@ -127,12 +136,6 @@ focus_worker.postMessage({
     eventName: "focus",
     publisher: loginComponent,
     userInfo: "one",
-});
-
-click_worker.postMessage({
-    eventName: "click",
-    publisher: loginComponent,
-    userInfo: "right",
 });
 
 // stringify

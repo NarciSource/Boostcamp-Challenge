@@ -32,7 +32,7 @@
 
 -   [x] subscriber도 handler를 처리하는 Event Emitter를 지정할 수 있도록 개선한다
 
--   [ ] handler에 Event 와 함께 이벤트가 종료를 의미하는 completed flag를 전달한다
+-   [x] handler에 Event 와 함께 이벤트가 종료를 의미하는 completed flag를 전달한다
 
 -   [x] Promise와 Event Emitter를 활용해서 구현해야 한다.
 
