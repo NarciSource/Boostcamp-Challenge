@@ -1,7 +1,10 @@
 import EventEmitter from "events";
+import PromiseEventEmitter from "./PromiseEventEmitter.js";
 
 export default class EventManager {
     table;
+    syncEmitter;
+    asyncEmitter;
 
     constructor() {
         if (EventManager.instance) {
@@ -9,7 +12,8 @@ export default class EventManager {
         }
 
         this.table = new Map();
-        this.eventEmitter = new EventEmitter();
+        this.syncEmitter = new EventEmitter();
+        this.asyncEmitter = new PromiseEventEmitter();
         EventManager.instance = this;
     }
 
@@ -21,10 +25,13 @@ export default class EventManager {
         return EventManager.instance;
     }
 
-    add({ subscriber, eventName, publisher, handler }) {
+    add({ subscriber, eventName, publisher, handler, emitter_type }) {
         this.table.set({ subscriber, eventName, publisher }, handler);
 
-        this.eventEmitter.on({ eventName, publisher }, (data) => {
+        const emitter =
+            emitter_type === "sync" ? this.syncEmitter : this.asyncEmitter;
+
+        emitter.on({ eventName, publisher }, (data) => {
             console.log(handler, data);
         });
     }
@@ -59,20 +66,11 @@ export default class EventManager {
                 }),
             );
 
-        if (async) {
-            matched.forEach(({ eventName, publisher }) =>
-                new Promise((resolve) => {
-                    this.eventEmitter.emit({ eventName, publisher }, userInfo);
-                    resolve(true);
-                }).then(() => {
-                    console.log("success");
-                }),
-            );
-        } else {
-            matched.forEach(({ eventName, publisher }) =>
-                this.eventEmitter.emit({ eventName, publisher }, userInfo),
-            );
-        }
+        const emitter = async ? this.asyncEmitter : this.syncEmitter;
+
+        matched.forEach(({ eventName, publisher }) =>
+            emitter.emit({ eventName, publisher }, userInfo),
+        );
     }
 
     stringify() {
