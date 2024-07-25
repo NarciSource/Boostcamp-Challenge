@@ -21,10 +21,10 @@ export default class EventManager {
         return EventManager.instance;
     }
 
-    add(subscriber, eventName, sender, handler) {
-        this.table.set({ subscriber, eventName, sender }, handler);
+    add(subscriber, eventName, publisher, handler) {
+        this.table.set({ subscriber, eventName, publisher }, handler);
 
-        this.eventEmitter.on({ eventName, sender }, (data) => {
+        this.eventEmitter.on({ eventName, publisher }, (data) => {
             console.log(handler, data);
         });
     }
@@ -37,36 +37,38 @@ export default class EventManager {
         keys.forEach((key) => this.table.delete(key));
     }
 
-    postEvent(eventName, sender, userInfo = undefined) {
+    postEvent(eventName, publisher, userInfo = undefined) {
         const matched = new Map();
 
         Array.from(this.table.keys())
             .filter((row) => {
                 return (
-                    (row.sender === sender && row.eventName === eventName) ||
-                    (row.sender === sender && eventName === "") ||
-                    (row.sender === undefined && row.eventName === eventName) ||
-                    (row.sender === undefined && eventName === "")
+                    (row.publisher === publisher &&
+                        row.eventName === eventName) ||
+                    (row.publisher === publisher && eventName === "") ||
+                    (row.publisher === undefined &&
+                        row.eventName === eventName) ||
+                    (row.publisher === undefined && eventName === "")
                 );
             })
-            .forEach(({ sender, eventName }) =>
-                matched.set(JSON.stringify({ sender, eventName }), {
-                    sender,
+            .forEach(({ eventName, publisher }) =>
+                matched.set(JSON.stringify({ eventName, publisher }), {
+                    publisher,
                     eventName,
                 }),
             );
 
-        matched.forEach(({ eventName, sender }) =>
-            this.eventEmitter.emit({ eventName, sender }, userInfo),
+        matched.forEach(({ eventName, publisher }) =>
+            this.eventEmitter.emit({ eventName, publisher }, userInfo),
         );
     }
 
     stringify() {
         return Array.from(this.table.keys())
-            .map(({ eventName, sender }, index) => {
+            .map(({ eventName, publisher }, index) => {
                 return `Subscriber#${
                     index + 1
-                } : event name = "${eventName}", sender = ${sender.name}`;
+                } : event name = "${eventName}", publisher = ${publisher.name}`;
             })
             .join("\n");
     }
