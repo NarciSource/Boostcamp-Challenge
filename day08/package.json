@@ -1,0 +1,31 @@
+{
+  "name": "day08",
+  "version": "1.0.0",
+  "description": "함수형 코드로 구현하기",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gist.github.com/5a61330d320559c109cb27e490e1bedf.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/5a61330d320559c109cb27e490e1bedf"
+  },
+  "homepage": "https://gist.github.com/5a61330d320559c109cb27e490e1bedf",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "esbuild-jest": "^0.5.0",
+    "ts-jest": "^29.2.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": ["**/?(*.)+(spec|test).[tj]s?(x)"]
+  }
+}
