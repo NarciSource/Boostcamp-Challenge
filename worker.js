@@ -13,7 +13,7 @@ parentPort.on("message", ({ command, args }) => {
             eventManager.add({
                 ...args,
                 publisher,
-                handler: new Function(args.handler),
+                handler: new Function("return " + args.handler)(),
             });
 
             console.log(eventManager.stringify());
