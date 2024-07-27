@@ -15,8 +15,18 @@ parentPort.on("message", ({ command, args }) => {
                 publisher,
                 handler: new Function("return " + args.handler)(),
             });
+            break;
 
-            console.log(eventManager.stringify());
+        case "triggerEvent":
+            triggerHandler({ ...args, publisher });
+            eventManager.postEvent({ ...args, publisher });
             break;
     }
 });
+
+const triggerHandler = ({ eventName, publisher }) => {
+    console.log(
+        `// ${eventName} post "${publisher.name}"`,
+        new Date().toLocaleTimeString(),
+    );
+};

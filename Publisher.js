@@ -16,4 +16,11 @@ export default class Publisher {
             args: { ...args, eventName, handler: args.handler?.toString() },
         });
     }
+
+    trigger(eventName, userInfo) {
+        this.worker.postMessage({
+            command: "triggerEvent",
+            args: { eventName, userInfo },
+        });
+    }
 }

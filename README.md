@@ -53,7 +53,7 @@
 
 ### 🪚 재구현
 
--   [ ] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; ~~postEvent~~ eventManager
+-   [x] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; ~~postEvent~~ eventManager
 
     1. 선언
 
@@ -66,7 +66,7 @@
 
     3. 실행
 
-    -   [ ] 이벤트 실행(eventName, publisher, userInfo) → 워커쓰레드로 전송 → 이벤트매니저에서 실행
+    -   [x] 이벤트 실행(eventName, publisher, userInfo) → 워커쓰레드로 전송 → 이벤트매니저에서 실행
 
 ## 문제 해결 과정
 

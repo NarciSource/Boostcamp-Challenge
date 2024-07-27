@@ -75,3 +75,7 @@ loginComponent.on("hover", {
     handler,
     emitter_type: "async",
 });
+
+loginComponent.trigger("click", "right");
+searchComponent.trigger("click", "right");
+widgetComponent.trigger("click", "right");
