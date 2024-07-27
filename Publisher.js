@@ -7,6 +7,13 @@ export default class Publisher {
     constructor(name) {
         this.name = name;
 
-        this.worker.postMessage({ command: "init", data: name });
+        this.worker.postMessage({ command: "init", args: { name } });
+    }
+
+    on(eventName, args) {
+        this.worker.postMessage({
+            command: "addEvent",
+            args: { ...args, eventName, handler: args.handler?.toString() },
+        });
     }
 }

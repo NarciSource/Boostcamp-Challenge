@@ -2,10 +2,21 @@ import { parentPort } from "worker_threads";
 import EventManager from "./EventManager.js";
 const eventManager = EventManager.sharedInstance();
 
-let publisher_name;
-parentPort.on("message", ({ command, data }) => {
+let publisher;
+parentPort.on("message", ({ command, args }) => {
     switch (command) {
         case "init":
-            publisher_name = data;
+            publisher = args;
+            break;
+
+        case "addEvent":
+            eventManager.add({
+                ...args,
+                publisher,
+                handler: new Function(args.handler),
+            });
+
+            console.log(eventManager.stringify());
+            break;
     }
 });

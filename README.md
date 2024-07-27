@@ -61,7 +61,7 @@
 
     2. 등록
 
-    -   [ ] 이벤트 등록(subscriber, eventName, publisher, handler) → 워커쓰레드로 전송 → 이벤트매니저에 등록
+    -   [x] 이벤트 등록(subscriber, eventName, publisher, handler) → 워커쓰레드로 전송 → 이벤트매니저에 등록
             ⇒ 각자 컴포넌트마다 이벤트 등록이 독립적으로 행해진다.
 
     3. 실행
