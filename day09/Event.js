@@ -9,6 +9,8 @@ export default class Event {
 
     run(userData) {
         sleep(2000);
+        this.completed = true;
+
         return `${this.eventName} event from ${
             this.publisher.name
         } userData = ${JSON.stringify(userData)}`;

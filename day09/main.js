@@ -1,145 +1,55 @@
 import EventManager from "./EventManager.js";
-import Subscriber from "./Subscriber.js";
 import Publisher from "./Publisher.js";
-import { Worker } from "worker_threads";
+import Subscriber from "./Subscriber.js";
 
-const eventManager = EventManager.sharedInstance();
 const loginComponent = new Publisher("loginComponent");
+const searchComponent = new Publisher("searchComponent");
+const widgetComponent = new Publisher("widgetComponent");
+
 const subscriberA = new Subscriber("subscriberA");
 const subscriberB = new Subscriber("subscriberB");
+const subscriberC = new Subscriber("subscriberC");
 
-const triggerHandler = ({ eventName, publisher }) => {
-    console.log(
-        `----${eventName} event trigger from ${publisher.name}:`,
-        new Date().toLocaleTimeString(),
-    );
-};
-const handler = (event, userInfo, managersGuide) => {
+const handler = (result, managersGuide) => {
     const { subscriber, emitter_type, delay } = managersGuide;
+    const time = new Date().toLocaleTimeString();
 
     console.log(
-        `${subscriber.name}: ${event.run(
-            userInfo,
-        )} ${new Date().toLocaleTimeString()} ${emitter_type} ${delay || ""}`,
+        `${subscriber.name}: ${result} ${time} ${emitter_type} ${delay || ""}`,
     );
-
-    event.completed = true;
 };
 
 // subscribe
-(function delay_test() {
-    eventManager.add({
-        subscriber: subscriberA,
-        eventName: "hover",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "delay",
-        delay: 5000,
-    });
+const subscribe_commands = [
+    [searchComponent, ["click", subscriberA, "sync"]],
+    [widgetComponent, ["focus", subscriberA, "delay", 7000]],
+    [widgetComponent, ["focus", subscriberB, "sync"]],
+    [widgetComponent, ["hover", subscriberA, "delay", 3000]],
+    [loginComponent, ["click", subscriberA, "sync"]],
+    [loginComponent, ["click", subscriberB, "sync"]],
+    [loginComponent, ["click", subscriberC, "sync"]],
+    [loginComponent, ["click", subscriberA, "async"]],
+    [loginComponent, ["click", subscriberB, "async"]],
+    [loginComponent, ["click", subscriberC, "async"]],
+    [loginComponent, ["hover", subscriberB, "async"]],
+];
 
-    eventManager.add({
-        subscriber: subscriberB,
-        eventName: "click",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "delay",
-        delay: 100,
-    });
-})();
-
-(function sync_test() {
-    eventManager.add({
-        subscriber: subscriberA,
-        eventName: "keyboard",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "sync",
-    });
-    eventManager.add({
-        subscriber: subscriberB,
-        eventName: "keyboard",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "sync",
-    });
-})();
-
-(function sync2_test() {
-    eventManager.add({
-        subscriber: subscriberA,
-        eventName: "focus",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "sync",
-    });
-    eventManager.add({
-        subscriber: subscriberB,
-        eventName: "focus",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "sync",
-    });
-})();
-
-(function async_test() {
-    eventManager.add({
-        subscriber: subscriberA,
-        eventName: "click",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "async",
-    });
-
-    eventManager.add({
-        subscriber: subscriberB,
-        eventName: "hover",
-        publisher: loginComponent,
-        handler,
-        emitter_type: "async",
-    });
-})();
-
-// trigger
-const click_worker = new Worker("./worker.js");
-const keyboard_worker = new Worker("./worker.js");
-const focus_worker = new Worker("./worker.js");
-const hover_worker = new Worker("./worker.js");
-
-const workers = [keyboard_worker, focus_worker, click_worker, hover_worker];
-
-for (const worker of workers) {
-    worker.on("message", (args) => {
-        triggerHandler(args);
-        eventManager.postEvent(args);
-        worker.terminate();
-    });
+for (const [
+    publisher,
+    [eventName, subscriber, emitter_type, delay],
+] of subscribe_commands) {
+    publisher.on(eventName, { subscriber, handler, emitter_type, delay });
 }
 
-click_worker.postMessage({
-    eventName: "click",
-    publisher: loginComponent,
-    userInfo: "right",
-});
-
-hover_worker.postMessage({
-    eventName: "hover",
-    publisher: loginComponent,
-    userInfo: "smooth",
-});
-
-keyboard_worker.postMessage({
-    eventName: "keyboard",
-    publisher: loginComponent,
-    userInfo: "left",
-});
-
-focus_worker.postMessage({
-    eventName: "focus",
-    publisher: loginComponent,
-    userInfo: "one",
-});
-
 // stringify
-console.log("모든 Subscriber 조건");
+const eventManager = EventManager.sharedInstance();
 console.log(eventManager.stringify());
 console.log();
+
+// event trigger
+loginComponent.trigger("click", "right");
+loginComponent.trigger("hover", "smooth");
+searchComponent.trigger("click", "right");
+widgetComponent.trigger("", "monkey");
+
+setTimeout(() => eventManager.offAll(), 20000);

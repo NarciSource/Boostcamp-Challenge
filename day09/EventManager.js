@@ -1,14 +1,9 @@
-import AsyncEventEmitter from "./EventEmitter.Async.js";
-import DelayEventEmitter from "./EventEmitter.Delay.js";
-import SyncEventEmitter from "./EventEmitter.Sync.js";
-import Event from "./event.js";
+import { Worker } from "worker_threads";
 
 export default class EventManager {
-    table = new Map();
+    table = [];
     eventMap = new Map();
-    syncQueue = new SyncEventEmitter();
-    asyncQueue = new AsyncEventEmitter();
-    delayQueue = new DelayEventEmitter();
+    publisherThreads = {};
 
     constructor() {
         if (EventManager.instance) {
@@ -34,92 +29,90 @@ export default class EventManager {
         emitter_type = "sync",
         delay,
     }) {
-        this.table.set({ subscriber, eventName, publisher }, handler);
+        this.table.push({ subscriber, eventName, publisher });
 
-        const emitter = (() => {
-            switch (emitter_type) {
-                case "sync":
-                    return this.syncQueue;
-                case "async":
-                    return this.asyncQueue;
-                case "delay":
-                    return this.delayQueue;
-            }
-        })();
+        const worker = (this.publisherThreads[publisher.name] =
+            this.publisherThreads[publisher.name] || new Worker("./worker.js"));
 
-        const managersGuide = { subscriber, emitter_type, delay };
-
-        emitter.on(
-            { eventName, publisher },
-            (event, userInfo) => handler(event, userInfo, managersGuide),
-            delay,
-        );
-    }
-
-    remove(subscriber) {
-        const keys = Array.from(this.table.keys()).filter(
-            (row) => row.subscriber === subscriber,
-        );
-
-        keys.forEach((key) => this.table.delete(key));
-    }
-
-    postEvent({ eventName, publisher, completed, userInfo = undefined }) {
-        const key_string = JSON.stringify({ eventName, publisher });
-
-        if (this.eventMap.get(key_string)?.completed) {
-            return true;
-        }
-        const event = new Event(eventName, publisher, completed);
-        this.eventMap.set(key_string, event);
-
-        const matched = new Map();
-        Array.from(this.table.keys())
-            .filter((row) => {
-                return (
-                    (row.publisher.name === publisher.name &&
-                        row.eventName === eventName) ||
-                    (row.publisher.name === publisher.name &&
-                        eventName === "") ||
-                    (row.publisher.name === undefined &&
-                        row.eventName === eventName) ||
-                    (row.publisher.name === undefined && eventName === "")
-                );
-            })
-            .forEach(({ eventName, publisher }) =>
-                matched.set(JSON.stringify({ eventName, publisher }), {
-                    publisher,
-                    eventName,
-                }),
-            );
-
-        matched.forEach(({ eventName, publisher }) => {
-            this.delayQueue.emit({ eventName, publisher }, event, userInfo);
-            this.syncQueue.emit({ eventName, publisher }, event, userInfo);
-            this.asyncQueue.emit({ eventName, publisher }, event, userInfo);
+        worker.postMessage({
+            command: "addEvent",
+            args: {
+                subscriber,
+                eventName,
+                handler: handler.toString(),
+                emitter_type,
+                delay,
+            },
         });
     }
 
+    remove(subscriber) {
+        this.table = this.table.filter((row) => row.subscriber !== subscriber);
+    }
+
+    postEvent({ eventName, publisher, completed, userInfo = undefined }) {
+        // expand including select all
+        const expanded = this.table
+            .filter(
+                (row) =>
+                    (row.publisher.name === publisher.name ||
+                        !publisher.name) &&
+                    (row.eventName === eventName || eventName === ""),
+            )
+            .map(({ eventName, publisher }) => ({ eventName, publisher }));
+
+        // filter completed events
+        const incomplete = expanded.filter((key) => {
+            const key_string = JSON.stringify(key);
+
+            return !this.eventMap.get(key_string);
+        });
+
+        // set incomplete events to eventMap
+        for (const key of incomplete) {
+            const key_string = JSON.stringify(key);
+
+            this.eventMap.set(key_string, completed);
+        }
+
+        // filter duplicates by object-key
+        const filtered = new Map(
+            incomplete.map((key) => [JSON.stringify(key), key]),
+        ).values();
+
+        // trigger
+        const worker = this.publisherThreads[publisher.name];
+
+        for (const { eventName, publisher } of filtered) {
+            worker.postMessage({
+                command: "triggerEvent",
+                args: {
+                    eventName,
+                    publisher,
+                    userInfo,
+                },
+            });
+        }
+    }
+
     stringify() {
-        return [
-            ...this.syncQueue
-                .getKeys()
-                .map((arg) => ({ emit: "sync", ...arg })),
-            ...this.asyncQueue
-                .getKeys()
-                .map((arg) => ({ emit: "async", ...arg })),
-            ...this.delayQueue
-                .getKeys()
-                .map((arg) => ({ emit: "delay", ...arg })),
-        ]
+        return this.table
             .map(
-                ({ emit, eventName, publisher }, index) =>
+                ({ subscriber, eventName, publisher }, index) =>
                     `Subscriber#${
                         index + 1
-                    } : ${emit}, event name = ${eventName}, publisher = ${
+                    } : event name = ${eventName}, publisher = ${
                         publisher.name
-                    }`,
+                    }, subscriber = ${subscriber.name}`,
             )
             .join("\n");
+    }
+
+    offAll() {
+        this.table = [];
+        for (const thread of Object.values(this.publisherThreads)) {
+            thread.terminate();
+        }
+        this.publisherThreads = {};
     }
 }

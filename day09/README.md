@@ -29,8 +29,6 @@
 
 -   [x] EventManager 내부에는 그림처럼 이벤트 조건을 비교할 수 있는 규칙 데이터가 있어야 한다. 이벤트가 발생했을 때 Subscriber 구독자를 찾기 위한 데이터 구조와 표를 readme에 추가한다
 
--   [x] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; postEvent
-
 -   [x] post() 이벤트를 보낼 때 동기 방식을 위한 SyncQueue, 비동기 처리를 위한 AsyncQueue, 일정 시간에 맞춰서 delay 혹은 예약 발송이 가능한 DelayQueue를 선택할 수 있도록 개선한다.
 
 -   [x] subscriber도 handler를 처리하는 Event Emitter를 지정할 수 있도록 개선한다
@@ -53,7 +51,33 @@
 
 -   [x] 모든 Subscriber 조건과 실행 결과도 함께 출력해서 gist에 저장한다.
 
+### 🪚 재구현
+
+특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; ~~postEvent~~ eventManager
+
+-   [x] ~~퍼블리셔 별로 이벤트 매니저를 관리~~
+
+    1. 선언
+
+    -   [x] 이벤트가 등록될 퍼블리셔(컴포넌트)가 정해지면 워커쓰레드 생성 → 자신만의 이벤트매니저 생성
+
+    2. 등록
+
+    -   [x] 이벤트 등록(subscriber, eventName, publisher, handler) → 워커쓰레드로 전송 → 이벤트매니저에 등록
+            ⇒ 각자 컴포넌트마다 이벤트 등록이 독립적으로 행해진다.
+
+    3. 실행
+
+    -   [x] 이벤트 실행(eventName, publisher, userInfo) → 워커쓰레드로 전송 → 이벤트매니저에서 실행
+
+-   [x] 관리와 핸들러 수행 분리
+
+    -   [x] 워커쓰레드로 핸들러 수행 이동, emitter
+    -   [x] 이벤트 객체 생성 이동
+
 ## 문제 해결 과정
+
+### 이름 정의
 
 -   파라미터
 
@@ -82,36 +106,92 @@
 ### pseudo code
 
 ```js
-class EventManager
-    table
-    eventMap
-    syncQueue <- SyncEventEmitter <- EventEmitter
-    asyncQueue <- AsyncEventEmitter
-    delayQueue <- DelayEventEmitter
-
-    sharedInstance: singleton
-
+EventManager
     function add
-        table <- [key: subscriber, eventName, publisher], value: handler
-        emitter <- [key: eventName, publisher], value: handler
+        table <- [subscriber, eventName, publisher]
 
-        emitter.on -> handler
+        send "addEvent" message to worker of publisher
 
     function postEvent
         table
-            filter
-            forEach
-                delayQueue.emit <- key
-                syncQueue.emit <- key
-                asyncQueue.emit <- key
+            filter by publisher and eventName match
+            or anonymous publisher
+            or unspecified eventName
+
+        send "triggerEvent" message to worker of publisher
+
+Worker
+    syncQueue <- SyncEventEmitter <- EventEmitter
+    asyncQueue <- AsyncEventEmitter <- SyncEventEmitter
+    delayQueue <- DelayEventEmitter <- AsyncEventEmitter
+
+    case "addEvent"
+        emitter <- [key: eventName], value: Handler
+
+    case "triggerEvent"
+        delayQueue.emit <- eventName
+        syncQueue.emit <- eventName
+        asyncQueue.emit <- eventName
+
 ```
+
+### Worker Thead 사용
+
+#### 🔍 문제
+
+-   요구사항: 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현
+-   특이사항:
+    1. 워커 쓰레드는 독자적인 메모리 구조를 가진다. &rightarrow; 공통 메모리가 없다. JS 쓰레드만의 특징.
+    2. 모든 쓰레드의 싱글톤 객체 공유 불가.
+    3. 쓰레드간 데이터 통신은 직렬화를 거친다. &rightarrow; 컨텍스트를 잃어버린다. 함수를 사용하지 못함.
+        - Structured Clone Algorithm을 사용하여 데이터를 직렬화
+        - 함수, 클래스 인스턴스, DOM 노드, Error, RegExp 직렬화 불가
+
+#### ❌ 실패
+
+-   ~~Worker에게 통신을 전송하고 종료 핸들을 하는 과정에 새로운 쓰레드를 가진다.~~
+-   ~~종료 핸들의 콜백에선 메인 쓰레드를 클로저한다.~~
+-   ~~Worker 통신을 통해 만들어진 서브 쓰레드에서 클로저한 메인 쓰레드의 컨텍스를 사용할 수 있다.~~
+
+#### 🤦실패 사유
+
+-   콜백 함수는 새로운 쓰레드에서 실행되고 있는 것이 아니다.
+-   콜백은 이벤트루프로 메인 쓰레드에서 비동기로 실행되고 있을 뿐이다.
+
+#### 🌱 새로운 시도
+
+-   퍼블리셔(컴포넌트)끼리 이벤트 파급은 필요하지 않다.
+-   퍼블리셔 마다 워커쓰레드를 가진다.
+-   워커쓰레드에서 이벤트매니저를 각자 갖는다. &leftarrow; 독립적인 메모리를 가지기 때문
+-   이벤트 등록과 수행을 모두 워커쓰레드에서 이벤트매니저를 통해 수행한다.
+
+-   이벤트매니저가 분배되어 있는건 아무래도 좋은 구조는 아닌 것 같다.
+    -   중앙(메인 쓰레드)에서 모든 바인딩된 이벤트 관리가 필요하기 때문
+    -   💡 관리는 메인에서 핸들러 수행은 서브 쓰레드에서?
+
+#### 🎉 결과
+
+-   퍼블리셔들은 워커 쓰레드를 하나씩 가진다.
+-   메인 쓰레드는 EventManager를 가진다.
+
+    -   쓰레드를 관리한다.
+
+    -   전체 이벤트 테이블을 관리한다.
+        |Subscriber|Event Name|Publisher|
+        |----|----|----|
+
+-   서브 쓰레드는 EventEmitter를 가진다.
+    -   퍼블리셔 별의 이벤트 테이블을 관리하고 수행한다.
+        |Event Name|Handler|
+        |----|----|
 
 ### 결과
 
-![event](https://gist.github.com/user-attachments/assets/cacd32f2-dc15-4f2a-a427-e41f3e016fe8)
+![event](https://gist.github.com/user-attachments/assets/ba0c4715-c271-4e27-b473-f383a88e65dd)
 
 ## 학습 메모
 
 -   [Worker threads](https://nodejs.org/api/worker_threads.html#worker-threads)
+-   [The structured clone algorithm](https://developer.mozilla.org/ko/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)
 -   [EventEmitter](https://nodejs.org/docs/latest/api/events.html#class-eventemitter)
 -   [Publisher-Subscriber](https://learn.microsoft.com/ko-kr/azure/architecture/patterns/publisher-subscriber)

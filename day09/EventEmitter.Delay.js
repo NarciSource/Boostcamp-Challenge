@@ -1,23 +1,13 @@
 import { setTimeout } from "timers/promises";
-import SyncEventEmitter from "./EventEmitter.Sync.js";
+import AsyncEventEmitter from "./EventEmitter.Async.js";
 
-export default class DelayEventEmitter extends SyncEventEmitter {
-    delayMap = new Map();
+export default class DelayEventEmitter extends AsyncEventEmitter {
+    on(key, listener, delay) {
+        const delayed_listener = async (...args) => {
+            await setTimeout(delay);
+            await listener(...args);
+        };
 
-    on(key, listeners, delay) {
-        const key_string = JSON.stringify(key);
-        this.delayMap.set(key_string, delay);
-
-        super.on(key, listeners);
-    }
-
-    async emit(key, ...args) {
-        const key_string = JSON.stringify(key);
-        const handlers = this.listeners(key_string);
-
-        for (const handler of handlers) {
-            await setTimeout(this.delayMap.get(key_string));
-            await handler(...args);
-        }
+        super.on(key, delayed_listener);
     }
 }
