@@ -13,9 +13,7 @@ const handler = (event, userInfo, managersGuide) => {
     const { subscriber, emitter_type, delay } = managersGuide;
 
     console.log(
-        `${subscriber.name}: ${event.run(
-            userInfo,
-        )} ${new Date().toLocaleTimeString()} ${emitter_type} ${delay || ""}`,
+        `${subscriber.name}:  ${new Date().toLocaleTimeString()} ${emitter_type} ${delay || ""}`,
     );
 
     event.completed = true;

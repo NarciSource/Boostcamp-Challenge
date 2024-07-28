@@ -1,30 +1,24 @@
-import { Worker } from "worker_threads";
+import EventManager from "./EventManager.js";
+
+const eventManager = EventManager.sharedInstance();
 
 export default class Publisher {
     name;
-    worker = new Worker("./worker.js");
 
     constructor(name) {
         this.name = name;
-
-        this.worker.postMessage({ command: "init", args: { name } });
     }
 
     on(eventName, args) {
-        this.worker.postMessage({
-            command: "addEvent",
-            args: { ...args, eventName, handler: args.handler?.toString() },
-        });
+        eventManager.add({ ...args, eventName, publisher: this });
     }
 
-    trigger(eventName, userInfo) {
-        this.worker.postMessage({
-            command: "triggerEvent",
-            args: { eventName, userInfo },
+    trigger(eventName, userInfo, completed = false) {
+        eventManager.postEvent({
+            eventName,
+            publisher: this,
+            completed,
+            userInfo,
         });
-    }
-
-    destroy() {
-        this.worker.terminate();
     }
 }

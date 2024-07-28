@@ -1,14 +1,10 @@
-import AsyncEventEmitter from "./EventEmitter.Async.js";
-import DelayEventEmitter from "./EventEmitter.Delay.js";
-import SyncEventEmitter from "./EventEmitter.Sync.js";
+import { Worker } from "worker_threads";
 import Event from "./event.js";
 
 export default class EventManager {
     table = new Map();
     eventMap = new Map();
-    syncQueue = new SyncEventEmitter();
-    asyncQueue = new AsyncEventEmitter();
-    delayQueue = new DelayEventEmitter();
+    publisher_threads = {};
 
     constructor() {
         if (EventManager.instance) {
@@ -36,24 +32,21 @@ export default class EventManager {
     }) {
         this.table.set({ subscriber, eventName, publisher }, handler);
 
-        const emitter = (() => {
-            switch (emitter_type) {
-                case "sync":
-                    return this.syncQueue;
-                case "async":
-                    return this.asyncQueue;
-                case "delay":
-                    return this.delayQueue;
-            }
-        })();
+        const worker = (this.publisher_threads[publisher.name] =
+            this.publisher_threads[publisher.name] ||
+            new Worker("./worker.js"));
 
-        const managersGuide = { subscriber, emitter_type, delay };
-
-        emitter.on(
-            { eventName, publisher },
-            (event, userInfo) => handler(event, userInfo, managersGuide),
-            delay,
-        );
+        worker.postMessage({
+            command: "addEvent",
+            args: {
+                subscriber,
+                eventName,
+                publisher,
+                handler: handler.toString(),
+                emitter_type,
+                delay,
+            },
+        });
     }
 
     remove(subscriber) {
@@ -97,11 +90,19 @@ export default class EventManager {
             incomplete.map((obj) => [JSON.stringify(obj), obj]),
         );
 
-        // emit
+        // trigger
+        const worker = this.publisher_threads[publisher.name];
+
         for (const [, { eventName, publisher, event }] of filtered) {
-            this.delayQueue.emit({ eventName, publisher }, event, userInfo);
-            this.asyncQueue.emit({ eventName, publisher }, event, userInfo);
-            this.syncQueue.emit({ eventName, publisher }, event, userInfo);
+            worker.postMessage({
+                command: "triggerEvent",
+                args: {
+                    eventName,
+                    publisher,
+                    event,
+                    userInfo,
+                },
+            });
         }
     }
 

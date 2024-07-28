@@ -1,26 +1,60 @@
 import { parentPort } from "worker_threads";
-import EventManager from "./EventManager.js";
-const eventManager = EventManager.sharedInstance();
+import AsyncEventEmitter from "./EventEmitter.Async.js";
+import DelayEventEmitter from "./EventEmitter.Delay.js";
+import SyncEventEmitter from "./EventEmitter.Sync.js";
 
-let publisher;
+const syncQueue = new SyncEventEmitter();
+const asyncQueue = new AsyncEventEmitter();
+const delayQueue = new DelayEventEmitter();
+
 parentPort.on("message", ({ command, args }) => {
     switch (command) {
-        case "init":
-            publisher = args;
-            break;
-
-        case "addEvent":
-            eventManager.add({
-                ...args,
+        case "addEvent": {
+            const {
+                subscriber,
+                eventName,
                 publisher,
-                handler: new Function("return " + args.handler)(),
-            });
-            break;
+                handler,
+                emitter_type,
+                delay,
+            } = args;
 
-        case "triggerEvent":
-            triggerHandler({ ...args, publisher });
-            eventManager.postEvent({ ...args, publisher });
+            const emitter = (() => {
+                switch (emitter_type) {
+                    case "sync":
+                        return syncQueue;
+                    case "async":
+                        return asyncQueue;
+                    case "delay":
+                        return delayQueue;
+                }
+            })();
+
+            const managersGuide = { subscriber, emitter_type, delay };
+
+            emitter.on(
+                { eventName, publisher },
+                (event, userInfo) =>
+                    new Function("return " + handler)()(
+                        event,
+                        userInfo,
+                        managersGuide,
+                    ),
+                delay,
+            );
+
             break;
+        }
+        case "triggerEvent": {
+            const { eventName, publisher, event, userInfo } = args;
+
+            triggerHandler({ ...args, publisher });
+
+            delayQueue.emit({ eventName, publisher }, event, userInfo);
+            asyncQueue.emit({ eventName, publisher }, event, userInfo);
+            syncQueue.emit({ eventName, publisher }, event, userInfo);
+            break;
+        }
     }
 });
 
