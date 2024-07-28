@@ -65,39 +65,44 @@ export default class EventManager {
     }
 
     postEvent({ eventName, publisher, completed, userInfo = undefined }) {
-        const key_string = JSON.stringify({ eventName, publisher });
+        // expand including select all
+        const expanded = Array.from(this.table.keys()).filter(
+            (row) =>
+                (row.publisher.name === publisher.name || !publisher.name) &&
+                (row.eventName === eventName || eventName === ""),
+        );
 
-        if (this.eventMap.get(key_string)?.completed) {
-            return true;
-        }
-        const event = new Event(eventName, publisher, completed);
-        this.eventMap.set(key_string, event);
+        // filter completed events
+        const incomplete = expanded
+            .filter(({ eventName, publisher }) => {
+                const key_string = JSON.stringify({ eventName, publisher });
 
-        const matched = new Map();
-        Array.from(this.table.keys())
-            .filter((row) => {
-                return (
-                    (row.publisher.name === publisher.name &&
-                        row.eventName === eventName) ||
-                    (row.publisher.name === publisher.name &&
-                        eventName === "") ||
-                    (row.publisher.name === undefined &&
-                        row.eventName === eventName) ||
-                    (row.publisher.name === undefined && eventName === "")
-                );
+                return !this.eventMap.get(key_string)?.completed;
             })
-            .forEach(({ eventName, publisher }) =>
-                matched.set(JSON.stringify({ eventName, publisher }), {
-                    publisher,
-                    eventName,
-                }),
-            );
+            .map(({ eventName, publisher }) => ({
+                eventName,
+                publisher,
+                event: new Event(eventName, publisher, completed),
+            }));
 
-        matched.forEach(({ eventName, publisher }) => {
+        // set incomplete events to eventMap
+        for (const { eventName, publisher, event } of incomplete) {
+            const key_string = JSON.stringify({ eventName, publisher });
+
+            this.eventMap.set(key_string, event);
+        }
+
+        // filter duplicates by object-key
+        const filtered = new Map(
+            incomplete.map((obj) => [JSON.stringify(obj), obj]),
+        );
+
+        // emit
+        for (const [, { eventName, publisher, event }] of filtered) {
             this.delayQueue.emit({ eventName, publisher }, event, userInfo);
             this.asyncQueue.emit({ eventName, publisher }, event, userInfo);
             this.syncQueue.emit({ eventName, publisher }, event, userInfo);
-        });
+        }
     }
 
     stringify() {
