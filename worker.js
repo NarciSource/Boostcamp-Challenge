@@ -2,6 +2,7 @@ import { parentPort } from "worker_threads";
 import AsyncEventEmitter from "./EventEmitter.Async.js";
 import DelayEventEmitter from "./EventEmitter.Delay.js";
 import SyncEventEmitter from "./EventEmitter.Sync.js";
+import Event from "./event.js";
 
 const syncQueue = new SyncEventEmitter();
 const asyncQueue = new AsyncEventEmitter();
@@ -46,7 +47,8 @@ parentPort.on("message", ({ command, args }) => {
             break;
         }
         case "triggerEvent": {
-            const { eventName, publisher, event, userInfo } = args;
+            const { eventName, publisher, userInfo } = args;
+            const event = new Event(eventName, publisher);
 
             triggerHandler({ ...args, publisher });
 

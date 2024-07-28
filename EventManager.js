@@ -1,5 +1,4 @@
 import { Worker } from "worker_threads";
-import Event from "./event.js";
 
 export default class EventManager {
     table = new Map();
@@ -70,19 +69,14 @@ export default class EventManager {
             .filter(({ eventName, publisher }) => {
                 const key_string = JSON.stringify({ eventName, publisher });
 
-                return !this.eventMap.get(key_string)?.completed;
+                return !this.eventMap.get(key_string);
             })
-            .map(({ eventName, publisher }) => ({
-                eventName,
-                publisher,
-                event: new Event(eventName, publisher, completed),
-            }));
 
         // set incomplete events to eventMap
-        for (const { eventName, publisher, event } of incomplete) {
+        for (const { eventName, publisher } of incomplete) {
             const key_string = JSON.stringify({ eventName, publisher });
 
-            this.eventMap.set(key_string, event);
+            this.eventMap.set(key_string, completed);
         }
 
         // filter duplicates by object-key
@@ -93,13 +87,12 @@ export default class EventManager {
         // trigger
         const worker = this.publisher_threads[publisher.name];
 
-        for (const [, { eventName, publisher, event }] of filtered) {
+        for (const [, { eventName, publisher }] of filtered) {
             worker.postMessage({
                 command: "triggerEvent",
                 args: {
                     eventName,
                     publisher,
-                    event,
                     userInfo,
                 },
             });

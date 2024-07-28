@@ -13,7 +13,9 @@ const handler = (event, userInfo, managersGuide) => {
     const { subscriber, emitter_type, delay } = managersGuide;
 
     console.log(
-        `${subscriber.name}:  ${new Date().toLocaleTimeString()} ${emitter_type} ${delay || ""}`,
+        `${subscriber.name}: ${event.run(
+            userInfo,
+        )} ${new Date().toLocaleTimeString()} ${emitter_type} ${delay || ""}`,
     );
 
     event.completed = true;
@@ -93,10 +95,3 @@ loginComponent.trigger("click", "right");
 loginComponent.trigger("hover", "smooth");
 searchComponent.trigger("click", "right");
 widgetComponent.trigger("", "monkey");
-
-// exit
-setTimeout(() => {
-    loginComponent.destroy();
-    searchComponent.destroy();
-    widgetComponent.destroy();
-}, 200000);
