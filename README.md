@@ -106,28 +106,33 @@
 ### pseudo code
 
 ```js
-class EventManager
-    table
-    eventMap
-    syncQueue <- SyncEventEmitter <- EventEmitter
-    asyncQueue <- AsyncEventEmitter
-    delayQueue <- DelayEventEmitter
-
-    sharedInstance: singleton
-
+EventManager
     function add
-        table <- [key: subscriber, eventName, publisher], value: handler
-        emitter <- [key: eventName, publisher], value: handler
+        table <- [subscriber, eventName, publisher]
 
-        emitter.on -> handler
+        send "addEvent" message to worker of publisher
 
     function postEvent
         table
-            filter
-            forEach
-                delayQueue.emit <- key
-                syncQueue.emit <- key
-                asyncQueue.emit <- key
+            filter by publisher and eventName match
+            or anonymous publisher
+            or unspecified eventName
+
+        send "triggerEvent" message to worker of publisher
+
+Worker
+    syncQueue <- SyncEventEmitter <- EventEmitter
+    asyncQueue <- AsyncEventEmitter <- SyncEventEmitter
+    delayQueue <- DelayEventEmitter <- AsyncEventEmitter
+
+    case "addEvent"
+        emitter <- [key: eventName], value: Handler
+
+    case "triggerEvent"
+        delayQueue.emit <- eventName
+        syncQueue.emit <- eventName
+        asyncQueue.emit <- eventName
+
 ```
 
 ### Worker Thead 사용
@@ -164,9 +169,25 @@ class EventManager
     -   중앙(메인 쓰레드)에서 모든 바인딩된 이벤트 관리가 필요하기 때문
     -   💡 관리는 메인에서 핸들러 수행은 서브 쓰레드에서?
 
+#### 🎉 결과
+
+-   퍼블리셔들은 워커 쓰레드를 하나씩 가진다.
+-   메인 쓰레드는 EventManager를 가진다.
+
+    -   쓰레드를 관리한다.
+
+    -   전체 이벤트 테이블을 관리한다.
+        |Subscriber|Event Name|Publisher|
+        |----|----|----|
+
+-   서브 쓰레드는 EventEmitter를 가진다.
+    -   퍼블리셔 별의 이벤트 테이블을 관리하고 수행한다.
+        |Event Name|Handler|
+        |----|----|
+
 ### 결과
 
-![event](https://gist.github.com/user-attachments/assets/cacd32f2-dc15-4f2a-a427-e41f3e016fe8)
+![event](https://gist.github.com/user-attachments/assets/ba0c4715-c271-4e27-b473-f383a88e65dd)
 
 ## 학습 메모
 
