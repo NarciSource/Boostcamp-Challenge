@@ -10,16 +10,13 @@ const subscriberA = new Subscriber("subscriberA");
 const subscriberB = new Subscriber("subscriberB");
 const subscriberC = new Subscriber("subscriberC");
 
-const handler = (event, userInfo, managersGuide) => {
+const handler = (result, managersGuide) => {
     const { subscriber, emitter_type, delay } = managersGuide;
+    const time = new Date().toLocaleTimeString();
 
     console.log(
-        `${subscriber.name}: ${event.run(
-            userInfo,
-        )} ${new Date().toLocaleTimeString()} ${emitter_type} ${delay || ""}`,
+        `${subscriber.name}: ${result} ${time} ${emitter_type} ${delay || ""}`,
     );
-
-    event.completed = true;
 };
 
 // subscribe

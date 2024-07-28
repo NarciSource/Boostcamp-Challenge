@@ -31,8 +31,7 @@ parentPort.on("message", ({ command, args }) => {
                 eventName,
                 (event, userInfo) =>
                     new Function("return " + handler)()(
-                        event,
-                        userInfo,
+                        event.run(userInfo),
                         managersGuide,
                     ),
                 delay,
