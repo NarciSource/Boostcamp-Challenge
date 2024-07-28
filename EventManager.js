@@ -40,7 +40,6 @@ export default class EventManager {
             args: {
                 subscriber,
                 eventName,
-                publisher,
                 handler: handler.toString(),
                 emitter_type,
                 delay,

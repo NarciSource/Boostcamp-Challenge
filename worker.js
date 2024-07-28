@@ -11,14 +11,8 @@ const delayQueue = new DelayEventEmitter();
 parentPort.on("message", ({ command, args }) => {
     switch (command) {
         case "addEvent": {
-            const {
-                subscriber,
-                eventName,
-                publisher,
-                handler,
-                emitter_type,
-                delay,
-            } = args;
+            const { subscriber, eventName, handler, emitter_type, delay } =
+                args;
 
             const emitter = (() => {
                 switch (emitter_type) {
@@ -34,7 +28,7 @@ parentPort.on("message", ({ command, args }) => {
             const managersGuide = { subscriber, emitter_type, delay };
 
             emitter.on(
-                { eventName, publisher },
+                eventName,
                 (event, userInfo) =>
                     new Function("return " + handler)()(
                         event,
@@ -52,9 +46,9 @@ parentPort.on("message", ({ command, args }) => {
 
             triggerHandler({ ...args, publisher });
 
-            delayQueue.emit({ eventName, publisher }, event, userInfo);
-            asyncQueue.emit({ eventName, publisher }, event, userInfo);
-            syncQueue.emit({ eventName, publisher }, event, userInfo);
+            delayQueue.emit(eventName, event, userInfo);
+            asyncQueue.emit(eventName, event, userInfo);
+            syncQueue.emit(eventName, event, userInfo);
             break;
         }
     }
