@@ -7,6 +7,7 @@ const widgetComponent = new Publisher("widgetComponent");
 
 const subscriberA = new Subscriber("subscriberA");
 const subscriberB = new Subscriber("subscriberB");
+const subscriberC = new Subscriber("subscriberC");
 
 const handler = (event, userInfo, managersGuide) => {
     const { subscriber, emitter_type, delay } = managersGuide;
@@ -21,8 +22,26 @@ const handler = (event, userInfo, managersGuide) => {
 };
 
 // subscribe
+searchComponent.on("click", {
+    subscriber: subscriberA,
+    handler,
+    emitter_type: "sync",
+});
+
 loginComponent.on("click", {
     subscriber: subscriberA,
+    handler,
+    emitter_type: "sync",
+});
+
+loginComponent.on("click", {
+    subscriber: subscriberB,
+    handler,
+    emitter_type: "sync",
+});
+
+loginComponent.on("click", {
+    subscriber: subscriberC,
     handler,
     emitter_type: "sync",
 });
@@ -34,67 +53,52 @@ loginComponent.on("click", {
 });
 
 loginComponent.on("click", {
+    subscriber: subscriberB,
+    handler,
+    emitter_type: "async",
+});
+
+loginComponent.on("click", {
+    subscriber: subscriberC,
+    handler,
+    emitter_type: "async",
+});
+
+widgetComponent.on("focus", {
+    subscriber: subscriberA,
+    handler,
+    emitter_type: "delay",
+    delay: 7000,
+});
+
+widgetComponent.on("focus", {
+    subscriber: subscriberA,
+    handler,
+    emitter_type: "sync",
+});
+
+widgetComponent.on("hover", {
     subscriber: subscriberA,
     handler,
     emitter_type: "delay",
     delay: 3000,
 });
 
-loginComponent.on("click", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "async",
-});
-
-searchComponent.on("click", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "sync",
-});
-
-widgetComponent.on("click", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "sync",
-});
-
-loginComponent.on("hover", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "delay",
-    delay: 5000,
-});
-
-loginComponent.on("keyboard", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "sync",
-});
-
-loginComponent.on("keyboard", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "sync",
-});
-
-loginComponent.on("focus", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "sync",
-});
-
-loginComponent.on("click", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "async",
-});
-
 loginComponent.on("hover", {
     subscriber: subscriberB,
     handler,
     emitter_type: "async",
 });
 
+// event trigger
 loginComponent.trigger("click", "right");
+loginComponent.trigger("hover", "smooth");
 searchComponent.trigger("click", "right");
-widgetComponent.trigger("click", "right");
+widgetComponent.trigger("", "monkey");
+
+// exit
+setTimeout(() => {
+    loginComponent.destroy();
+    searchComponent.destroy();
+    widgetComponent.destroy();
+}, 200000);

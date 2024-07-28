@@ -26,7 +26,7 @@ parentPort.on("message", ({ command, args }) => {
 
 const triggerHandler = ({ eventName, publisher }) => {
     console.log(
-        `// ${eventName} post "${publisher.name}"`,
+        `// ${eventName || "all"} post "${publisher.name}"`,
         new Date().toLocaleTimeString(),
     );
 };

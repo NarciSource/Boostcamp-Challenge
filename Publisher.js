@@ -23,4 +23,8 @@ export default class Publisher {
             args: { eventName, userInfo },
         });
     }
+
+    destroy() {
+        this.worker.terminate();
+    }
 }
