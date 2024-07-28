@@ -53,7 +53,9 @@
 
 ### 🪚 재구현
 
--   [x] 특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; ~~postEvent~~ eventManager
+특정한 PublisherA가 EventManager를 호출했을 때 다른 PublisherB도 호출할 수 있도록 Worker Thread를 구현한다. &rightarrow; ~~postEvent~~ eventManager
+
+-   [x] ~~퍼블리셔 별로 이벤트 매니저를 관리~~
 
     1. 선언
 
@@ -67,6 +69,10 @@
     3. 실행
 
     -   [x] 이벤트 실행(eventName, publisher, userInfo) → 워커쓰레드로 전송 → 이벤트매니저에서 실행
+
+-   [ ] 관리와 핸들러 수행 분리
+
+    -   [ ] 워커쓰레드로 핸들러 수행 이동, emitter
 
 ## 문제 해결 과정
 
@@ -152,6 +158,10 @@ class EventManager
 -   퍼블리셔 마다 워커쓰레드를 가진다.
 -   워커쓰레드에서 이벤트매니저를 각자 갖는다. &leftarrow; 독립적인 메모리를 가지기 때문
 -   이벤트 등록과 수행을 모두 워커쓰레드에서 이벤트매니저를 통해 수행한다.
+
+-   이벤트매니저가 분배되어 있는건 아무래도 좋은 구조는 아닌 것 같다.
+    -   중앙(메인 쓰레드)에서 모든 바인딩된 이벤트 관리가 필요하기 때문
+    -   💡 관리는 메인에서 핸들러 수행은 서브 쓰레드에서?
 
 ### 결과
 
