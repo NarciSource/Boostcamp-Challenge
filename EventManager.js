@@ -58,19 +58,21 @@ export default class EventManager {
 
     postEvent({ eventName, publisher, completed, userInfo = undefined }) {
         // expand including select all
-        const expanded = Array.from(this.table.keys()).filter(
-            (row) =>
-                (row.publisher.name === publisher.name || !publisher.name) &&
-                (row.eventName === eventName || eventName === ""),
-        );
+        const expanded = Array.from(this.table.keys())
+            .filter(
+                (row) =>
+                    (row.publisher.name === publisher.name ||
+                        !publisher.name) &&
+                    (row.eventName === eventName || eventName === ""),
+            )
+            .map(({ eventName, publisher }) => ({ eventName, publisher }));
 
         // filter completed events
-        const incomplete = expanded
-            .filter(({ eventName, publisher }) => {
-                const key_string = JSON.stringify({ eventName, publisher });
+        const incomplete = expanded.filter(({ eventName, publisher }) => {
+            const key_string = JSON.stringify({ eventName, publisher });
 
-                return !this.eventMap.get(key_string);
-            })
+            return !this.eventMap.get(key_string);
+        });
 
         // set incomplete events to eventMap
         for (const { eventName, publisher } of incomplete) {
