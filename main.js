@@ -27,6 +27,25 @@ loginComponent.on("click", {
     emitter_type: "sync",
 });
 
+loginComponent.on("click", {
+    subscriber: subscriberA,
+    handler,
+    emitter_type: "async",
+});
+
+loginComponent.on("click", {
+    subscriber: subscriberA,
+    handler,
+    emitter_type: "delay",
+    delay: 3000,
+});
+
+loginComponent.on("click", {
+    subscriber: subscriberB,
+    handler,
+    emitter_type: "async",
+});
+
 searchComponent.on("click", {
     subscriber: subscriberB,
     handler,
