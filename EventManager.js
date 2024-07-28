@@ -3,7 +3,7 @@ import { Worker } from "worker_threads";
 export default class EventManager {
     table = [];
     eventMap = new Map();
-    publisher_threads = {};
+    publisherThreads = {};
 
     constructor() {
         if (EventManager.instance) {
@@ -31,9 +31,8 @@ export default class EventManager {
     }) {
         this.table.push({ subscriber, eventName, publisher });
 
-        const worker = (this.publisher_threads[publisher.name] =
-            this.publisher_threads[publisher.name] ||
-            new Worker("./worker.js"));
+        const worker = (this.publisherThreads[publisher.name] =
+            this.publisherThreads[publisher.name] || new Worker("./worker.js"));
 
         worker.postMessage({
             command: "addEvent",
@@ -82,7 +81,7 @@ export default class EventManager {
         ).values();
 
         // trigger
-        const worker = this.publisher_threads[publisher.name];
+        const worker = this.publisherThreads[publisher.name];
 
         for (const { eventName, publisher } of filtered) {
             worker.postMessage({
@@ -107,5 +106,13 @@ export default class EventManager {
                     }, subscriber = ${subscriber.name}`,
             )
             .join("\n");
+    }
+
+    offAll() {
+        this.table = [];
+        for (const thread of Object.values(this.publisherThreads)) {
+            thread.terminate();
+        }
+        this.publisherThreads = {};
     }
 }

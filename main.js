@@ -54,3 +54,5 @@ loginComponent.trigger("click", "right");
 loginComponent.trigger("hover", "smooth");
 searchComponent.trigger("click", "right");
 widgetComponent.trigger("", "monkey");
+
+setTimeout(() => eventManager.offAll(), 20000);
