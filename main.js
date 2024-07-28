@@ -1,3 +1,4 @@
+import EventManager from "./EventManager.js";
 import Publisher from "./Publisher.js";
 import Subscriber from "./Subscriber.js";
 
@@ -22,73 +23,31 @@ const handler = (event, userInfo, managersGuide) => {
 };
 
 // subscribe
-searchComponent.on("click", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "sync",
-});
+const subscribe_commands = [
+    [searchComponent, ["click", subscriberA, "sync"]],
+    [widgetComponent, ["focus", subscriberA, "delay", 7000]],
+    [widgetComponent, ["focus", subscriberB, "sync"]],
+    [widgetComponent, ["hover", subscriberA, "delay", 3000]],
+    [loginComponent, ["click", subscriberA, "sync"]],
+    [loginComponent, ["click", subscriberB, "sync"]],
+    [loginComponent, ["click", subscriberC, "sync"]],
+    [loginComponent, ["click", subscriberA, "async"]],
+    [loginComponent, ["click", subscriberB, "async"]],
+    [loginComponent, ["click", subscriberC, "async"]],
+    [loginComponent, ["hover", subscriberB, "async"]],
+];
 
-loginComponent.on("click", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "sync",
-});
+for (const [
+    publisher,
+    [eventName, subscriber, emitter_type, delay],
+] of subscribe_commands) {
+    publisher.on(eventName, { subscriber, handler, emitter_type, delay });
+}
 
-loginComponent.on("click", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "sync",
-});
-
-loginComponent.on("click", {
-    subscriber: subscriberC,
-    handler,
-    emitter_type: "sync",
-});
-
-loginComponent.on("click", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "async",
-});
-
-loginComponent.on("click", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "async",
-});
-
-loginComponent.on("click", {
-    subscriber: subscriberC,
-    handler,
-    emitter_type: "async",
-});
-
-widgetComponent.on("focus", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "delay",
-    delay: 7000,
-});
-
-widgetComponent.on("focus", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "sync",
-});
-
-widgetComponent.on("hover", {
-    subscriber: subscriberA,
-    handler,
-    emitter_type: "delay",
-    delay: 3000,
-});
-
-loginComponent.on("hover", {
-    subscriber: subscriberB,
-    handler,
-    emitter_type: "async",
-});
+// stringify
+const eventManager = EventManager.sharedInstance();
+console.log(eventManager.stringify());
+console.log();
 
 // event trigger
 loginComponent.trigger("click", "right");
