@@ -11,7 +11,7 @@ export default class SyncEventEmitter extends EventEmitter {
         super.on(key_string, listener);
     }
 
-    emit(key, ...args) {
+    async emit(key, ...args) {
         const key_string = JSON.stringify(key);
         super.emit(key_string, ...args);
     }

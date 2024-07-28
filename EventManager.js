@@ -95,8 +95,8 @@ export default class EventManager {
 
         matched.forEach(({ eventName, publisher }) => {
             this.delayQueue.emit({ eventName, publisher }, event, userInfo);
-            this.syncQueue.emit({ eventName, publisher }, event, userInfo);
             this.asyncQueue.emit({ eventName, publisher }, event, userInfo);
+            this.syncQueue.emit({ eventName, publisher }, event, userInfo);
         });
     }
 
