@@ -1,7 +1,7 @@
 import { Worker } from "worker_threads";
 
 export default class EventManager {
-    table = new Map();
+    table = [];
     eventMap = new Map();
     publisher_threads = {};
 
@@ -29,7 +29,7 @@ export default class EventManager {
         emitter_type = "sync",
         delay,
     }) {
-        this.table.set({ subscriber, eventName, publisher }, handler);
+        this.table.push({ subscriber, eventName, publisher });
 
         const worker = (this.publisher_threads[publisher.name] =
             this.publisher_threads[publisher.name] ||
@@ -48,16 +48,12 @@ export default class EventManager {
     }
 
     remove(subscriber) {
-        const keys = Array.from(this.table.keys()).filter(
-            (row) => row.subscriber === subscriber,
-        );
-
-        keys.forEach((key) => this.table.delete(key));
+        this.table = this.table.filter((row) => row.subscriber !== subscriber);
     }
 
     postEvent({ eventName, publisher, completed, userInfo = undefined }) {
         // expand including select all
-        const expanded = Array.from(this.table.keys())
+        const expanded = this.table
             .filter(
                 (row) =>
                     (row.publisher.name === publisher.name ||
