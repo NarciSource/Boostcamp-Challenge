@@ -68,28 +68,28 @@ export default class EventManager {
             .map(({ eventName, publisher }) => ({ eventName, publisher }));
 
         // filter completed events
-        const incomplete = expanded.filter(({ eventName, publisher }) => {
-            const key_string = JSON.stringify({ eventName, publisher });
+        const incomplete = expanded.filter((key) => {
+            const key_string = JSON.stringify(key);
 
             return !this.eventMap.get(key_string);
         });
 
         // set incomplete events to eventMap
-        for (const { eventName, publisher } of incomplete) {
-            const key_string = JSON.stringify({ eventName, publisher });
+        for (const key of incomplete) {
+            const key_string = JSON.stringify(key);
 
             this.eventMap.set(key_string, completed);
         }
 
         // filter duplicates by object-key
         const filtered = new Map(
-            incomplete.map((obj) => [JSON.stringify(obj), obj]),
-        );
+            incomplete.map((key) => [JSON.stringify(key), key]),
+        ).values();
 
         // trigger
         const worker = this.publisher_threads[publisher.name];
 
-        for (const [, { eventName, publisher }] of filtered) {
+        for (const { eventName, publisher } of filtered) {
             worker.postMessage({
                 command: "triggerEvent",
                 args: {
