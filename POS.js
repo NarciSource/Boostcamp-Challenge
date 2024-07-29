@@ -1,3 +1,5 @@
+import manager from "./Manager.js";
+
 export default class POS {
     regex = /^(1|2|3):(\d)$/;
 
@@ -14,7 +16,7 @@ export default class POS {
                     { 1: "small", 2: "medium", 3: "large" }[type],
                 );
 
-                console.log(parcels);
+                manager.reception(parcels);
         }
     }
 }
