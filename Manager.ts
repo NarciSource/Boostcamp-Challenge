@@ -3,6 +3,7 @@ import Worker from "./Worker";
 import Classify_Worker from "./Classify_Worker";
 import Delivery_Worker from "./Delivery_Worker";
 import POS from "./POS";
+import EventLooper from "./EventLooper";
 
 class Manager {
     machines: POS[] = [];
@@ -12,9 +13,14 @@ class Manager {
     delivery_workers: Delivery_Worker[] = [];
 
     constructor() {
-        setInterval(this.pos_watcher.bind(this), 1000);
-        setInterval(this.logistic_queue_watcher.bind(this), 1000);
-        setInterval(this.delivery_queue_watcher.bind(this), 1000);
+        const pos_looper = new EventLooper<Parcel>();
+        pos_looper.set_watcher(this.pos_watcher, this);
+
+        const logistic_looper = new EventLooper<Parcel>();
+        logistic_looper.set_watcher(this.logistic_queue_watcher, this);
+
+        const delivery_looper = new EventLooper<Parcel>();
+        delivery_looper.set_watcher(this.delivery_queue_watcher, this);
     }
 
     connect(pos: POS) {
