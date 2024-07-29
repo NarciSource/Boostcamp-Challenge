@@ -5,7 +5,7 @@
 -   [x] 객체 식별
 -   [x] 동작예시 해석 😒
 -   [x] 시퀀스 다이어그램
--   [ ] 슈도 코드
+-   [x] 슈도 코드
 
 ### 1단계. 접수 이벤트
 
@@ -94,6 +94,40 @@ sequenceDiagram
             end
         end
     end
+```
+
+### pseudo code
+
+```js
+POS
+    ready_queue <- input parcel
+
+Manager
+    ready_queue
+    delivery_queue
+    sorting_workers: subscribers
+    delivery_workers: subscribers
+
+    function notify
+        while unclassified_parcel <- ready_queue.pop
+            sorting_workers
+                filter free
+            then alarm()
+
+        while delivery_parcel <- delivery_queue.pop
+            delivery_workers
+                filter free
+            then alarm()
+
+Worker
+    function alarm
+        parcel <- get()
+        result <- work( parcel )
+        post( result )
+
+Sorting_Worker extends Worker
+Delivery_Worker extends Worker
+
 ```
 
 ## 학습 메모
