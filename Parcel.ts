@@ -3,13 +3,13 @@ export default class Parcel {
 }
 
 export class Small_Parcel extends Parcel {
-    sorting_duration = 3;
+    sorting_duration = 3000;
 }
 
 export class Medium_Parcel extends Parcel {
-    sorting_duration = 7;
+    sorting_duration = 7000;
 }
 
 export class Large_Parcel extends Parcel {
-    sorting_duration = 15;
+    sorting_duration = 15000;
 }
