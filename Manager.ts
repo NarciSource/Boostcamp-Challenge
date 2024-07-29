@@ -1,16 +1,19 @@
 import Parcel from "./Parcel";
 import Worker from "./Worker";
 import Classify_Worker from "./Classify_Worker";
+import Delivery_Worker from "./Delivery_Worker";
 
 class Manager {
     ready_queue: Parcel[] = [];
     logistic_queue: Parcel[] = [];
     delivery_queue: Parcel[] = [];
     classify_workers: Classify_Worker[] = [];
+    delivery_workers: Delivery_Worker[] = [];
 
     constructor() {
         setInterval(this.ready_queue_watcher.bind(this), 1000);
         setInterval(this.logistic_queue_watcher.bind(this), 1000);
+        setInterval(this.delivery_queue_watcher.bind(this), 1000);
     }
 
     reception(parcels: Parcel[]): void {
@@ -21,9 +24,17 @@ class Manager {
         const classify_newcomers = newcomers.filter(
             (newcomer) => newcomer instanceof Classify_Worker,
         );
+        const delivery_newcomers = newcomers.filter(
+            (newcomer) => newcomer instanceof Delivery_Worker,
+        );
+
         this.classify_workers = [
             ...this.classify_workers,
             ...classify_newcomers,
+        ];
+        this.delivery_workers = [
+            ...this.delivery_workers,
+            ...delivery_newcomers,
         ];
     }
 
@@ -46,11 +57,28 @@ class Manager {
         }
     }
 
-    get_parcel(): Parcel {
-        if (this.logistic_queue.length) {
-            const unclassified_parcel = this.logistic_queue[0];
+    delivery_queue_watcher() {
+        if (this.delivery_queue.length) {
+            const free_worker = this.delivery_workers.filter(
+                (worker) => worker.free,
+            );
 
-            this.logistic_queue.shift();
+            for (const worker of free_worker) {
+                worker.alarm();
+            }
+        }
+    }
+
+    get_parcel(type: string): Parcel {
+        const queue = {
+            classify: this.logistic_queue,
+            delivery: this.delivery_queue,
+        }[type];
+
+        if (queue.length) {
+            const unclassified_parcel = queue[0];
+
+            queue.shift();
             return unclassified_parcel;
         }
     }

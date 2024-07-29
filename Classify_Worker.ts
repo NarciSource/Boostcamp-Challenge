@@ -4,7 +4,7 @@ import Parcel from "./Parcel";
 
 export default class Classify_Worker extends Worker {
     alarm() {
-        const parcel = manager.get_parcel();
+        const parcel = manager.get_parcel("classify");
 
         if (parcel) {
             this.work(parcel);

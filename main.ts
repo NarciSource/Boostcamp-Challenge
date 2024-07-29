@@ -1,6 +1,7 @@
 import manager from "./Manager";
 import POS from "./POS";
 import Classify_Worker from "./Classify_Worker";
+import Delivery_Worker from "./Delivery_Worker";
 
 const get_input = (prompt: string): Promise<string> =>
     new Promise((resolve) => {
@@ -10,7 +11,7 @@ const get_input = (prompt: string): Promise<string> =>
 
 (async function main() {
     const pos = new POS();
-    manager.hire([new Classify_Worker(), new Classify_Worker()]);
+    manager.hire([new Classify_Worker(), new Classify_Worker(), new Delivery_Worker()]);
 
     while (true) {
         try {
