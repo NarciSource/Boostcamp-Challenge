@@ -1,0 +1,21 @@
+{
+  "name": "day11",
+  "version": "1.0.0",
+  "description": "접수 이벤트",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gist.github.com/6b89b1f682f51fef40320e6930bb49f4.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/6b89b1f682f51fef40320e6930bb49f4"
+  },
+  "homepage": "https://gist.github.com/6b89b1f682f51fef40320e6930bb49f4"
+}
