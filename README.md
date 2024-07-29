@@ -21,7 +21,7 @@
 
     -   [x] 접수 대기가 있을 경우, *물류 센터 큐*에 물품 이벤트를 _전달한다_.
 
-    -   [ ] 필요하면 매니저(Manager)도 배송 현황판을 표시할 이벤트를 전달할 수 있다.
+    -   [x] 필요하면 매니저(Manager)도 배송 현황판을 표시할 이벤트를 전달할 수 있다.
 
 -   [x] *작업자*는 물품 분류하기 시작할 때와 끝날 때 마다 이벤트를 발생한다.
 
@@ -45,13 +45,13 @@
 
 -   [x] 접수를 할 때마다 접수한 고객을 구분해서 한꺼번에 접수한 물품들을 구분해서 알고 있어야 한다.
 
--   [ ] 매니저(Manager)는 접수/배달 대기큐에서 이벤트를 받는다.
+-   [x] 매니저(Manager)는 접수/배달 대기큐에서 이벤트를 받는다.
 
     -   [x] 접수 대기가 있을 경우 작업이 물류센터별로 물품이 적은 곳으로 이벤트를 전달한다. 물류센터별 분류 대기 목록을 관리해야 한다.
 
-    -   [ ] 물류센터 지정이 끝난 물품에 대해 배달 가능한 기사에게 작업 이벤트를 전달한다. 대기중인 배달 기사 목록을 관리해야 한다.
+    -   [x] 물류센터 지정이 끝난 물품에 대해 배달 가능한 기사에게 작업 이벤트를 전달한다. 대기중인 배달 기사 목록을 관리해야 한다.
 
--   [ ] 이제 물류센터는 4곳이 있다고 가정하고, 작업자는 한 번에 2개 물품까지 동시에 분류할 수 있다고 가정한다.
+-   [x] 이제 물류센터는 4곳이 있다고 가정하고, 작업자는 한 번에 2개 물품까지 동시에 분류할 수 있다고 가정한다.
 
 ## 문제 해결 과정
 
@@ -59,13 +59,11 @@
 
 -   EventLooper 이벤트 루퍼
 -   Manager 접수 매니저 - 이벤트 관리
-    -   ready_queue 접수 큐
-    -   logistics_queue 물류 센터 큐
-    -
 -   POS 접수기계 - 이벤트 등록
 -   ClassifyWorker 분류 작업자
 -   DeliveryWorker 배달 기사
 -   DashBoard 현황판
+-   LogisticsCenter 물류 센터
 
 ### 시퀀스 다이어그램
 
@@ -110,12 +108,14 @@ POS
 
 Manager
     machines: POSes
-    classify_workers: subscribers
-    delivery_workers: subscribers
 
     function watcher
         while parcel <- POS.transfer
-            EventLoops.enqueue()
+            min of logisticsCenter.enqueue()
+
+LogisticsCenter
+    classify_workers: subscribers
+    delivery_workers: subscribers
 
 EventLoops
     ready_queue

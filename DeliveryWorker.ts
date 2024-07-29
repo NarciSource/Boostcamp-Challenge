@@ -5,12 +5,12 @@ import { sleep } from "./utils";
 export default class DeliveryWorker extends Worker {
     async work(parcel: Parcel) {
         console.log("delivery start!");
-        this.free = false;
+        this._free = false;
 
         await sleep(10000);
 
         console.log("delivery end!");
-        this.free = true;
+        this._free = true;
         parcel.delivered = true;
     }
 }
