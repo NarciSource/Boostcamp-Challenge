@@ -13,11 +13,7 @@ const get_input = (prompt: string): Promise<string> =>
 (async function main() {
     const pos = new POS();
 
-    manager.hire([
-        new Classify_Worker(),
-        new Classify_Worker(),
-        new Delivery_Worker(),
-    ]);
+    manager.hire([new Classify_Worker(), new Classify_Worker(), new Delivery_Worker()]);
     dashBoard.display();
 
     while (true) {
