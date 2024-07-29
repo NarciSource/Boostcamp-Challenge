@@ -1,26 +1,16 @@
 import Worker from "./Worker";
-import manager from "./Manager";
 import Parcel from "./Parcel";
+import { sleep } from "./utils";
 
 export default class Classify_Worker extends Worker {
-    alarm() {
-        const parcel = manager.get_parcel("classify");
-
-        if (parcel) {
-            this.work(parcel);
-        }
-    }
-
-    work(parcel: Parcel) {
+    async work(parcel: Parcel) {
         console.log("classified start!");
-
         this.free = false;
-        setTimeout(() => {
-            console.log("classified end!");
 
-            parcel.classified = true;
-            manager.store_parcel(parcel);
-            this.free = true;
-        }, parcel.sorting_duration);
+        await sleep(parcel.sorting_duration);
+
+        console.log("classified end!");
+        this.free = true;
+        parcel.classified = true;
     }
 }

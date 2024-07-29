@@ -15,7 +15,7 @@
 
     -   [x] 접수를 받으면 _접수 대기큐_(Queue)에 _추가한다_.
 
--   [ ] 대기큐에 들어있는 이벤트를 꺼내서 처리하는 **이벤트 루퍼**(Looper)를 별도 모듈/객체로 분리해서 구현한다.
+-   [x] 대기큐에 들어있는 이벤트를 꺼내서 처리하는 **이벤트 루퍼**(Looper)를 별도 모듈/객체로 분리해서 구현한다.
 
 -   [x] _접수 매니저_(Manager)는 **주기적으로** 접수 대기큐에서 이벤트를 _확인한다_.
 
@@ -41,14 +41,14 @@
 
 ### 객체 식별
 
--   Looper 이벤트 루퍼
+-   EventLooper 이벤트 루퍼
 -   Manager 접수 매니저 - 이벤트 관리
     -   ready_queue 접수 큐
     -   logistics_queue 물류 센터 큐
     -
 -   POS 접수기계 - 이벤트 등록
--   Classify_Worker 분류 작업자
--   Delivery_Worker 배달 기사
+-   ClassifyWorker 분류 작업자
+-   DeliveryWorker 배달 기사
 -   DashBoard 현황판
 
 ### 시퀀스 다이어그램
@@ -56,46 +56,33 @@
 ```mermaid
 sequenceDiagram
     participant POS
-    participant ready_queue
     participant Manager
-    participant logistics_queue
-    participant Classify_Worker
-    participant Delivery_Worker
+    participant ready_queue
+    participant ClassifyWorker
+    participant active_queue
+    participant DeliveryWorker
+    participant completed_queue
 
-    loop reception
-        POS->>ready_queue: parcel
-    end
-
-    loop check ready parcel
-        Manager->>ready_queue: check()
+    loop watcher
+        Manager->>POS: check()
         alt If parcel exists
-            ready_queue->>logistics_queue: stored(parcel)
+            POS->>Manager: transfer()
+            Manager->>ready_queue: enqueue()
         end
     end
 
     loop parcel classify
-        Manager->>logistics_queue: check()
-        logistics_queue->>Manager: response()
-        alt If unclassified_parcel exists
-            Manager->>Classify_Worker: alarm()
-            Classify_Worker->>logistics_queue: get(1)
-            logistics_queue->>Classify_Worker: unclassified_parcel
-            Classify_Worker->>Classify_Worker: classify()
-            Classify_Worker->>logistics_queue: classified_parcel
-        end
+        ready_queue->>ClassifyWorker: unclassified_parcel
+        ClassifyWorker->>ClassifyWorker: classify()
+        ClassifyWorker->>ready_queue: classified_parcel
+        ready_queue->>active_queue: active()
     end
 
     loop parcel deliver
-        Manager->>logistics_queue: check()
-        logistics_queue->>Manager: response()
-        alt If awaiting delivery_parcels exist
-            Manager->>Delivery_Worker: alarm()
-            alt If available delivery worker exists
-                Delivery_Worker->>logistics_queue: get(1)
-                logistics_queue->>Delivery_Worker: delivery_parcel
-                Delivery_Worker->>Delivery_Worker: deliver()
-            end
-        end
+        active_queue->>DeliveryWorker: delivery_parcel
+        DeliveryWorker->>DeliveryWorker: delivery()
+        DeliveryWorker->>active_queue: delivered_parcel
+        active_queue->>completed_queue: completed()
     end
 ```
 
@@ -106,30 +93,21 @@ POS
     ready_queue <- input parcel
 
 Manager
-    logistics_queue
-    delivery_queue
+    machines: POSes
     Classify_Workers: subscribers
     delivery_workers: subscribers
 
     function watcher
-        while unclassified_parcel <- ready_queue.pop
-            Classify_Workers
-                filter free
-            then alarm()
+        while parcel <- POS.transfer
+            EventLoops.enqueue()
 
-        while delivery_parcel <- delivery_queue.pop
-            delivery_workers
-                filter free
-            then alarm()
+EventLoops
+    ready_queue
+    active_queue
+    completed_queue
 
-Worker
-    function alarm
-        parcel <- get()
-        result <- work( parcel )
-        post( result )
-
-Classify_Worker extends Worker
-Delivery_Worker extends Worker
+    loop
+        completed_queue <= active_queue <= ready_queue
 
 ```
 
