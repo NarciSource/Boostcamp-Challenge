@@ -1,4 +1,4 @@
-import Parcel from "./Parcel";
+import Parcel, { LargeParcel, MediumParcel, SmallParcel } from "./Parcel";
 import Worker from "./Worker";
 import ClassifyWorker from "./ClassifyWorker";
 import DeliveryWorker from "./DeliveryWorker";
@@ -27,13 +27,24 @@ export default class LogisticsCenter {
 
         this.classify_workers = [...this.classify_workers, ...classify_newcomers];
         this.delivery_workers = [...this.delivery_workers, ...delivery_newcomers];
+
+        if (this.classify_workers.length >= 3) {
+            this.set_specialist();
+        }
+    }
+
+    set_specialist() {
+        const parcel_type_list = [SmallParcel, MediumParcel, LargeParcel];
+        for (const [index, worker] of this.classify_workers.entries()) {
+            worker.specialist = parcel_type_list[index % 3];
+        }
     }
 
     allocate_worker(workers_name: string) {
         function inner(parcel: Parcel, callback: (data: Parcel) => void) {
             const workers = this[workers_name] as Worker[];
 
-            const free_worker = workers.find((worker) => worker.free);
+            const free_worker = workers.find((worker) => worker.free && worker.is_allowed(parcel));
 
             if (free_worker) {
                 if (

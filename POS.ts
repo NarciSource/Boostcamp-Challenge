@@ -1,5 +1,5 @@
 import Manager from "./Manager";
-import Parcel, { Large_Parcel, Medium_Parcel, Small_Parcel } from "./Parcel";
+import Parcel, { LargeParcel, MediumParcel, SmallParcel } from "./Parcel";
 import { v4 as uuidv4 } from "uuid";
 
 export default class POS {
@@ -19,9 +19,9 @@ export default class POS {
             default:
                 const [, type, num] = this.regex.exec(input);
                 const Parcel_Type = {
-                    1: Small_Parcel,
-                    2: Medium_Parcel,
-                    3: Large_Parcel,
+                    1: SmallParcel,
+                    2: MediumParcel,
+                    3: LargeParcel,
                 }[type];
 
                 const customer_id = uuidv4();

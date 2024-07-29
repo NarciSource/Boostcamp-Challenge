@@ -8,4 +8,8 @@ export default abstract class Worker {
     public get free() {
         return this._free;
     }
+
+    public is_allowed(parcel: Parcel) {
+        return true;
+    }
 }
