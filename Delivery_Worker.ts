@@ -11,5 +11,6 @@ export default class Delivery_Worker extends Worker {
 
         console.log("delivery end!");
         this.free = true;
+        parcel.delivered = true;
     }
 }

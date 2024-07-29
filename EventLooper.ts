@@ -12,8 +12,8 @@ export default class EventLooper<T> extends EventEmitter {
 
         setInterval(() => {
             this.move_to_queue("active", this.ready_queue, this.active_queue);
-            this.move_to_queue("completed", this.active_queue, this.completed_queue);
-            this.move_to_queue("finalize", this.completed_queue, null);
+            this.move_to_queue("completed", this.active_queue, this.ready_queue);
+            this.move_to_queue("finalize", this.active_queue, this.completed_queue);
         }, 1000);
     }
 

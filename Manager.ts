@@ -15,8 +15,9 @@ class Manager {
         setInterval(this.pos_watcher.bind(this), 1000);
 
         this.event_looper.on("active", this.allocate_worker("classify_workers"));
-        this.event_looper.on("completed", this.check_classified.bind(this));
-        this.event_looper.on("finalize", this.allocate_worker("delivery_workers"));
+        this.event_looper.on("completed", this.check_status("classify_workers"));
+        this.event_looper.on("active", this.allocate_worker("delivery_workers"));
+        this.event_looper.on("finalize", this.check_status("delivery_workers"));
     }
 
     connect(pos: POS) {
@@ -46,18 +47,30 @@ class Manager {
             const workers = this[workers_name] as Worker[];
 
             const free_worker = workers.find((worker) => worker.free);
+
             if (free_worker) {
-                free_worker.work(parcel);
-                callback(parcel);
+                if (
+                    (workers_name === "classify_workers" && !parcel.classified) ||
+                    (workers_name === "delivery_workers" && parcel.classified)
+                ) {
+                    free_worker.work(parcel);
+                    callback(parcel);
+                }
             }
         }
         return inner.bind(this);
     }
 
-    check_classified(parcel: Parcel, callback: (data: Parcel) => void) {
-        if (parcel.classified) {
-            callback(parcel);
+    check_status(workers_name: string) {
+        function inner(parcel: Parcel, callback: (data: Parcel) => void) {
+            if (
+                (workers_name === "classify_workers" && !parcel.delivered) ||
+                (workers_name === "delivery_workers" && parcel.delivered)
+            ) {
+                callback(parcel);
+            }
         }
+        return inner.bind(this);
     }
 }
 
