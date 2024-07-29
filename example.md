@@ -12,7 +12,7 @@
 
     -   > 1:2
     -   <U>[ 1 1 ]</U> &rarr; _DashBoard_
-    -   소형 분류 시작 &rarr; _Classify_Worker_
+    -   소형 분류 시작 &rarr; _ClassifyWorker_
     -   **[1]** <U>[ 1 ]</U> &rarr; _DashBoard_
 
 -   (1분경과)
@@ -22,8 +22,8 @@
 
 -   (2분경과)
 
-    -   소형 물품 배송 시작 &rarr; _Delivery_Worker_
-    -   소형 분류 시작 &rarr; _Classify_Worker_
+    -   소형 물품 배송 시작 &rarr; _DeliveryWorker_
+    -   소형 분류 시작 &rarr; _ClassifyWorker_
 
 -   (2분경과)
 
@@ -34,36 +34,36 @@
 
     -   소형 물품 배송 대기
     -   **[3]** <U>[ 2 2 ]</U> &rarr; _DashBoard_
-    -   대형 분류 시작 &rarr; _Classify_Worker_
+    -   대형 분류 시작 &rarr; _ClassifyWorker_
 
 -   (7분경과)
 
-    -   소형 물품 배송 완료 &rarr; _Delivery_Worker_
-    -   소형 물품 배송 시작 &rarr; _Delivery_Worker_
+    -   소형 물품 배송 완료 &rarr; _DeliveryWorker_
+    -   소형 물품 배송 시작 &rarr; _DeliveryWorker_
 
 -   (8분경과)
 
     -   **[2]** <U>[ 2 ]</U> &rarr; _DashBoard_
-    -   중형 분류 시작 &rarr; _Classify_Worker_
+    -   중형 분류 시작 &rarr; _ClassifyWorker_
 
 -   (2분경과)
 
-    -   소형 물품 배송 완료 &rarr; _Delivery_Worker_
+    -   소형 물품 배송 완료 &rarr; _DeliveryWorker_
 
 -   (5분경과)
 
-    -   대형 물품 배송 시작 &rarr; _Delivery_Worker_
-    -   중형 분류 시작 &rarr; _Classify_Worker_
+    -   대형 물품 배송 시작 &rarr; _DeliveryWorker_
+    -   중형 분류 시작 &rarr; _ClassifyWorker_
     -   **[2]** <U>[&nbsp;&nbsp;&nbsp;]</U> &rarr; _DashBoard_
 
 -   (7분경과)
 
     -   <U>[&nbsp;&nbsp;&nbsp;]</U>
-    -   대형 물품 배송 완료 &rarr; _Delivery_Worker_
+    -   대형 물품 배송 완료 &rarr; _DeliveryWorker_
 
 -   (3분경과)
 
-    -   중형 물품 배송 시작 &rarr; _Delivery_Worker_
+    -   중형 물품 배송 시작 &rarr; _DeliveryWorker_
 
 -   (중간생략)
 -   모든 물품이 발송되었습니다.

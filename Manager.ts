@@ -1,15 +1,15 @@
 import Parcel from "./Parcel";
 import Worker from "./Worker";
-import Classify_Worker from "./Classify_Worker";
-import Delivery_Worker from "./Delivery_Worker";
+import ClassifyWorker from "./ClassifyWorker";
+import DeliveryWorker from "./DeliveryWorker";
 import POS from "./POS";
 import EventLooper from "./EventLooper";
 
 class Manager {
     event_looper = new EventLooper<Parcel>();
     machines: POS[] = [];
-    classify_workers: Classify_Worker[] = [];
-    delivery_workers: Delivery_Worker[] = [];
+    classify_workers: ClassifyWorker[] = [];
+    delivery_workers: DeliveryWorker[] = [];
 
     constructor() {
         setInterval(this.pos_watcher.bind(this), 1000);
@@ -26,10 +26,10 @@ class Manager {
 
     hire(newcomers: Worker[]): void {
         const classify_newcomers = newcomers.filter(
-            (newcomer) => newcomer instanceof Classify_Worker,
+            (newcomer) => newcomer instanceof ClassifyWorker,
         );
         const delivery_newcomers = newcomers.filter(
-            (newcomer) => newcomer instanceof Delivery_Worker,
+            (newcomer) => newcomer instanceof DeliveryWorker,
         );
 
         this.classify_workers = [...this.classify_workers, ...classify_newcomers];

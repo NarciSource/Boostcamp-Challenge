@@ -94,7 +94,7 @@ POS
 
 Manager
     machines: POSes
-    Classify_Workers: subscribers
+    classify_workers: subscribers
     delivery_workers: subscribers
 
     function watcher

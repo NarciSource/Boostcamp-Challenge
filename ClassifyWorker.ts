@@ -2,7 +2,7 @@ import Worker from "./Worker";
 import Parcel from "./Parcel";
 import { sleep } from "./utils";
 
-export default class Classify_Worker extends Worker {
+export default class ClassifyWorker extends Worker {
     async work(parcel: Parcel) {
         console.log("classified start!");
         this.free = false;

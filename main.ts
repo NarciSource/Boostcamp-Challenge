@@ -1,8 +1,8 @@
 import manager from "./Manager";
 import dashBoard from "./DashBoard";
 import POS from "./POS";
-import Classify_Worker from "./Classify_Worker";
-import Delivery_Worker from "./Delivery_Worker";
+import ClassifyWorker from "./ClassifyWorker";
+import DeliveryWorker from "./DeliveryWorker";
 
 const get_input = (prompt: string): Promise<string> =>
     new Promise((resolve) => {
@@ -13,7 +13,7 @@ const get_input = (prompt: string): Promise<string> =>
 (async function main() {
     const pos = new POS();
 
-    manager.hire([new Classify_Worker(), new Classify_Worker(), new Delivery_Worker()]);
+    manager.hire([new ClassifyWorker(), new ClassifyWorker(), new DeliveryWorker()]);
     dashBoard.display();
 
     while (true) {

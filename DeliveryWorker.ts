@@ -2,7 +2,7 @@ import Worker from "./Worker";
 import Parcel from "./Parcel";
 import { sleep } from "./utils";
 
-export default class Delivery_Worker extends Worker {
+export default class DeliveryWorker extends Worker {
     async work(parcel: Parcel) {
         console.log("delivery start!");
         this.free = false;
