@@ -1,11 +1,11 @@
 import Parcel from "./Parcel";
 import Worker from "./Worker";
-import Sorting_Worker from "./Sorting_Worker";
+import Classify_Worker from "./Classify_Worker";
 
 class Manager {
     ready_queue: Parcel[] = [];
     logistic_queue: Parcel[] = [];
-    sorting_workers: Sorting_Worker[] = [];
+    Classify_Workers: Classify_Worker[] = [];
 
     constructor() {
         setInterval(this.ready_queue_watcher.bind(this), 1000);
@@ -18,23 +18,26 @@ class Manager {
 
     hire(newcomers: Worker[]): void {
         const sorting_newcomers = newcomers.filter(
-            (newcomer) => newcomer instanceof Sorting_Worker,
+            (newcomer) => newcomer instanceof Classify_Worker,
         );
-        this.sorting_workers = [...this.sorting_workers, ...sorting_newcomers];
+        this.Classify_Workers = [
+            ...this.Classify_Workers,
+            ...sorting_newcomers,
+        ];
     }
 
-    async ready_queue_watcher() {
+    ready_queue_watcher() {
         if (this.ready_queue.length) {
             this.logistic_queue = [...this.logistic_queue, ...this.ready_queue];
             this.ready_queue = [];
         }
     }
 
-    async logistic_queue_watcher() {
+    logistic_queue_watcher() {
         if (this.is_exist_unclassified_parcel) {
-            for (const worker of this.sorting_workers) {
-                worker.alarm();
-            }
+            this.Classify_Workers.filter((worker) => worker.free).forEach(
+                (worker) => worker.alarm(),
+            );
         }
     }
 

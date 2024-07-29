@@ -47,7 +47,7 @@
     -   logistics_queue 물류 센터 큐
     -
 -   POS 접수기계 - 이벤트 등록
--   Sorting_Worker 분류 작업자
+-   Classify_Worker 분류 작업자
 -   Delivery_Worker 배달 기사
 -   DashBoard 현황판
 
@@ -57,9 +57,9 @@
 sequenceDiagram
     participant POS
     participant ready_queue
-    participant logistics_queue
     participant Manager
-    participant Sorting_Worker
+    participant logistics_queue
+    participant Classify_Worker
     participant Delivery_Worker
 
     loop reception
@@ -77,11 +77,11 @@ sequenceDiagram
         Manager->>logistics_queue: check()
         logistics_queue->>Manager: response()
         alt If unclassified_parcel exists
-            Manager->>Sorting_Worker: alarm()
-            Sorting_Worker->>logistics_queue: get(1)
-            logistics_queue->>Sorting_Worker: unclassified_parcel
-            Sorting_Worker->>Sorting_Worker: classify()
-            Sorting_Worker->>logistics_queue: classified_parcel
+            Manager->>Classify_Worker: alarm()
+            Classify_Worker->>logistics_queue: get(1)
+            logistics_queue->>Classify_Worker: unclassified_parcel
+            Classify_Worker->>Classify_Worker: classify()
+            Classify_Worker->>logistics_queue: classified_parcel
         end
     end
 
@@ -108,12 +108,12 @@ POS
 Manager
     ready_queue
     delivery_queue
-    sorting_workers: subscribers
+    Classify_Workers: subscribers
     delivery_workers: subscribers
 
     function watcher
         while unclassified_parcel <- ready_queue.pop
-            sorting_workers
+            Classify_Workers
                 filter free
             then alarm()
 
@@ -128,7 +128,7 @@ Worker
         result <- work( parcel )
         post( result )
 
-Sorting_Worker extends Worker
+Classify_Worker extends Worker
 Delivery_Worker extends Worker
 
 ```

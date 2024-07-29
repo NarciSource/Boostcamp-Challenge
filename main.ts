@@ -1,6 +1,6 @@
 import manager from "./Manager";
 import POS from "./POS";
-import Sorting_Worker from "./Sorting_Worker";
+import Classify_Worker from "./Classify_Worker";
 
 const get_input = (prompt: string): Promise<string> =>
     new Promise((resolve) => {
@@ -10,7 +10,7 @@ const get_input = (prompt: string): Promise<string> =>
 
 (async function main() {
     const pos = new POS();
-    manager.hire([new Sorting_Worker()]);
+    manager.hire([new Classify_Worker()]);
 
     while (true) {
         try {

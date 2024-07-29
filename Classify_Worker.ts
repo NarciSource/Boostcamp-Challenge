@@ -2,8 +2,8 @@ import Worker from "./Worker";
 import manager from "./Manager";
 import Parcel from "./Parcel";
 
-export default class Sorting_Worker extends Worker {
-    working = false;
+export default class Classify_Worker extends Worker {
+    free = true;
 
     alarm() {
         const parcel = manager.get_parcel();
@@ -14,11 +14,11 @@ export default class Sorting_Worker extends Worker {
     work(parcel: Parcel) {
         console.log("sorting start!");
 
-        this.working = true;
+        this.free = false;
         setTimeout(() => {
             console.log("sorting end!");
 
-            this.working = false;
+            this.free = true;
         }, parcel.sorting_duration);
     }
 }
