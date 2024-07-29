@@ -87,6 +87,7 @@ sequenceDiagram
     participant completed_queue
     participant ClassifyWorker
     participant DeliveryWorker
+    note over ready_queue, completed_queue: EventLooper
 
     loop watcher
         Manager->>POS: check()
