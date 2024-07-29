@@ -34,6 +34,7 @@ const get_input = (prompt: string): Promise<string> =>
             if (pos.input(await get_input("> ")) === "exit") {
                 break;
             }
+            dashBoard.monitor();
         } catch (e) {
             console.error(e, "올바르지 않은 입력입니다.");
         }
