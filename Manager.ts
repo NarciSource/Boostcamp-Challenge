@@ -18,12 +18,12 @@ class Manager {
     }
 
     hire(newcomers: Worker[]): void {
-        const sorting_newcomers = newcomers.filter(
+        const classify_newcomers = newcomers.filter(
             (newcomer) => newcomer instanceof Classify_Worker,
         );
         this.classify_workers = [
             ...this.classify_workers,
-            ...sorting_newcomers,
+            ...classify_newcomers,
         ];
     }
 
