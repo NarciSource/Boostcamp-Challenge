@@ -1,6 +1,6 @@
 class Manager {
     ready_queue = [];
-    delivery_queue = [];
+    logistic_queue = [];
 
     constructor() {
         setInterval(this.ready_queue_watcher.bind(this), 1000);
@@ -12,8 +12,8 @@ class Manager {
 
     async ready_queue_watcher() {
         if (this.ready_queue.length) {
-            console.log("watch");
-            this.ready_queue.shift();
+            this.logistic_queue = [...this.logistic_queue, ...this.ready_queue];
+            this.ready_queue = [];
         }
     }
 }
