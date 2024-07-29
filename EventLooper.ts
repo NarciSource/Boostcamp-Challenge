@@ -1,50 +1,34 @@
 import EventEmitter from "events";
 
+type queue<T> = T[];
+
 export default class EventLooper<T> extends EventEmitter {
-    ready_queue: T[] = [];
-    active_queue: T[] = [];
-    completed_queue: T[] = [];
+    ready_queue: queue<T> = [];
+    active_queue: queue<T> = [];
+    completed_queue: queue<T> = [];
 
     constructor() {
         super();
-        setInterval(this.ready_queue_loop.bind(this), 1000);
-        setInterval(this.active_queue_loop.bind(this), 1000);
-        setInterval(this.completed_queue_loo.bind(this), 1000);
+
+        setInterval(() => {
+            this.move_to_queue("active", this.ready_queue, this.active_queue);
+            this.move_to_queue("completed", this.active_queue, this.completed_queue);
+            this.move_to_queue("finalize", this.completed_queue, null);
+        }, 1000);
     }
 
-    enqueue(events: T[]) {
+    enqueue(events: T[]): void {
         this.ready_queue = [...this.ready_queue, ...events];
     }
 
-    async ready_queue_loop() {
-        for (const data of this.ready_queue) {
-            const callback = (data: T) => {
-                this.active_queue.push(data);
-                this.ready_queue.shift();
-            };
-
-            this.emit("active", data, callback.bind(this));
-        }
-    }
-
-    async active_queue_loop() {
-        const callback = (data: T) => {
-            this.completed_queue.push(data);
-            this.active_queue.shift();
+    move_to_queue(key: string, source_queue: T[], destination_queue: T[]): void {
+        const callback = (event: T) => {
+            destination_queue?.push(event);
+            source_queue.shift();
         };
 
-        for (const data of this.active_queue) {
-            this.emit("completed", data, callback.bind(this));
-        }
-    }
-
-    async completed_queue_loo() {
-        const callback = (data: T) => {
-            this.completed_queue.shift();
-        };
-
-        for (const data of this.completed_queue) {
-            this.emit("final", data, callback.bind(this));
+        for (const event of source_queue) {
+            this.emit(key, event, callback.bind(this));
         }
     }
 }
