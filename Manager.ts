@@ -20,6 +20,7 @@ class Manager {
         );
 
         this.event_looper.on("completed", this.check_classified.bind(this));
+        this.event_looper.on("final", this.allocate_delivery_worker.bind(this));
     }
 
     connect(pos: POS) {
@@ -61,6 +62,15 @@ class Manager {
 
     check_classified(parcel: Parcel, callback: (data: Parcel) => void) {
         if (parcel.classified) {
+            callback(parcel);
+        }
+    }
+
+    allocate_delivery_worker(parcel: Parcel, callback: (data: Parcel) => void) {
+        const free_worker = this.delivery_workers.find((worker) => worker.free);
+
+        if (free_worker) {
+            free_worker.work(parcel);
             callback(parcel);
         }
     }
