@@ -1,8 +1,13 @@
-import manager from "./Manager";
-import { Large_Parcel, Medium_Parcel, Small_Parcel } from "./Parcel";
+import Manager from "./Manager";
+import Parcel, { Large_Parcel, Medium_Parcel, Small_Parcel } from "./Parcel";
 
 export default class POS {
     regex = /^(1|2|3):(\d)$/;
+    ready_queue: Parcel[] = [];
+
+    constructor() {
+        Manager.connect(this);
+    }
 
     input(input: string): string {
         switch (input) {
@@ -22,7 +27,13 @@ export default class POS {
                     new Parcel_Type(),
                 );
 
-                manager.reception(parcels);
+                this.ready_queue = [...this.ready_queue, ...parcels];
         }
+    }
+
+    transfer(): Parcel[] {
+        const ready_queue = this.ready_queue;
+        this.ready_queue = [];
+        return ready_queue;
     }
 }

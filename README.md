@@ -106,7 +106,7 @@ POS
     ready_queue <- input parcel
 
 Manager
-    ready_queue
+    logistics_queue
     delivery_queue
     Classify_Workers: subscribers
     delivery_workers: subscribers

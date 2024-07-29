@@ -2,22 +2,23 @@ import Parcel from "./Parcel";
 import Worker from "./Worker";
 import Classify_Worker from "./Classify_Worker";
 import Delivery_Worker from "./Delivery_Worker";
+import POS from "./POS";
 
 class Manager {
-    ready_queue: Parcel[] = [];
+    machines: POS[] = [];
     logistic_queue: Parcel[] = [];
     delivery_queue: Parcel[] = [];
     classify_workers: Classify_Worker[] = [];
     delivery_workers: Delivery_Worker[] = [];
 
     constructor() {
-        setInterval(this.ready_queue_watcher.bind(this), 1000);
+        setInterval(this.pos_watcher.bind(this), 1000);
         setInterval(this.logistic_queue_watcher.bind(this), 1000);
         setInterval(this.delivery_queue_watcher.bind(this), 1000);
     }
 
-    reception(parcels: Parcel[]): void {
-        this.ready_queue = [...this.ready_queue, ...parcels];
+    connect(pos: POS) {
+        this.machines.push(pos);
     }
 
     hire(newcomers: Worker[]): void {
@@ -38,11 +39,10 @@ class Manager {
         ];
     }
 
-    ready_queue_watcher() {
-        if (this.ready_queue.length) {
-            this.logistic_queue = [...this.logistic_queue, ...this.ready_queue];
-            this.ready_queue = [];
-        }
+    pos_watcher() {
+        const ready_queue = this.machines.flatMap((pos) => pos.transfer());
+
+        this.logistic_queue = [...this.logistic_queue, ...ready_queue];
     }
 
     logistic_queue_watcher() {
