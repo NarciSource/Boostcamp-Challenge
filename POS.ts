@@ -24,7 +24,7 @@ export default class POS {
                     3: LargeParcel,
                 }[type];
 
-                const customer_id = uuidv4();
+                const customer_id = uuidv4().substring(0, 4);
                 const parcels = new Array(parseInt(num))
                     .fill(null)
                     .map(() => new Parcel_Type(customer_id));

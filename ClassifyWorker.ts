@@ -7,12 +7,12 @@ export default class ClassifyWorker extends Worker {
     specialist: typeof Parcel;
 
     async work(parcel: Parcel) {
-        console.log("classified start!");
+        console.log(parcel.customer, parcel.constructor.name, "분류중");
         this.hands--;
 
         await sleep(parcel.sorting_duration);
 
-        console.log("classified end!");
+        console.log(parcel.customer, parcel.constructor.name, "분류완료");
         this.hands++;
         parcel.classified = true;
     }
