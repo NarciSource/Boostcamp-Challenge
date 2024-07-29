@@ -4,22 +4,22 @@
 
 -   [x] 객체 식별
 -   [x] 동작예시 해석 😒
--   [ ] 시퀀스 다이어그램
+-   [x] 시퀀스 다이어그램
 -   [ ] 슈도 코드
 
 ### 1단계. 접수 이벤트
 
 -   [ ] 직접 스레드를 만들면 안되고, Event를 처리하는 비동기 이벤트 처리하도록 구현한다.
 
--   [ ] _접수 기계_(POS)는 접수를 연속해서 받을 수 있다.
+-   [ ] _접수 기계_(POS)는 접수를 **연속해서** 받을 수 있다.
 
-    -   [ ] 접수를 받으면 _접수 대기큐_(Queue)에 추가한다.
+    -   [ ] 접수를 받으면 _접수 대기큐_(Queue)에 _추가한다_.
 
 -   [ ] 대기큐에 들어있는 이벤트를 꺼내서 처리하는 **이벤트 루퍼**(Looper)를 별도 모듈/객체로 분리해서 구현한다.
 
--   [ ] _접수 매니저_(Manager)는 주기적으로 접수 대기큐에서 이벤트를 확인한다.
+-   [ ] _접수 매니저_(Manager)는 **주기적으로** 접수 대기큐에서 이벤트를 _확인한다_.
 
-    -   [ ] 접수 대기가 있을 경우, *물류 센터 큐*에 물품 이벤트를 전달한다.
+    -   [ ] 접수 대기가 있을 경우, *물류 센터 큐*에 물품 이벤트를 _전달한다_. &rarr; publish
 
     -   [ ] 필요하면 매니저(Manager)도 배송 현황판을 표시할 이벤트를 전달할 수 있다.
 
@@ -50,5 +50,50 @@
 -   Sorting_Worker 분류 작업자
 -   Delivery_Worker 배달 기사
 -   DashBoard 현황판
+
+### 시퀀스 다이어그램
+
+```mermaid
+sequenceDiagram
+    participant POS
+    participant ready_queue
+    participant Manager
+    participant logistics_queue
+    participant Sorting_Worker
+    participant Delivery_Worker
+
+    loop reception
+        POS->>ready_queue: parcel
+    end
+
+    loop check event
+        Manager->>ready_queue: check()
+        alt parcel exists
+            ready_queue->>Manager: response(parcel)
+            Manager->>logistics_queue: unclassified_parcel
+        end
+    end
+
+    loop parcel classify
+        alt If unclassified_parcel exists
+            Manager->>Sorting_Worker: alarm()
+            Sorting_Worker->>logistics_queue: get(1)
+            logistics_queue->>Sorting_Worker: unclassified_parcel
+            Sorting_Worker->>Sorting_Worker: classify()
+            Sorting_Worker->>logistics_queue: classified_parcel
+        end
+    end
+
+    loop parcel deliver
+        alt If awaiting delivery_parcels exist
+            Manager->>Delivery_Worker: alarm()
+            alt If available delivery worker exists
+                Delivery_Worker->>logistics_queue: get(1)
+                logistics_queue->>Delivery_Worker: delivery_parcel
+                Delivery_Worker->>Delivery_Worker: deliver()
+            end
+        end
+    end
+```
 
 ## 학습 메모
