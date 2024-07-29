@@ -1,7 +1,12 @@
 export default class Parcel {
+    customer: string;
     sorting_duration: number;
     classified = false;
     delivered = false;
+
+    constructor(customer: string) {
+        this.customer = customer;
+    }
 }
 
 export class Small_Parcel extends Parcel {

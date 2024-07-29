@@ -1,5 +1,6 @@
 import Manager from "./Manager";
 import Parcel, { Large_Parcel, Medium_Parcel, Small_Parcel } from "./Parcel";
+import { v4 as uuidv4 } from "uuid";
 
 export default class POS {
     regex = /^(1|2|3):(\d)$/;
@@ -23,7 +24,12 @@ export default class POS {
                     3: Large_Parcel,
                 }[type];
 
-                const parcels = new Array(parseInt(num)).fill(null).map(() => new Parcel_Type());
+                const customer_id = uuidv4();
+                const parcels = new Array(parseInt(num))
+                    .fill(null)
+                    .map(() => new Parcel_Type(customer_id));
+
+                console.log(parcels);
 
                 this.ready_queue = [...this.ready_queue, ...parcels];
         }
