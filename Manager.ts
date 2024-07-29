@@ -18,6 +18,8 @@ class Manager {
             "active",
             this.allocate_classify_worker.bind(this),
         );
+
+        this.event_looper.on("completed", this.check_classified.bind(this));
     }
 
     connect(pos: POS) {
@@ -53,6 +55,12 @@ class Manager {
 
         if (free_worker) {
             free_worker.work(parcel);
+            callback(parcel);
+        }
+    }
+
+    check_classified(parcel: Parcel, callback: (data: Parcel) => void) {
+        if (parcel.classified) {
             callback(parcel);
         }
     }

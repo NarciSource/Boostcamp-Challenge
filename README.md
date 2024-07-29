@@ -60,8 +60,8 @@ sequenceDiagram
     participant ready_queue
     participant ClassifyWorker
     participant active_queue
-    participant DeliveryWorker
     participant completed_queue
+    participant DeliveryWorker
 
     loop watcher
         Manager->>POS: check()
@@ -72,17 +72,16 @@ sequenceDiagram
     end
 
     loop parcel classify
-        ready_queue->>ClassifyWorker: unclassified_parcel
-        ClassifyWorker->>ClassifyWorker: classify()
-        ClassifyWorker->>ready_queue: classified_parcel
         ready_queue->>active_queue: active()
+        active_queue->>ClassifyWorker: unclassified_parcel
+        ClassifyWorker->>ClassifyWorker: classify()
+        ClassifyWorker->>active_queue: 
+        active_queue->>completed_queue: classified_parcel 
     end
 
     loop parcel deliver
-        active_queue->>DeliveryWorker: delivery_parcel
+        completed_queue->>DeliveryWorker: delivery_parcel
         DeliveryWorker->>DeliveryWorker: delivery()
-        DeliveryWorker->>active_queue: delivered_parcel
-        active_queue->>completed_queue: completed()
     end
 ```
 

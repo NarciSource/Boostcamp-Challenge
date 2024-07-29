@@ -8,6 +8,7 @@ export default class EventLooper<T> extends EventEmitter {
     constructor() {
         super();
         setInterval(this.ready_queue_loop.bind(this), 1000);
+        setInterval(this.active_queue_loop.bind(this), 1000);
     }
 
     enqueue(events: T[]) {
@@ -22,6 +23,17 @@ export default class EventLooper<T> extends EventEmitter {
             };
 
             this.emit("active", data, callback.bind(this));
+        }
+    }
+
+    async active_queue_loop() {
+        const callback = (data: T) => {
+            this.completed_queue.push(data);
+            this.active_queue.shift();
+        };
+
+        for (const data of this.active_queue) {
+            this.emit("completed", data, callback.bind(this));
         }
     }
 }
