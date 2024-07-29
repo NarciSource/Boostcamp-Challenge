@@ -12,12 +12,14 @@ export default class Classify_Worker extends Worker {
     }
 
     work(parcel: Parcel) {
-        console.log("sorting start!");
+        console.log("classified start!");
 
         this.free = false;
         setTimeout(() => {
-            console.log("sorting end!");
+            console.log("classified end!");
 
+            parcel.classified = true;
+            manager.store_parcel(parcel);
             this.free = true;
         }, parcel.sorting_duration);
     }

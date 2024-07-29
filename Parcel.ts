@@ -1,5 +1,6 @@
 export default class Parcel {
     sorting_duration: number;
+    classified = false;
 }
 
 export class Small_Parcel extends Parcel {

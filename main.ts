@@ -10,7 +10,7 @@ const get_input = (prompt: string): Promise<string> =>
 
 (async function main() {
     const pos = new POS();
-    manager.hire([new Classify_Worker()]);
+    manager.hire([new Classify_Worker(), new Classify_Worker()]);
 
     while (true) {
         try {

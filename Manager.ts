@@ -5,7 +5,8 @@ import Classify_Worker from "./Classify_Worker";
 class Manager {
     ready_queue: Parcel[] = [];
     logistic_queue: Parcel[] = [];
-    Classify_Workers: Classify_Worker[] = [];
+    delivery_queue: Parcel[] = [];
+    classify_workers: Classify_Worker[] = [];
 
     constructor() {
         setInterval(this.ready_queue_watcher.bind(this), 1000);
@@ -20,8 +21,8 @@ class Manager {
         const sorting_newcomers = newcomers.filter(
             (newcomer) => newcomer instanceof Classify_Worker,
         );
-        this.Classify_Workers = [
-            ...this.Classify_Workers,
+        this.classify_workers = [
+            ...this.classify_workers,
             ...sorting_newcomers,
         ];
     }
@@ -34,15 +35,19 @@ class Manager {
     }
 
     logistic_queue_watcher() {
-        if (this.is_exist_unclassified_parcel) {
-            this.Classify_Workers.filter((worker) => worker.free).forEach(
-                (worker) => worker.alarm(),
+        if (this.logistic_queue.length) {
+            const free_worker = this.classify_workers.filter(
+                (worker) => worker.free,
             );
+
+            for (const worker of free_worker) {
+                worker.alarm();
+            }
         }
     }
 
     get_parcel(): Parcel {
-        if (this.is_exist_unclassified_parcel) {
+        if (this.logistic_queue.length) {
             const unclassified_parcel = this.logistic_queue[0];
 
             this.logistic_queue.shift();
@@ -50,8 +55,8 @@ class Manager {
         }
     }
 
-    get is_exist_unclassified_parcel(): boolean {
-        return this.logistic_queue.length > 0;
+    store_parcel(parcel: Parcel) {
+        this.delivery_queue.push(parcel);
     }
 }
 
