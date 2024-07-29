@@ -23,9 +23,7 @@ export default class POS {
                     3: Large_Parcel,
                 }[type];
 
-                const parcels = new Array(parseInt(num)).fill(
-                    new Parcel_Type(),
-                );
+                const parcels = new Array(parseInt(num)).fill(null).map(() => new Parcel_Type());
 
                 this.ready_queue = [...this.ready_queue, ...parcels];
         }
