@@ -1,4 +1,4 @@
-# 부스트캠프 챌린지 Day11. 접수 이벤트
+# 부스트캠프 챌린지 Day11. 택배 시뮬레이터
 
 ## 나만의 체크포인트
 
@@ -138,4 +138,10 @@ EventLoops
 
 ```
 
+### 결과
+
+![simulate](https://gist.github.com/user-attachments/assets/49be3ffe-05ec-48be-8876-a721a2ea3ffa)
+
 ## 학습 메모
+
+-   [Event Loop](https://developer.mozilla.org/ko/docs/Web/JavaScript/Event_loop)

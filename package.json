@@ -1,7 +1,7 @@
 {
   "name": "day11",
   "version": "1.0.0",
-  "description": "접수 이벤트",
+  "description": "택배 시뮬레이터",
   "main": "main.ts",
   "scripts": {
     "start": "ts-node main.ts",

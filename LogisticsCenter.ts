@@ -35,6 +35,7 @@ export default class LogisticsCenter {
 
     set_specialist() {
         const parcel_type_list = [SmallParcel, MediumParcel, LargeParcel];
+
         for (const [index, worker] of this.classify_workers.entries()) {
             worker.specialist = parcel_type_list[index % 3];
         }
