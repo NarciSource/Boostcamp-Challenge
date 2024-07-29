@@ -17,17 +17,16 @@ const get_input = (prompt: string): Promise<string> =>
     const [n, m] = input.split(" ");
     console.log("분류작업자: ", n, "배달 기사", m);
 
-    const classify_newcomers = Array(parseInt(n))
-        .fill(null)
-        .map(() => new ClassifyWorker());
-    const delivery_newcomers = Array(parseInt(m))
-        .fill(null)
-        .map(() => new DeliveryWorker());
+    for (const center of manager.logistics_centers) {
+        const classify_newcomers = Array(parseInt(n))
+            .fill(null)
+            .map(() => new ClassifyWorker());
+        const delivery_newcomers = Array(parseInt(m))
+            .fill(null)
+            .map(() => new DeliveryWorker());
 
-
-        console.log([...classify_newcomers, ...delivery_newcomers])
-
-    manager.hire([...classify_newcomers, ...delivery_newcomers]);
+        center.hire([...classify_newcomers, ...delivery_newcomers]);
+    }
     dashBoard.display();
 
     while (true) {

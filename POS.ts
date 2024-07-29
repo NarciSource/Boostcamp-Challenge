@@ -29,8 +29,6 @@ export default class POS {
                     .fill(null)
                     .map(() => new Parcel_Type(customer_id));
 
-                console.log(parcels);
-
                 this.ready_queue = [...this.ready_queue, ...parcels];
         }
     }
