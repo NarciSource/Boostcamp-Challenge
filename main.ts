@@ -13,7 +13,21 @@ const get_input = (prompt: string): Promise<string> =>
 (async function main() {
     const pos = new POS();
 
-    manager.hire([new ClassifyWorker(), new ClassifyWorker(), new DeliveryWorker()]);
+    const input = await get_input("작업자와 배달 기사 인원 수를 지정하세요(띄어서 입력). ");
+    const [n, m] = input.split(" ");
+    console.log("분류작업자: ", n, "배달 기사", m);
+
+    const classify_newcomers = Array(parseInt(n))
+        .fill(null)
+        .map(() => new ClassifyWorker());
+    const delivery_newcomers = Array(parseInt(m))
+        .fill(null)
+        .map(() => new DeliveryWorker());
+
+
+        console.log([...classify_newcomers, ...delivery_newcomers])
+
+    manager.hire([...classify_newcomers, ...delivery_newcomers]);
     dashBoard.display();
 
     while (true) {
