@@ -1,8 +1,8 @@
-import manager from "./Manager.js";
-import POS from "./POS.js";
-import Sorting_Worker from "./Sorting_Worker.js";
+import manager from "./Manager";
+import POS from "./POS";
+import Sorting_Worker from "./Sorting_Worker";
 
-const get_input = (prompt) =>
+const get_input = (prompt: string): Promise<string> =>
     new Promise((resolve) => {
         process.stdout.write(prompt);
         process.stdin.once("data", (data) => resolve(data.toString().trim()));

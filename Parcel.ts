@@ -1,5 +1,5 @@
 export default class Parcel {
-    sorting_duration;
+    sorting_duration: number;
 }
 
 export class Small_Parcel extends Parcel {

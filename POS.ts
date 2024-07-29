@@ -1,10 +1,10 @@
-import manager from "./Manager.js";
-import { Large_Parcel, Medium_Parcel, Small_Parcel } from "./Parcel.js";
+import manager from "./Manager";
+import { Large_Parcel, Medium_Parcel, Small_Parcel } from "./Parcel";
 
 export default class POS {
     regex = /^(1|2|3):(\d)$/;
 
-    input(input) {
+    input(input: string): string {
         switch (input) {
             case "":
                 return;
