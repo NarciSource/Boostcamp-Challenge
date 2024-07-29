@@ -57,8 +57,8 @@
 sequenceDiagram
     participant POS
     participant ready_queue
-    participant Manager
     participant logistics_queue
+    participant Manager
     participant Sorting_Worker
     participant Delivery_Worker
 
@@ -66,15 +66,16 @@ sequenceDiagram
         POS->>ready_queue: parcel
     end
 
-    loop check event
+    loop check ready parcel
         Manager->>ready_queue: check()
-        alt parcel exists
-            ready_queue->>Manager: response(parcel)
-            Manager->>logistics_queue: unclassified_parcel
+        alt If parcel exists
+            ready_queue->>logistics_queue: stored(parcel)
         end
     end
 
     loop parcel classify
+        Manager->>logistics_queue: check()
+        logistics_queue->>Manager: response()
         alt If unclassified_parcel exists
             Manager->>Sorting_Worker: alarm()
             Sorting_Worker->>logistics_queue: get(1)
@@ -85,6 +86,8 @@ sequenceDiagram
     end
 
     loop parcel deliver
+        Manager->>logistics_queue: check()
+        logistics_queue->>Manager: response()
         alt If awaiting delivery_parcels exist
             Manager->>Delivery_Worker: alarm()
             alt If available delivery worker exists
@@ -108,7 +111,7 @@ Manager
     sorting_workers: subscribers
     delivery_workers: subscribers
 
-    function notify
+    function watcher
         while unclassified_parcel <- ready_queue.pop
             sorting_workers
                 filter free
