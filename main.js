@@ -1,4 +1,6 @@
+import manager from "./Manager.js";
 import POS from "./POS.js";
+import Sorting_Worker from "./Sorting_Worker.js";
 
 const get_input = (prompt) =>
     new Promise((resolve) => {
@@ -8,6 +10,7 @@ const get_input = (prompt) =>
 
 (async function main() {
     const pos = new POS();
+    manager.hire([new Sorting_Worker()]);
 
     while (true) {
         try {
