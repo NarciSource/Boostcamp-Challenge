@@ -3,6 +3,12 @@ import EventEmitter from "events";
 const LOOP_TIME = 1000;
 type queue<T> = T[];
 
+export enum Queue_Action {
+    Active = "Active",
+    Completed = "Completed",
+    Finalize = "Finalize",
+}
+
 export default class EventLooper<T> extends EventEmitter {
     ready_queue: queue<T> = [];
     active_queue: queue<T> = [];
@@ -12,9 +18,9 @@ export default class EventLooper<T> extends EventEmitter {
         super();
 
         setInterval(() => {
-            this.move_to_queue("active", this.ready_queue, this.active_queue);
-            this.move_to_queue("completed", this.active_queue, this.ready_queue);
-            this.move_to_queue("finalize", this.active_queue, this.completed_queue);
+            this.move_to_queue(Queue_Action.Active, this.ready_queue, this.active_queue);
+            this.move_to_queue(Queue_Action.Completed, this.active_queue, this.ready_queue);
+            this.move_to_queue(Queue_Action.Finalize, this.active_queue, this.completed_queue);
         }, LOOP_TIME);
     }
 
@@ -22,7 +28,7 @@ export default class EventLooper<T> extends EventEmitter {
         this.ready_queue = [...this.ready_queue, ...events];
     }
 
-    move_to_queue(key: string, source_queue: T[], destination_queue: T[]): void {
+    move_to_queue(key: Queue_Action, source_queue: T[], destination_queue: T[]): void {
         const callback = (event: T) => {
             destination_queue?.push(event);
             source_queue.shift();
