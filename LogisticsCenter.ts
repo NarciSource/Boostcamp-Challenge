@@ -14,10 +14,10 @@ export default class LogisticsCenter {
     #delivery_workers: DeliveryWorker[] = [];
 
     constructor() {
-        this.event_looper.on(Queue_Action.Active, this.#allocate_worker("classify_workers"));
-        this.event_looper.on(Queue_Action.Completed, this.#check_status("classify_workers"));
-        this.event_looper.on(Queue_Action.Active, this.#allocate_worker("delivery_workers"));
-        this.event_looper.on(Queue_Action.Finalize, this.#check_status("delivery_workers"));
+        this.event_looper.on(Queue_Action.Active, this.#allocate_worker(ClassifyWorker));
+        this.event_looper.on(Queue_Action.Completed, this.#check_status(ClassifyWorker));
+        this.event_looper.on(Queue_Action.Active, this.#allocate_worker(DeliveryWorker));
+        this.event_looper.on(Queue_Action.Finalize, this.#check_status(DeliveryWorker));
     }
 
     get classify_workers(): ClassifyWorker[] {
@@ -51,16 +51,20 @@ export default class LogisticsCenter {
         }
     }
 
-    #allocate_worker(workers_name: string) {
+    #allocate_worker(worker_type: typeof Worker) {
         function inner(parcel: Parcel, callback: (data: Parcel) => void) {
-            const workers = this[workers_name] as Worker[];
+            const workers_map = new Map<typeof Worker, Worker[]>([
+                [ClassifyWorker, this.classify_workers],
+                [DeliveryWorker, this.delivery_workers],
+            ]);
 
+            const workers = workers_map.get(worker_type);
             const free_worker = workers.find((worker) => worker.free && worker.is_allowed(parcel));
 
             if (free_worker) {
                 if (
-                    (workers_name === "classify_workers" && !parcel.classified) ||
-                    (workers_name === "delivery_workers" && parcel.classified)
+                    (worker_type === ClassifyWorker && !parcel.classified) ||
+                    (worker_type === DeliveryWorker && parcel.classified)
                 ) {
                     free_worker.work(parcel);
                     callback(parcel);
@@ -70,11 +74,11 @@ export default class LogisticsCenter {
         return inner.bind(this);
     }
 
-    #check_status(workers_name: string) {
+    #check_status(workers_name: typeof Worker) {
         function inner(parcel: Parcel, callback: (data: Parcel) => void) {
             if (
-                (workers_name === "classify_workers" && !parcel.delivered) ||
-                (workers_name === "delivery_workers" && parcel.delivered)
+                (workers_name === ClassifyWorker && !parcel.delivered) ||
+                (workers_name === DeliveryWorker && parcel.delivered)
             ) {
                 callback(parcel);
             }
