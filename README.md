@@ -82,6 +82,7 @@
 sequenceDiagram
     participant POS
     participant Manager
+    participant LogisticsCenter
     participant ready_queue
     participant active_queue
     participant completed_queue
@@ -89,26 +90,35 @@ sequenceDiagram
     participant DeliveryWorker
     note over ready_queue, completed_queue: EventLooper
 
-    loop watcher
-        Manager->>POS: check()
-        alt If parcel exists
-            POS->>Manager: transfer()
-            Manager->>ready_queue: enqueue()
+    par
+        loop watcher
+            Manager->>POS: check()
+            alt If parcel exists
+                POS->>Manager: transfer()
+                Manager->>LogisticsCenter: allocate()
+                LogisticsCenter->>ready_queue: enqueue()
+            end
         end
-    end
 
-    loop parcel classify
-        ready_queue->>active_queue: active()
-        active_queue->>ClassifyWorker: unclassified_parcel
-        ClassifyWorker->>ClassifyWorker: classify()
-        ClassifyWorker->>ready_queue: classified_parcel
-    end
+        and
 
-    loop parcel deliver
-        ready_queue->>active_queue: active()
-        active_queue->>DeliveryWorker: delivery_parcel
-        DeliveryWorker->>DeliveryWorker: delivery()
-        DeliveryWorker->>completed_queue: delivered_parcel
+        loop classify parcel
+            ready_queue->>active_queue: active()
+            active_queue->>ClassifyWorker: unclassified_parcel
+            ClassifyWorker->>ClassifyWorker: classify()
+            ClassifyWorker->>active_queue: classified_parcel
+            active_queue->>ready_queue: complete()
+        end
+
+        and
+
+        loop deliver parcel
+            ready_queue->>active_queue: active()
+            active_queue->>DeliveryWorker: delivery_parcel
+            DeliveryWorker->>DeliveryWorker: delivery()
+            DeliveryWorker->>active_queue: delivered_parcel
+            active_queue->>completed_queue: finalize()
+        end
     end
 ```
 
