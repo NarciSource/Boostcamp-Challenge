@@ -1,3 +1,9 @@
+const DELIVERY_TIME = {
+    SMALL_PARCEL: 3000,
+    MEDIUM_PARCEL: 7000,
+    LARGE_PARCEL: 15000,
+};
+
 export default class Parcel {
     customer: string;
     sorting_duration: number;
@@ -10,13 +16,13 @@ export default class Parcel {
 }
 
 export class SmallParcel extends Parcel {
-    sorting_duration = 3000;
+    sorting_duration = DELIVERY_TIME.SMALL_PARCEL;
 }
 
 export class MediumParcel extends Parcel {
-    sorting_duration = 7000;
+    sorting_duration = DELIVERY_TIME.MEDIUM_PARCEL;
 }
 
 export class LargeParcel extends Parcel {
-    sorting_duration = 15000;
+    sorting_duration = DELIVERY_TIME.LARGE_PARCEL;
 }

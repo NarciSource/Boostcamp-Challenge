@@ -1,6 +1,8 @@
 import LogisticsCenter from "./LogisticsCenter";
 import manager from "./Manager";
 
+const MONITORING_TIME = 3000;
+
 class DashBoard {
     read_queue(center: LogisticsCenter) {
         const ready = center.event_looper.ready_queue
@@ -42,7 +44,7 @@ class DashBoard {
             } else {
                 past_is_remains = is_remains;
             }
-        }, 3000);
+        }, MONITORING_TIME);
     }
 
     display() {
@@ -67,7 +69,7 @@ class DashBoard {
                     console.log("배송완료", delivered);
                 }
             }
-        }, 3000);
+        }, MONITORING_TIME);
     }
 }
 

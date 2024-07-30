@@ -1,9 +1,11 @@
 import POS from "./POS";
 import LogisticsCenter from "./LogisticsCenter";
 
+const LOGISTICS_CENTERS = 4;
+
 class Manager {
     machines: POS[] = [];
-    logistics_centers = Array(4)
+    logistics_centers = Array(LOGISTICS_CENTERS)
         .fill(null)
         .map(() => new LogisticsCenter());
 

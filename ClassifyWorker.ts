@@ -2,8 +2,10 @@ import Worker from "./Worker";
 import Parcel from "./Parcel";
 import { sleep } from "./utils";
 
+const CONCURRENT_TASK_LIMIT = 2;
+
 export default class ClassifyWorker extends Worker {
-    hands = 2;
+    hands = CONCURRENT_TASK_LIMIT;
     specialist: typeof Parcel;
 
     async work(parcel: Parcel) {
@@ -14,6 +16,7 @@ export default class ClassifyWorker extends Worker {
 
         console.log(parcel.customer, parcel.constructor.name, "분류완료");
         this.hands++;
+
         parcel.classified = true;
     }
 

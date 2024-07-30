@@ -1,5 +1,6 @@
 import EventEmitter from "events";
 
+const LOOP_TIME = 1000;
 type queue<T> = T[];
 
 export default class EventLooper<T> extends EventEmitter {
@@ -14,7 +15,7 @@ export default class EventLooper<T> extends EventEmitter {
             this.move_to_queue("active", this.ready_queue, this.active_queue);
             this.move_to_queue("completed", this.active_queue, this.ready_queue);
             this.move_to_queue("finalize", this.active_queue, this.completed_queue);
-        }, 1000);
+        }, LOOP_TIME);
     }
 
     enqueue(events: T[]): void {
