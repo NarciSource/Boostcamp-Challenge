@@ -1,5 +1,6 @@
 import Manager from "./Manager";
-import Parcel, { LargeParcel, MediumParcel, SmallParcel } from "./Parcel";
+import Parcel from "./Parcel";
+import { get_parcel_type } from "./Parcel.typeDictionary";
 import { v4 as uuidv4 } from "uuid";
 
 export default class POS {
@@ -18,11 +19,7 @@ export default class POS {
                 return "exit";
             default:
                 const [, type, num] = this.regex.exec(input);
-                const Parcel_Type = {
-                    1: SmallParcel,
-                    2: MediumParcel,
-                    3: LargeParcel,
-                }[type];
+                const Parcel_Type = get_parcel_type(parseInt(type));
 
                 const customer_id = uuidv4().substring(0, 4);
                 const parcels = new Array(parseInt(num))
