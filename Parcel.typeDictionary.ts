@@ -1,6 +1,6 @@
 import Parcel, { LargeParcel, MediumParcel, SmallParcel } from "./Parcel";
 
-const parcel_dictionary = {
+export const parcel_dictionary = {
     1: SmallParcel,
     2: MediumParcel,
     3: LargeParcel,

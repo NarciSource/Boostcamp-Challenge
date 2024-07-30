@@ -1,8 +1,9 @@
-import Parcel, { LargeParcel, MediumParcel, SmallParcel } from "./Parcel";
+import EventLooper from "./EventLooper";
+import Parcel from "./Parcel";
+import { parcel_dictionary } from "./Parcel.typeDictionary";
 import Worker from "./Worker";
 import ClassifyWorker from "./ClassifyWorker";
 import DeliveryWorker from "./DeliveryWorker";
-import EventLooper from "./EventLooper";
 
 const MINIMUM_SPECIALIST_REQUIRED = 3;
 
@@ -31,14 +32,14 @@ export default class LogisticsCenter {
         this.delivery_workers = [...this.delivery_workers, ...delivery_newcomers];
 
         if (this.classify_workers.length >= MINIMUM_SPECIALIST_REQUIRED) {
-            this.set_specialist();
+            this.set_specialist(this.classify_workers);
         }
     }
 
-    set_specialist() {
-        const parcel_type_list = [SmallParcel, MediumParcel, LargeParcel];
+    set_specialist(classify_workers: ClassifyWorker[]) {
+        const parcel_type_list = Object.values(parcel_dictionary);
 
-        for (const [index, worker] of this.classify_workers.entries()) {
+        for (const [index, worker] of classify_workers.entries()) {
             worker.specialist = parcel_type_list[index % MINIMUM_SPECIALIST_REQUIRED];
         }
     }

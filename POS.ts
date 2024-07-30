@@ -4,7 +4,6 @@ import { get_parcel_type } from "./Parcel.typeDictionary";
 import { v4 as uuidv4 } from "uuid";
 
 export default class POS {
-    regex = /^(1|2|3):(\d)$/;
     ready_queue: Parcel[] = [];
 
     constructor() {
@@ -12,19 +11,21 @@ export default class POS {
     }
 
     input(input: string): string {
+        const regex = /^(1|2|3):(\d)$/;
+
         switch (input) {
             case "":
                 return;
             case "exit":
                 return "exit";
             default:
-                const [, type, num] = this.regex.exec(input);
-                const Parcel_Type = get_parcel_type(parseInt(type));
-
+                const [type, num] = (([, type, num]) => [parseInt(type), parseInt(num)])(
+                    regex.exec(input),
+                );
                 const customer_id = uuidv4().substring(0, 4);
-                const parcels = new Array(parseInt(num))
-                    .fill(null)
-                    .map(() => new Parcel_Type(customer_id));
+
+                const Parcel_Type = get_parcel_type(type);
+                const parcels = new Array(num).fill(null).map(() => new Parcel_Type(customer_id));
 
                 this.ready_queue = [...this.ready_queue, ...parcels];
         }
