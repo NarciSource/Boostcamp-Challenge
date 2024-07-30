@@ -1,4 +1,4 @@
-import EventLooper, { Queue_Action } from "./EventLooper";
+import EventLooper, { LoopAction } from "./EventLooper";
 import Parcel from "./Parcel";
 import { parcel_dictionary } from "./Parcel.typeDictionary";
 import Worker from "./Worker";
@@ -14,10 +14,10 @@ export default class LogisticsCenter {
     #delivery_workers: DeliveryWorker[] = [];
 
     constructor() {
-        this.event_looper.on(Queue_Action.Active, this.#allocate_worker(ClassifyWorker));
-        this.event_looper.on(Queue_Action.Completed, this.#check_status(ClassifyWorker));
-        this.event_looper.on(Queue_Action.Active, this.#allocate_worker(DeliveryWorker));
-        this.event_looper.on(Queue_Action.Finalize, this.#check_status(DeliveryWorker));
+        this.event_looper.on(LoopAction.Active, this.#allocate_worker(ClassifyWorker));
+        this.event_looper.on(LoopAction.Complete, this.#check_status(ClassifyWorker));
+        this.event_looper.on(LoopAction.Active, this.#allocate_worker(DeliveryWorker));
+        this.event_looper.on(LoopAction.Finalize, this.#check_status(DeliveryWorker));
     }
 
     get classify_workers(): ClassifyWorker[] {
