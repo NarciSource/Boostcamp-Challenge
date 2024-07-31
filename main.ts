@@ -1,4 +1,5 @@
 import fs from "fs";
+import { glob, Ignore } from "glob";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
@@ -15,6 +16,7 @@ switch (command) {
         init(directoryPath);
         break;
     case "add":
+        add(directoryPath);
         break;
     case "status":
         break;
@@ -38,4 +40,13 @@ function init(directoryPath) {
     fs.mkdir(`${directoryPath}/.mit/index`, { recursive: true }, (error) => {
         console.log(error);
     });
+}
+
+/**
+ * 현재 디렉토리 아래의 전체 파일 탐색
+ * https://www.npmjs.com/package/glob
+ */
+async function add(directoryPath) {
+    const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", "test/**"] });
+    console.log(files);
 }

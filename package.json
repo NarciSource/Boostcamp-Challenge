@@ -21,11 +21,13 @@
   },
   "homepage": "https://gist.github.com/4006ac426805369346ae36ffa9537e35",
   "devDependencies": {
+    "@types/glob": "^8.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "glob": "^11.0.0"
   },
   "keywords": []
 }
