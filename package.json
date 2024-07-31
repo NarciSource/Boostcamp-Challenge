@@ -2,10 +2,13 @@
   "name": "day13",
   "version": "1.0.0",
   "description": "소스 저장 오브젝트",
-  "main": "main.js",
+  "main": "main.ts",
   "scripts": {
     "start": "ts-node main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mit": "main.ts"
   },
   "repository": {
     "type": "git",
@@ -20,5 +23,9 @@
   "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
-  }
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "keywords": []
 }
