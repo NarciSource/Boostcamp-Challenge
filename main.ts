@@ -6,6 +6,9 @@ import zlib from "zlib";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
+type Hash = string;
+type Path = string;
+
 /**
  * init 디렉토리명
  * add 디렉토리명
@@ -22,6 +25,7 @@ switch (command) {
         add(directoryPath);
         break;
     case "status":
+        status(directoryPath);
         break;
     case "log":
         break;
@@ -36,21 +40,35 @@ switch (command) {
  * 디렉토리명/.mit/index/
  * https://www.geeksforgeeks.org/node-js-fs-mkdir-method/
  */
-function init(directoryPath) {
+function init(directoryPath: Path) {
     fs.mkdir(`${directoryPath}/.mit/objects`, { recursive: true }, (error) => {
         console.log(error);
     });
     fs.writeFileSync(`${directoryPath}/.mit/index`, "");
 }
 
+function writeHashDictionary(directoryPath: Path, hash: Hash, data: any) {
+    try {
+        fs.mkdirSync(`${directoryPath}/.mit/objects/${hash.substring(0, 8)}`, {
+            recursive: true,
+        });
+        fs.writeFileSync(
+            `${directoryPath}/.mit/objects/${hash.substring(0, 8)}/${hash.substring(8)}`,
+            data.toString(),
+        );
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 /**
  * 현재 디렉토리 아래의 전체 파일 탐색
  * https://www.npmjs.com/package/glob
  */
-async function add(directoryPath) {
+async function add(directoryPath: Path) {
     const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", ".mit/**"] });
 
-    const curStaging = files.map((filePath) => hashObject(filePath, directoryPath));
+    const curStaging: Hash[] = files.map((filePath) => hashObject(filePath, directoryPath));
 
     const hash = crypto.createHash("sha256");
     const curStagingHash = hash.update(curStaging.join(" ")).digest("hex");
@@ -59,6 +77,8 @@ async function add(directoryPath) {
 
     if (curStagingHash !== preStagingHash) {
         fs.writeFileSync(`${directoryPath}/.mit/index`, curStagingHash);
+
+        writeHashDictionary(directoryPath, curStagingHash, curStaging);
     }
 }
 
@@ -70,7 +90,7 @@ async function add(directoryPath) {
  * https://nodejs.org/api/zlib.html
  * sha256
  */
-function hashObject(filePath, directoryPath): string {
+function hashObject(filePath: Path, directoryPath: Path): Hash {
     const fileSize = fs.statSync(filePath).size;
     const fileContent = fs.readFileSync(filePath);
     const compressedContent = zlib.deflateSync(fileContent);
@@ -80,36 +100,26 @@ function hashObject(filePath, directoryPath): string {
     hash.update(blobObject.content);
     const hashCode = hash.digest("hex");
 
-    try {
-        fs.mkdirSync(`${directoryPath}/.mit/objects/${hashCode.substring(0, 8)}`, {
-            recursive: true,
-        });
-        fs.writeFileSync(
-            `${directoryPath}/.mit/objects/${hashCode.substring(0, 8)}/${hashCode.substring(8)}`,
-            blobObject.content,
-        );
-    } catch (error) {
-        console.log(error);
-    }
+    writeHashDictionary(directoryPath, hashCode, hashCode);
 
     return hashCode;
 }
 
-// 인덱스 파일의 바이너리 구조는 다음과 같습니다:
+async function status(directoryPath: Path): Promise<void> {
+    const key = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
 
-//     헤더 (48바이트):
-//         Signature (4바이트): DIRC
-//         Version (4바이트): 버전 정보 (일반적으로 2가 사용됨)
-//         Checksum (4바이트): 헤더와 데이터에 대한 체크섬
+    const staging = fs
+        .readFileSync(
+            `${directoryPath}/.mit/objects/${key.substring(0, 8)}/${key.substring(8)}`,
+            "utf8",
+        )
+        .split(",");
 
-//     인덱스 항목 (변동 크기):
-//         File Mode (2바이트)
-//         Object Name (20바이트, SHA-1 해시)
-//         Stage (1바이트)
-//         Timestamp (4바이트, UNIX 타임스탬프)
-//         Size (4바이트)
-//         Path Length (2바이트)
-//         Path (변동 크기, NUL로 구분된 문자열)
+    const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", ".mit/**"] });
 
-//     체크섬 (20바이트):
-//         Checksum: 인덱스 파일 전체에 대한 체크섬
+    files
+        .filter((filePath) => !staging.includes(hashObject(filePath, directoryPath)))
+        .forEach((filePath) => {
+            console.log(filePath);
+        });
+}
