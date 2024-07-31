@@ -39,7 +39,7 @@
 
     -   [ ] commit : add로 만들어진 파일들을 커밋한다.
 
-        -   <blob 오브젝트> 파일별로 blob 오브젝트를 생성한다.
+        -   **<blob 오브젝트>** 파일별로 blob 오브젝트를 생성한다.
 
             -   [ ] 해시값 앞에 8자리를 objects 하위 디렉토리로 생성한다.
 
@@ -47,7 +47,7 @@
 
             -   [ ] blob 오브젝트 파일 내용은 원본 파일을 zlib로 압축해서 저장한다.
 
-        -   <tree 오브젝트> blob 파일에 대한 기록은 tree 오브젝트에 저장한다. tree 오브젝트 파일은 objects 아래에 blob 규칙과 동일하게 생성한다.
+        -   **<tree 오브젝트>** blob 파일에 대한 기록은 tree 오브젝트에 저장한다. tree 오브젝트 파일은 objects 아래에 blob 규칙과 동일하게 생성한다.
 
             -   [ ] tree 오브젝트는 blob마다 blob해시값, 압축후 파일크기, 파일명 순서로 한 줄씩 문자열로 기록한다.
 
@@ -55,7 +55,7 @@
 
             -   [ ] 작성한 tree 오브젝트 내용을 기준으로 sha256 해시값으로 blob와 동일하게 파일명을 만든다.
 
-        -   <commit 오브젝트> 커밋할 때마다 이전 트리와 현재 트리를 포함하는 commit 오브젝트를 objects 아래에 생성한다.
+        -   **<commit 오브젝트>** 커밋할 때마다 이전 트리와 현재 트리를 포함하는 commit 오브젝트를 objects 아래에 생성한다.
 
             -   commit 오브젝트는 2가지 정보를 포함한다.
 
@@ -86,19 +86,30 @@
 
 ## 문제 해결 과정
 
-`test` 클래스
+### 설계
 
--   `one()`
-    -   어떤어떤 역할을 수행하는 메서
+#### 객체 식별
 
-```js
-class test
-    one 어떤내용
-    two
+-   blob 오브젝트
+-   tree 오브젝트
+-   commit 오브젝트
 
+#### 시퀀스 다이어그램
 
+```mermaid
 
+sequenceDiagram
+    participant Untracked
+    participant Unmodified
+    participant Modified
+    participant Staged
+    participant History
 
+    Untracked->>Staged: init()
+    Unmodified->>Modified: edit
+    Modified->>Staged: add()
+    Staged->>History: commit()
+    History->>Unmodified: reset
 ```
 
 ## 학습 메모
