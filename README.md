@@ -3,7 +3,17 @@
 > 그룹-짝번호 : 46-B  
 > 캠퍼ID : J154, J225
 
-## 나만의 체크포인트
+## 페어 프로그래밍
+
+-   vscode의 live share 기능을 사용하여 함께 코드 작성
+-   slack의 hurdle 기능을 사용하여 소통  
+    ![짝프로그래밍캡쳐](https://gist.github.com/user-attachments/assets/7592afb7-998f-418e-bd7b-686bf9c0add8)
+
+-   30분 간격으로 네비게이터/드라이버 역할 변경
+-   드라이버 역할이 작성한 코드를 commit 진행  
+    ![각자커밋캡쳐](https://gist.github.com/user-attachments/assets/bb8455d0-fca5-45b8-8496-b8b45ab610b7)
+
+## 우리 체크포인트
 
 -   [ ] 학습
 
