@@ -1,0 +1,24 @@
+{
+  "name": "day13",
+  "version": "1.0.0",
+  "description": "소스 저장 오브젝트",
+  "main": "main.js",
+  "scripts": {
+    "start": "ts-node main.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gist.github.com/4006ac426805369346ae36ffa9537e35.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/4006ac426805369346ae36ffa9537e35"
+  },
+  "homepage": "https://gist.github.com/4006ac426805369346ae36ffa9537e35",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
