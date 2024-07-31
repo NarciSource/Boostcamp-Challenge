@@ -1,5 +1,7 @@
 import fs from "fs";
 import { glob } from "glob";
+import BlobObject from "./Blob";
+import crypto from "crypto";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
@@ -48,23 +50,24 @@ function init(directoryPath) {
  */
 async function add(directoryPath) {
     const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", "test/**"] });
-    for (const file of files) {
-        hashObject(file);
+
+    for (const filePath of files) {
+        console.log(hashObject(filePath));
     }
 }
 
 /**
- * 파일을 순회하며 blob객체로 만들기
+ * 파일을 순회하며 blob객체 생성
+ * blob 객체 해싱 후 해시값 반환
+ * https://nodejs.org/api/crypto.html
+ * sha256
  */
-function hashObject(file) {
-    // 각 파일 정보 읽어서 blob 생성
-    // 생성된 blob 해싱
-    // 해쉬값 반환
-}
+function hashObject(filePath): string {
+    const fileSize = fs.statSync(filePath).size;
+    const fileContent = fs.readFileSync(filePath);
+    const blobObject = new BlobObject(fileSize, fileContent);
+    const hash = crypto.createHash("sha256");
 
-/**
- * 파일을 읽어 size, content로 blob객체 생성
- */
-function createBlob() {
-    return;
+    hash.update(blobObject.content);
+    return hash.digest("hex");
 }

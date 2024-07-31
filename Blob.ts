@@ -1,8 +1,8 @@
-export class BlobObject {
+export default class BlobObject {
     size: number;
-    content: string;
+    content: Buffer;
 
-    constructor(size: number, content: string) {
+    constructor(size: number, content: Buffer) {
         this.size = size;
         this.content = content;
     }
