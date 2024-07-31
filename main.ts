@@ -2,6 +2,7 @@ import fs from "fs";
 import { glob } from "glob";
 import BlobObject from "./Blob";
 import crypto from "crypto";
+import zlib from "zlib";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
@@ -58,14 +59,17 @@ async function add(directoryPath) {
 
 /**
  * 파일을 순회하며 blob객체 생성
+ * blob 내용 zlip 압축
  * blob 객체 해싱 후 해시값 반환
  * https://nodejs.org/api/crypto.html
+ * https://nodejs.org/api/zlib.html
  * sha256
  */
 function hashObject(filePath, directoryPath): string {
     const fileSize = fs.statSync(filePath).size;
     const fileContent = fs.readFileSync(filePath);
-    const blobObject = new BlobObject(fileSize, fileContent);
+    const compressedContent = zlib.deflateSync(fileContent);
+    const blobObject = new BlobObject(fileSize, compressedContent);
     const hash = crypto.createHash("sha256");
 
     hash.update(blobObject.content);
