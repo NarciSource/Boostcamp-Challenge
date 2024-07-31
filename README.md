@@ -7,17 +7,17 @@
 
 -   [ ] 학습
 
-    -   [ ] VCS 버전관리 시스템
-    -   [ ] git
-        -   [ ] blob (Objects)
-        -   [ ] tree (Objects)
-        -   [ ] commit (Objects)
+    -   [x] VCS 버전관리 시스템
+    -   [x] git
+        -   [x] blob (Objects)
+        -   [x] tree (Objects)
+        -   [x] commit (Objects)
         -   [ ] delta compression
-    -   [ ] file
-        -   [ ] staged
-        -   [ ] tracking
-        -   [ ] modified
-    -   [ ] SHA
+    -   [x] file
+        -   [x] staged
+        -   [x] tracking
+        -   [x] modified
+    -   [x] SHA
 
 -   [ ] 구현
 
@@ -102,3 +102,13 @@ class test
 ```
 
 ## 학습 메모
+
+git 내부 4가지 object 이해  
+https://storycompiler.tistory.com/7
+
+git 내부 동작  
+https://tecoble.techcourse.co.kr/post/2021-07-08-dot-git/  
+https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4
+
+git 명령어별 원리  
+https://www.youtube.com/watch?v=KyGfapLpWhY&list=PLuHgQVnccGMA8iwZwrGyNXCGy2LAAsTXk&index=15
