@@ -94,8 +94,9 @@
 -   blob 오브젝트
 -   tree 오브젝트
 -   commit 오브젝트
+-   index = staging area
 
-#### 시퀀스 다이어그램
+#### mit 시퀀스 다이어그램
 
 ```mermaid
 
@@ -112,6 +113,69 @@ sequenceDiagram
     Staged->>History: commit()
     History->>Unmodified: reset
 ```
+
+1.  add
+
+    -   시퀀스다이어그램
+
+    ```mermaid
+    sequenceDiagram
+        participant file
+        participant blob
+        participant tree
+        participant staging_area
+        participant index
+
+        file->>blob: hashing()
+        blob->>staging_area: staging
+        blob->>tree: update-tree
+        tree->>staging_area: staging
+        staging_area->>staging_area: diff()
+        alt if is not same
+            staging_area->>index: update()
+        end
+    ```
+
+    -   pseudo code
+
+    ```js
+    function init
+        mkdir(.mit/objects)
+        mkdir(.mit/index)
+
+    function add
+        function hash-object
+            blob_file <- blob(file)
+
+            hash <- hashing(blob_file)
+
+            ./mit/objects/[hash] <- blob_file
+
+            cur_staging <- hash
+
+            return hash
+
+        function update-tree
+            tree <- [blob_hash blob_size blob_name]
+
+            hash <- hashing(tree)
+
+            ./mit/objects/[hash] <- tree
+
+            cur_staging <- hash
+
+
+        pre_staging <- ./mit/index/
+
+        files
+            for
+                blob_hash <- hash-object(file)
+                tree_hash <- update-tree(blob_hash)
+
+                if diff(pre_staging, cur_staging) is not same
+
+                    ./mit/index <- [file_name hash mode size]
+    ```
 
 ## 학습 메모
 

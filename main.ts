@@ -1,5 +1,5 @@
 import fs from "fs";
-import { glob, Ignore } from "glob";
+import { glob } from "glob";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
