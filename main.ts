@@ -3,11 +3,12 @@ import { glob } from "glob";
 import BlobObject from "./Blob";
 import crypto from "crypto";
 import zlib from "zlib";
+import init from "./init";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
-type Hash = string;
-type Path = string;
+export type Hash = string;
+export type Path = string;
 
 /**
  * init 디렉토리명
@@ -19,7 +20,7 @@ type Path = string;
  */
 switch (command) {
     case "init":
-        init(directoryPath);
+        init(directoryPath as Path);
         break;
     case "add":
         add(directoryPath);
@@ -33,18 +34,6 @@ switch (command) {
         break;
     default:
         break;
-}
-
-/**
- * 디렉토리명/.mit/objects/
- * 디렉토리명/.mit/index/
- * https://www.geeksforgeeks.org/node-js-fs-mkdir-method/
- */
-function init(directoryPath: Path) {
-    fs.mkdir(`${directoryPath}/.mit/objects`, { recursive: true }, (error) => {
-        console.log(error);
-    });
-    fs.writeFileSync(`${directoryPath}/.mit/index`, "");
 }
 
 function writeHashDictionary(directoryPath: Path, hash: Hash, data: any): void {
