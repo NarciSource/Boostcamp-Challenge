@@ -49,10 +49,10 @@ function init(directoryPath) {
  * https://www.npmjs.com/package/glob
  */
 async function add(directoryPath) {
-    const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", "test/**"] });
+    const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", ".mit/**"] });
 
     for (const filePath of files) {
-        console.log(hashObject(filePath));
+        console.log(hashObject(filePath, directoryPath));
     }
 }
 
@@ -62,12 +62,26 @@ async function add(directoryPath) {
  * https://nodejs.org/api/crypto.html
  * sha256
  */
-function hashObject(filePath): string {
+function hashObject(filePath, directoryPath): string {
     const fileSize = fs.statSync(filePath).size;
     const fileContent = fs.readFileSync(filePath);
     const blobObject = new BlobObject(fileSize, fileContent);
     const hash = crypto.createHash("sha256");
 
     hash.update(blobObject.content);
-    return hash.digest("hex");
+    const hashCode = hash.digest("hex");
+
+    try {
+        fs.mkdirSync(`${directoryPath}/.mit/objects/${hashCode.substring(0, 8)}`, {
+            recursive: true,
+        });
+        fs.writeFileSync(
+            `${directoryPath}/.mit/objects/${hashCode.substring(0, 8)}/${hashCode.substring(8)}`,
+            blobObject.content,
+        );
+    } catch (error) {
+        console.log(error);
+    }
+
+    return hashCode;
 }
