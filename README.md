@@ -172,9 +172,9 @@ sequenceDiagram
                 blob_hash <- hash-object(file)
                 tree_hash <- update-tree(blob_hash)
 
-                if diff(pre_staging, cur_staging) is not same
+            if diff(pre_staging, cur_staging) is not same
 
-                    ./mit/index <- [file_name hash mode size]
+                ./mit/index <- [file_name hash mode size]
     ```
 
 ## 학습 메모

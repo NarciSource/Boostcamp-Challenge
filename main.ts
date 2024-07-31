@@ -48,5 +48,23 @@ function init(directoryPath) {
  */
 async function add(directoryPath) {
     const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", "test/**"] });
-    console.log(files);
+    for (const file of files) {
+        hashObject(file);
+    }
+}
+
+/**
+ * 파일을 순회하며 blob객체로 만들기
+ */
+function hashObject(file) {
+    // 각 파일 정보 읽어서 blob 생성
+    // 생성된 blob 해싱
+    // 해쉬값 반환
+}
+
+/**
+ * 파일을 읽어 size, content로 blob객체 생성
+ */
+function createBlob() {
+    return;
 }
