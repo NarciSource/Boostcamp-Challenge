@@ -2,10 +2,10 @@ import fs from "fs";
 import { glob } from "glob";
 import init from "./init";
 import add from "./add";
+import { hashObject, readHashDictionary } from "./hash";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
-export type Hash = string;
 export type Path = string;
 
 /**
@@ -21,10 +21,10 @@ switch (command) {
         init(directoryPath as Path);
         break;
     case "add":
-        add(directoryPath);
+        add(directoryPath as Path);
         break;
     case "status":
-        status(directoryPath);
+        status(directoryPath as Path);
         break;
     case "log":
         break;
@@ -32,13 +32,6 @@ switch (command) {
         break;
     default:
         break;
-}
-
-function readHashDictionary(directoryPath: Path, key: Hash): any {
-    return fs.readFileSync(
-        `${directoryPath}/.mit/objects/${key.substring(0, 8)}/${key.substring(8)}`,
-        "utf8",
-    );
 }
 
 async function status(directoryPath: Path): Promise<void> {
