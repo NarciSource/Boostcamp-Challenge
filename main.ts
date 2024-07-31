@@ -1,6 +1,6 @@
-import init from "./init";
-import add from "./add";
-import status from "./status";
+import init from "./commands.init";
+import add from "./commands.add";
+import status from "./commands.status";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
