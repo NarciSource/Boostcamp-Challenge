@@ -47,7 +47,7 @@ function init(directoryPath: Path) {
     fs.writeFileSync(`${directoryPath}/.mit/index`, "");
 }
 
-function writeHashDictionary(directoryPath: Path, hash: Hash, data: any) {
+function writeHashDictionary(directoryPath: Path, hash: Hash, data: any): void {
     try {
         fs.mkdirSync(`${directoryPath}/.mit/objects/${hash.substring(0, 8)}`, {
             recursive: true,
@@ -59,6 +59,13 @@ function writeHashDictionary(directoryPath: Path, hash: Hash, data: any) {
     } catch (error) {
         console.log(error);
     }
+}
+
+function readHashDictionary(directoryPath: Path, key: Hash): any {
+    return fs.readFileSync(
+        `${directoryPath}/.mit/objects/${key.substring(0, 8)}/${key.substring(8)}`,
+        "utf8",
+    );
 }
 
 /**
@@ -108,12 +115,7 @@ function hashObject(filePath: Path, directoryPath: Path): Hash {
 async function status(directoryPath: Path): Promise<void> {
     const key = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
 
-    const staging = fs
-        .readFileSync(
-            `${directoryPath}/.mit/objects/${key.substring(0, 8)}/${key.substring(8)}`,
-            "utf8",
-        )
-        .split(",");
+    const staging = readHashDictionary(directoryPath, key).split(",");
 
     const files = await glob(`${directoryPath}/**/*`, { ignore: ["node_modules/**", ".mit/**"] });
 
