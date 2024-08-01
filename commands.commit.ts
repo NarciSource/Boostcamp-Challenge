@@ -7,13 +7,16 @@ export default function commit(directoryPath: Path) {
     const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
     const head = fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
 
-    const lines = readHashDictionary(directoryPath, head).split("\n");
+    const lines = readHashDictionary(directoryPath, head)?.split("\n");
     const [, topHash]: [Hash, Hash] = lines?.[0].split(" ") || [, null];
 
     if (index !== topHash) {
         const commit = new CommitObject("HEAD", [head, index]);
         hashObject(commit, directoryPath, false);
 
+        const commits: Buffer = fs.readFileSync(`${directoryPath}/.mit/commits`);
+
+        fs.writeFileSync(`${directoryPath}/.mit/commits`, `${commit.hash}\n${commits}`);
         fs.writeFileSync(`${directoryPath}/.mit/HEAD`, commit.hash);
     }
 }

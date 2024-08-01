@@ -12,4 +12,5 @@ export default function init(directoryPath: Path) {
     });
     fs.writeFileSync(`${directoryPath}/.mit/index`, "");
     fs.writeFileSync(`${directoryPath}/.mit/HEAD`, "");
+    fs.writeFileSync(`${directoryPath}/.mit/commits`, "");
 }
