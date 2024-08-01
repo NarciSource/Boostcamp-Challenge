@@ -9,18 +9,22 @@ import TreeObject from "./Object.Tree";
 export default async function add() {
     const filePaths = await readDirectory();
 
-    const blobObjects = filePaths.map((filePath: Path) => readFile(filePath));
+    const blobObjects = filePaths.map(readFile);
 
+    // compress and write
     for (const blobObject of blobObjects) {
         hashObject(blobObject, true);
     }
 
+    // update-tree and staging
     const curStaging = new TreeObject("staging", blobObjects);
     hashObject(curStaging, false);
 
     const preStagingHash = readIndex();
 
+    // diff
     if (curStaging.hash !== preStagingHash) {
+        // update
         writeIndex(curStaging.hash);
     }
 }

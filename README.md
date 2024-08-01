@@ -15,14 +15,14 @@
 
 ## 우리 체크포인트
 
--   [ ] 학습
+-   [x] 학습
 
     -   [x] VCS 버전관리 시스템
     -   [x] git
         -   [x] blob (Objects)
         -   [x] tree (Objects)
         -   [x] commit (Objects)
-        -   [ ] delta compression
+        -   [x] ~~delta compression~~
     -   [x] file
         -   [x] staged
         -   [x] tracking
@@ -97,6 +97,22 @@
         -   [x] 복원 과정에서 필요없는 commit, tree, blob 오브젝트는 삭제하지 않는다.
                 디렉토리 아래에 .mit 하위 디렉토리를 만들고 필요한 파일을 생성한다.
 
+## 개선 체크포인트
+
+-   기능구현
+    -   [x] commit
+    -   [x] log
+    -   [x] checkout
+    -   [x] restore
+-   리팩토링
+    -   [x] 중복 함수 분리
+    -   [x] 함수 파일 분리
+    -   [x] 이름 정리
+    -   [x] 책임성 분리
+    -   [x] 타입 좁히기
+    -   [x] 객체 공통 추상화
+    -   [x] 타입 인터페이스 추가
+
 ## 문제 해결 과정
 
 ### 설계
@@ -128,66 +144,138 @@ sequenceDiagram
 
 1.  add
 
-    -   시퀀스다이어그램
-
     ```mermaid
     sequenceDiagram
         participant file
         participant blob
         participant tree
-        participant staging_area
-        participant index
+        participant objects
+        participant Index
 
-        file->>blob: hashing()
-        blob->>staging_area: staging
-        blob->>tree: update-tree
-        tree->>staging_area: staging
-        staging_area->>staging_area: diff()
-        alt if is not same
-            staging_area->>index: update()
+        file->>blob: compress()
+        blob->>objects: write()
+        blob->>tree: update-tree()
+        tree->>objects: write()
+
+        tree->>Index: diff()
+        alt if not same
+            Index->>Index: update()
         end
     ```
 
-    -   pseudo code
+2.  commit
 
-    ```js
-    function init
-        mkdir(.mit/objects)
-        mkdir(.mit/index)
+    ```mermaid
+    sequenceDiagram
+        participant objects
+        participant HEAD
+        participant Index
+        participant Commit
 
-    function add
-        function hash-object
-            blob_file <- blob(file)
+        HEAD->>objects: read()
+        objects->>HEAD: [pre_tree_hash, top_tree_hash, time]
+        HEAD->>Index: top_tree_hash
 
-            hash <- hashing(blob_file)
-
-            ./mit/objects/[hash] <- blob_file
-
-            cur_staging <- hash
-
-            return hash
-
-        function update-tree
-            tree <- [blob_hash blob_size blob_name]
-
-            hash <- hashing(tree)
-
-            ./mit/objects/[hash] <- tree
-
-            cur_staging <- hash
-
-
-        pre_staging <- ./mit/index/
-
-        files
-            for
-                blob_hash <- hash-object(file)
-                tree_hash <- update-tree(blob_hash)
-
-            if diff(pre_staging, cur_staging) is not same
-
-                ./mit/index <- [file_name hash mode size]
+        alt if Index !== top_tree_hash
+            HEAD->>Commit: top_tree_hash
+            Index->>Commit: hash
+            Commit->>objects: [top_tree_hash, hash, time]
+        end
     ```
+
+3.  status
+
+    ```mermaid
+    sequenceDiagram
+        participant objects
+        participant Index
+        participant HEAD
+        participant current_files
+        participant user
+
+        Index->>objects: read()
+        objects->>Index: staging
+        Index->>current_files: staging
+
+        HEAD->>objects: read()
+        objects->>HEAD: tree_object
+        HEAD->>objects: read()
+        objects->>HEAD: snapshot
+        HEAD->>current_files: snapshot
+
+        current_files->>current_files: hashing()
+
+
+        alt if hash not in snapshot and staging
+            current_files->>user: "Changes to be committed"
+        else if hash not in snapshot and in staging
+            current_files->>user: "Changes not staged for commit"
+        end
+    ```
+
+4.  log
+
+    ```mermaid
+    sequenceDiagram
+        participant objects
+        participant commits
+        participant user
+
+        commits->>objects: read()
+        objects->>commits: [pre_tree_hash, top_tree_hash]
+        commits->>objects: top_tree_hash
+        objects->>commits: [hash, size, name][]
+        commits->>commits: compare_adjacent()
+        commits->>user: difference
+    ```
+
+5.  restore
+
+    ```mermaid
+    sequenceDiagram
+        participant user
+        participant objects
+        participant commits
+        participant Index
+        participant HEAD
+
+        user->>objects: restore_hash
+        objects->>user: [pre_tree_hash, top_tree_hash]
+        user->>commits: restore_hash
+        commits->>commits: delete up to the top
+        user->>Index: top_tree_hash
+        user->>HEAD: restore_hash
+    ```
+
+### pseudo code
+
+```js
+function add
+    function hash-object
+        hash <- hashing(blob_file)
+
+        ./mit/objects/[hash] <- blob_file
+
+    function update-tree
+        tree <- [blob_hash blob_size blob_name]
+
+        hash <- hashing(tree)
+
+        ./mit/objects/[hash] <- tree
+
+
+    files
+        map to make blob_object
+        for
+            blob_hash <- hash-object(blob_object)
+            tree_hash <- update-tree(blob_hash)
+
+    pre_staging <- ./mit/index/
+
+    if diff(pre_staging, cur_staging) is not same
+
+        ./mit/index <- [file_name hash mode size]
+```
 
 ## 학습 메모
 
