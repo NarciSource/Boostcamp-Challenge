@@ -10,6 +10,7 @@ export async function readDirectory(): Promise<string[]> {
 
     return glob(`${directoryPath}/**/*`, {
         ignore: ["node_modules/**", ".mit/**"],
+        nodir: true,
     });
 }
 
