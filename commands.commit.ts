@@ -1,9 +1,10 @@
 import fs from "fs";
-import { Path } from "./main";
 import { Hash, hashObject, readHashDictionary } from "./hash";
 import CommitObject from "./Object.commit";
 
-export default function commit(directoryPath: Path) {
+const directoryPath = process.argv[3] || ".";
+
+export default function commit() {
     const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
     const head = fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
 

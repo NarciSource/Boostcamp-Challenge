@@ -4,8 +4,6 @@ import status from "./commands.status";
 import commit from "./commands.commit";
 import log from "./commands.log";
 
-const [, , command, directoryPath, hashValue] = process.argv;
-
 export type Path = string;
 
 /**
@@ -16,24 +14,6 @@ export type Path = string;
  * log 디렉토리명
  * restore 디렉토리명 {8자리 | 64자리 커밋해시값}
  */
-switch (command) {
-    case "init":
-        init(directoryPath as Path);
-        break;
-    case "add":
-        add(directoryPath as Path);
-        break;
-    case "status":
-        status(directoryPath as Path);
-        break;
-    case "commit":
-        commit(directoryPath as Path);
-        break;
-    case "log":
-        log(directoryPath as Path);
-        break;
-    case "restore":
-        break;
-    default:
-        break;
-}
+
+const commands = { init, add, status, commit, log };
+commands[process.argv[2]]();

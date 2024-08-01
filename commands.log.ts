@@ -1,11 +1,12 @@
 import fs from "fs";
-import { Path } from "./main";
 import { Hash, readHashDictionary } from "./hash";
 import { compareAdjacent } from "./utils";
 import { SnapshotRecord } from "./Object.Tree";
 import CommitObject, { CommitRecord } from "./Object.commit";
 
-export default function log(directoryPath: Path) {
+const directoryPath = process.argv[3] || ".";
+
+export default function log() {
     const commits: Hash[] = fs.readFileSync(`${directoryPath}/.mit/commits`, "utf8").split(/\s/);
 
     const commitHistory: CommitRecord[] = commits.map((commitHash: Hash) =>
