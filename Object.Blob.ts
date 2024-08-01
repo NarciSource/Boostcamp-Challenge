@@ -1,13 +1,14 @@
 import zlib from "zlib";
-import { Hash, hashing } from "./hash";
+import MitObject from "./Object";
 
-export default class BlobObject {
+export default class BlobObject extends MitObject {
     name: string;
     size: number;
     content: Buffer;
-    #hash: Hash;
 
     constructor(name: string, content: Buffer) {
+        super();
+
         this.name = name;
         this.content = content;
         this.size = content.length;
@@ -16,9 +17,5 @@ export default class BlobObject {
     compress(): void {
         this.content = zlib.deflateSync(this.content);
         this.size = this.content.length;
-    }
-
-    get hash(): Hash {
-        return (this.#hash = this.#hash || hashing(this.content));
     }
 }

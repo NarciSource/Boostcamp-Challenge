@@ -2,8 +2,8 @@ import fs from "fs";
 import { glob } from "glob";
 import { Path } from "./main";
 import { hashObject } from "./hash";
-import BlobObject from "./Blob";
-import TreeObject from "./TreeObject";
+import BlobObject from "./Object.Blob";
+import TreeObject from "./Object.Tree";
 
 /**
  * 현재 디렉토리 아래의 전체 파일 탐색

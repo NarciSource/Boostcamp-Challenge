@@ -2,7 +2,7 @@ import fs from "fs";
 import { Path } from "./main";
 import { Hash, hashObject, readHashDictionary } from "./hash";
 import { glob } from "glob";
-import BlobObject from "./Blob";
+import BlobObject from "./Object.Blob";
 
 export default async function status(directoryPath: Path): Promise<void> {
     const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
