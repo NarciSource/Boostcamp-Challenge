@@ -1,20 +1,39 @@
 import { Hash } from "./hash";
 import MitObject from "./Object";
 
+export interface CommitRecord {
+    preTreeHash: Hash;
+    curTreeHash: Hash;
+    time: string;
+}
+
 export default class CommitObject extends MitObject {
-    #content: [Hash, Hash];
+    preTreeHash: Hash;
+    curTreeHash: Hash;
+    time: string;
 
     constructor(name: string, content: [Hash, Hash]) {
         super();
 
         this.name = name;
-        this.#content = content;
+        [this.preTreeHash, this.curTreeHash] = content;
+        this.time = new Date().toLocaleDateString();
         this.size = this.content.length;
     }
 
     get content(): Buffer {
-        const [preTreeHash, curTreeHash] = this.#content;
+        return Buffer.from(`${this.preTreeHash} ${this.curTreeHash}\n${this.time}`);
+    }
 
-        return Buffer.from(`${preTreeHash} ${curTreeHash}\n${new Date().toLocaleString()}`);
+    static parse(str: string): CommitRecord {
+        const lines = str.split("\n");
+        const [preTreeHash, curTreeHash] = lines[0];
+        const time = lines[1];
+
+        return {
+            preTreeHash,
+            curTreeHash,
+            time,
+        };
     }
 }

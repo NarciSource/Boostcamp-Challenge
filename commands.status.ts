@@ -1,8 +1,9 @@
 import fs from "fs";
 import { Path } from "./main";
-import { hashObject, readHashDictionary } from "./hash";
+import { Hash, hashObject, readHashDictionary } from "./hash";
 import { glob } from "glob";
 import BlobObject from "./Object.Blob";
+import CommitObject from "./Object.commit";
 
 export default async function status(directoryPath: Path): Promise<void> {
     // read staging
@@ -10,10 +11,11 @@ export default async function status(directoryPath: Path): Promise<void> {
     const staging = readHashDictionary(directoryPath, index).split(/\s/);
 
     // read commit snapshot
-    const head = fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
-    const commit = readHashDictionary(directoryPath, head);
-    const treeHash = commit?.split(/\s/)?.[1];
-    const snapshot = readHashDictionary(directoryPath, treeHash)?.split(/\s/);
+    const head: Hash = fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
+    const { curTreeHash: topTreeHash } = CommitObject.parse(
+        readHashDictionary(directoryPath, head),
+    );
+    const snapshot = readHashDictionary(directoryPath, topTreeHash)?.split(/\s/);
 
     // read current files
     const filePaths: Path[] = await glob(`${directoryPath}/**/*`, {
