@@ -2,24 +2,19 @@ import fs from "fs";
 import { Path } from "./main";
 import { Hash, readHashDictionary } from "./hash";
 import { compareAdjacent } from "./utils";
-import { BlobRecord } from "./Object.Blob";
+import { SnapshotRecord } from "./Object.Tree";
+import CommitObject, { CommitRecord } from "./Object.commit";
 
 export default function log(directoryPath: Path) {
     const commits: Hash[] = fs.readFileSync(`${directoryPath}/.mit/commits`, "utf8").split(/\s/);
 
-    const commitHistory: {
-        hashPair: [Hash, Hash] | any[];
-        time: string;
-    }[] = commits
-        .map((commitHash: Hash) => readHashDictionary(directoryPath, commitHash)?.split("\n") || [])
-        .map(([hashLine, time]: [string, string]) => ({
-            hashPair: hashLine?.split(/\s/) || [],
-            time,
-        }));
+    const commitHistory: CommitRecord[] = commits.map((commitHash: Hash) =>
+        CommitObject.parse(readHashDictionary(directoryPath, commitHash)),
+    );
 
-    const snapshotHistory: BlobRecord[][] = commitHistory
-        .map(({ hashPair: [preCommitHash, curCommitHash] }) =>
-            readHashDictionary(directoryPath, curCommitHash)?.split("\n"),
+    const snapshotHistory: SnapshotRecord[] = commitHistory
+        .map(({ preTreeHash, curTreeHash }) =>
+            readHashDictionary(directoryPath, curTreeHash)?.split("\n"),
         )
         .map((snapshotLines: string[]) =>
             snapshotLines?.map((line) => {

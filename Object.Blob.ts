@@ -25,4 +25,9 @@ export default class BlobObject extends MitObject {
         this.content = zlib.deflateSync(this.content);
         this.size = this.content.length;
     }
+
+    static parse(str: string): BlobRecord {
+        const [hash, size, name] = str.split(/\s/);
+        return { hash, size: parseInt(size), name };
+    }
 }

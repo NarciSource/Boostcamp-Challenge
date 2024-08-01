@@ -26,9 +26,9 @@ export default class CommitObject extends MitObject {
     }
 
     static parse(str: string): CommitRecord {
-        const lines = str.split("\n");
-        const [preTreeHash, curTreeHash] = lines[0];
-        const time = lines[1];
+        const lines = str?.split("\n");
+        const [preTreeHash, curTreeHash] = lines?.[0].split(" ") || [null, null];
+        const time = lines?.[1];
 
         return {
             preTreeHash,

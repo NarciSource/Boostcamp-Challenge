@@ -2,20 +2,26 @@ import fs from "fs";
 import { Path } from "./main";
 import { Hash, hashObject, readHashDictionary } from "./hash";
 import { glob } from "glob";
-import BlobObject from "./Object.Blob";
 import CommitObject from "./Object.commit";
+import BlobObject from "./Object.Blob";
+import TreeObject, { SnapshotRecord } from "./Object.Tree";
 
 export default async function status(directoryPath: Path): Promise<void> {
     // read staging
     const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
-    const staging = readHashDictionary(directoryPath, index).split(/\s/);
+
+    const staging: SnapshotRecord = TreeObject.parse(readHashDictionary(directoryPath, index));
+    const hashesOfStaging = staging.map((blobRecord) => blobRecord.hash);
 
     // read commit snapshot
     const head: Hash = fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
     const { curTreeHash: topTreeHash } = CommitObject.parse(
         readHashDictionary(directoryPath, head),
     );
-    const snapshot = readHashDictionary(directoryPath, topTreeHash)?.split(/\s/);
+    const snapshot: SnapshotRecord = TreeObject.parse(
+        readHashDictionary(directoryPath, topTreeHash),
+    );
+    const hashesOfSnapshot = snapshot.map((blobRecord) => blobRecord.hash);
 
     // read current files
     const filePaths: Path[] = await glob(`${directoryPath}/**/*`, {
@@ -31,12 +37,12 @@ export default async function status(directoryPath: Path): Promise<void> {
     // diff
     console.log("Changes to be committed:");
     hashes
-        .filter(([hash]) => !snapshot.includes(hash) && !staging.includes(hash))
+        .filter(([hash]) => !hashesOfSnapshot.includes(hash) && !hashesOfStaging.includes(hash))
         .forEach(([, filePath]) => console.log(filePath));
     console.log();
 
     console.log("Changes not staged for commit:");
     hashes
-        .filter(([hash]) => !snapshot.includes(hash) && staging.includes(hash))
+        .filter(([hash]) => !hashesOfSnapshot.includes(hash) && hashesOfStaging.includes(hash))
         .map(([, filePath]) => console.log(filePath));
 }
