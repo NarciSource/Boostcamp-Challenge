@@ -6,9 +6,9 @@ import CommitObject from "./Object.commit";
 import BlobObject from "./Object.Blob";
 import TreeObject, { SnapshotRecord } from "./Object.Tree";
 
-const directoryPath = process.argv[3] || ".";
-
 export default async function status(): Promise<void> {
+    const directoryPath = process.argv[3];
+
     // read staging
     const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
 

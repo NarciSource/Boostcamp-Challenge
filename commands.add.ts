@@ -5,13 +5,13 @@ import { hashObject } from "./hash";
 import BlobObject from "./Object.Blob";
 import TreeObject from "./Object.Tree";
 
-const directoryPath = process.argv[3] || ".";
-
 /**
  * 현재 디렉토리 아래의 전체 파일 탐색
  * https://www.npmjs.com/package/glob
  */
 export default async function add() {
+    const directoryPath = process.argv[3];
+
     const filePaths = await glob(`${directoryPath}/**/*`, {
         ignore: ["node_modules/**", ".mit/**"],
     });

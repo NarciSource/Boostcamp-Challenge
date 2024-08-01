@@ -2,9 +2,9 @@ import fs from "fs";
 import { Hash, hashObject, readHashDictionary } from "./hash";
 import CommitObject from "./Object.commit";
 
-const directoryPath = process.argv[3] || ".";
-
 export default function commit() {
+    const directoryPath = process.argv[3];
+
     const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
     const head = fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
 

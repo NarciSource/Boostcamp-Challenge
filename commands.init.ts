@@ -1,13 +1,13 @@
 import fs from "fs";
 
-const directoryPath = process.argv[3] || ".";
-
 /**
  * 디렉토리명/.mit/objects/
  * 디렉토리명/.mit/index/
  * https://www.geeksforgeeks.org/node-js-fs-mkdir-method/
  */
 export default function init() {
+    const directoryPath = process.argv[3];
+
     fs.mkdir(`${directoryPath}/.mit/objects`, { recursive: true }, (error) => {
         console.log(error);
     });
