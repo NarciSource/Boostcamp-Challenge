@@ -148,16 +148,16 @@ sequenceDiagram
     sequenceDiagram
         participant file
         participant blob
-        participant tree
+        participant stagingArea
         participant objects
         participant Index
 
         file->>blob: compress()
         blob->>objects: write()
-        blob->>tree: update-tree()
-        tree->>objects: write()
+        blob->>stagingArea: update()
+        stagingArea->>objects: write()
 
-        tree->>Index: diff()
+        stagingArea->>Index: diff()
         alt if not same
             Index->>Index: update()
         end

@@ -1,6 +1,6 @@
-import { Path, readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
+import { readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
 import { hashObject } from "./hashManager";
-import TreeObject from "./Object.Tree";
+import stagingArea from "./StagingArea";
 
 /**
  * 현재 디렉토리 아래의 전체 파일 탐색
@@ -16,8 +16,8 @@ export default async function add() {
         hashObject(blobObject, true);
     }
 
-    // update-tree and staging
-    const curStaging = new TreeObject("staging", blobObjects);
+    // staging update
+    const curStaging = stagingArea.update(blobObjects);
     hashObject(curStaging, false);
 
     const preStagingHash = readIndex();

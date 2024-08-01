@@ -9,8 +9,6 @@ export interface BlobRecord {
 }
 
 export default class BlobObject extends MitObject {
-    name: string;
-    size: number;
     content: Buffer;
 
     constructor(name: string, content: Buffer) {

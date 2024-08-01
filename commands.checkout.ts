@@ -1,6 +1,6 @@
 import { writeHEAD, writeIndex } from "./fileSystem";
 import { readHashDictionary } from "./hashManager";
-import CommitObject from "./Object.commit";
+import CommitObject from "./Object.Commit";
 
 export default function checkout() {
     const restoreHash = process.argv[4];

@@ -1,6 +1,6 @@
 import { readCommits, readHEAD, readIndex, writeCommits, writeHEAD } from "./fileSystem";
 import { Hash, hashObject, readHashDictionary } from "./hashManager";
-import CommitObject, { CommitRecord } from "./Object.commit";
+import CommitObject, { CommitRecord } from "./Object.Commit";
 
 export default function commit() {
     const index = readIndex();

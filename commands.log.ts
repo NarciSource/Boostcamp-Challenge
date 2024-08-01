@@ -2,7 +2,7 @@ import { readCommits } from "./fileSystem";
 import { Hash, readHashDictionary } from "./hashManager";
 import { compareAdjacent } from "./utils";
 import { SnapshotRecord } from "./Object.Tree";
-import CommitObject, { CommitRecord } from "./Object.commit";
+import CommitObject, { CommitRecord } from "./Object.Commit";
 
 export default function log() {
     const commits: Hash[] = readCommits();

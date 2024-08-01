@@ -3,15 +3,18 @@ import BlobObject, { BlobRecord } from "./Object.Blob";
 
 export type SnapshotRecord = BlobRecord[];
 
-export default class StagingTree extends MitObject {
+class StagingArea extends MitObject {
     #content: SnapshotRecord;
 
-    constructor(name: string, content: BlobObject[]) {
+    constructor() {
         super();
+    }
 
-        this.name = name;
-        this.#content = content;
+    update(snapshotRecord: SnapshotRecord): StagingArea {
+        this.name = "StagingArea";
+        this.#content = snapshotRecord;
         this.size = this.content.length;
+        return this;
     }
 
     get content(): Buffer {
@@ -26,3 +29,5 @@ export default class StagingTree extends MitObject {
         return str.split("\n").map(BlobObject.parse);
     }
 }
+
+export default new StagingArea();
