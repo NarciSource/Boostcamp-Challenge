@@ -1,8 +1,9 @@
 import fs from "fs";
 import { glob } from "glob";
 import { Path } from "./main";
-import { hashObject, Hash } from "./hash";
+import { hashObject } from "./hash";
 import BlobObject from "./Blob";
+import TreeObject from "./TreeObject";
 
 /**
  * 현재 디렉토리 아래의 전체 파일 탐색
@@ -13,18 +14,20 @@ export default async function add(directoryPath: Path) {
         ignore: ["node_modules/**", ".mit/**"],
     });
 
-    const curStaging: Hash[] = filePaths
-        .map((filePath: Path) => fs.readFileSync(filePath))
-        .map((fileContent: Buffer) => new BlobObject(fileContent))
-        .map((blobObject: BlobObject): Hash => hashObject(blobObject, directoryPath, true));
+    const blobObjects = filePaths
+        .map((filePath: Path) => [filePath, fs.readFileSync(filePath)])
+        .map(([filePath, fileContent]: [string, Buffer]) => new BlobObject(filePath, fileContent));
+
+    for (const blobObject of blobObjects) {
+        hashObject(blobObject, directoryPath, true);
+    }
+
+    const curStaging = new TreeObject("staging", blobObjects);
+    hashObject(curStaging, directoryPath, false);
 
     const preStagingHash = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
 
-    const buffer = Buffer.from(curStaging.join(" "));
-    const blobObject = new BlobObject(buffer);
-    const curStagingHash = hashObject(blobObject, directoryPath, false);
-
-    if (curStagingHash !== preStagingHash) {
-        fs.writeFileSync(`${directoryPath}/.mit/index`, curStagingHash);
+    if (curStaging.hash !== preStagingHash) {
+        fs.writeFileSync(`${directoryPath}/.mit/index`, curStaging.hash);
     }
 }

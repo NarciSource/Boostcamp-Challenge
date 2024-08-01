@@ -16,7 +16,7 @@ export default async function status(directoryPath: Path): Promise<void> {
     filePaths
         .filter((filePath) => {
             const fileContent: Buffer = fs.readFileSync(filePath);
-            const blobObject = new BlobObject(fileContent);
+            const blobObject = new BlobObject(filePath, fileContent);
             const hashCode: Hash = hashObject(blobObject, directoryPath, true);
             return !staging.includes(hashCode);
         })

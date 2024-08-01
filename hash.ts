@@ -2,6 +2,7 @@ import fs from "fs";
 import crypto from "crypto";
 import BlobObject from "./Blob";
 import { Path } from "./main";
+import TreeObject from "./TreeObject";
 
 export type Hash = string;
 
@@ -20,7 +21,11 @@ export function hashing(data: Buffer): Hash {
  * https://nodejs.org/api/zlib.html
  * sha256
  */
-export function hashObject(blobObject: BlobObject, directoryPath: Path, compress = false): Hash {
+export function hashObject(
+    blobObject: BlobObject | TreeObject,
+    directoryPath: Path,
+    compress = false,
+): Hash {
     if (compress) {
         blobObject.compress();
     }
@@ -32,7 +37,11 @@ export function hashObject(blobObject: BlobObject, directoryPath: Path, compress
     return hashCode;
 }
 
-export function writeHashDictionary(directoryPath: Path, hash: Hash, data: BlobObject): void {
+export function writeHashDictionary(
+    directoryPath: Path,
+    hash: Hash,
+    data: BlobObject | TreeObject,
+): void {
     try {
         fs.mkdirSync(`${directoryPath}/.mit/objects/${hash.substring(0, 8)}`, {
             recursive: true,
