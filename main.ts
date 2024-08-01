@@ -8,7 +8,6 @@ import checkout from "./commands.checkout";
 import restore from "./commands.restore";
 import { Hash } from "./hashManager";
 
-export type Path = string;
 
 /**
  * init 디렉토리명
@@ -22,7 +21,7 @@ export type Path = string;
     ? [".", process.argv[3]]
     : [process.argv[3], process.argv[4]];
 
-if (process.argv[4].length === 8) {
+if (process.argv[4]?.length === 8) {
     const commits: Hash[] = fs.readFileSync(`${process.argv[3]}/.mit/commits`, "utf8").split(/\s/);
     const found = commits.filter((hash) => hash.includes(process.argv[4]));
 

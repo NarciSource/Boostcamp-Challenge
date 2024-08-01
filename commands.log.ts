@@ -1,22 +1,18 @@
-import fs from "fs";
+import { readCommits } from "./fileSystem";
 import { Hash, readHashDictionary } from "./hashManager";
 import { compareAdjacent } from "./utils";
 import { SnapshotRecord } from "./Object.Tree";
 import CommitObject, { CommitRecord } from "./Object.commit";
 
 export default function log() {
-    const directoryPath = process.argv[3];
-
-    const commits: Hash[] = fs.readFileSync(`${directoryPath}/.mit/commits`, "utf8").split(/\s/);
+    const commits: Hash[] = readCommits();
 
     const commitHistory: CommitRecord[] = commits.map((commitHash: Hash) =>
-        CommitObject.parse(readHashDictionary(directoryPath, commitHash)),
+        CommitObject.parse(readHashDictionary(commitHash)),
     );
 
     const snapshotHistory: SnapshotRecord[] = commitHistory
-        .map(({ preTreeHash, curTreeHash }) =>
-            readHashDictionary(directoryPath, curTreeHash)?.split("\n"),
-        )
+        .map(({ preTreeHash, curTreeHash }) => readHashDictionary(curTreeHash)?.split("\n"))
         .map((snapshotLines: string[]) =>
             snapshotLines?.map((line) => {
                 const [hash, size, name] = line.split(/\s/);

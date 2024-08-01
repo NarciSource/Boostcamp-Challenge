@@ -1,23 +1,20 @@
-import fs from "fs";
+import { readCommits, readHEAD, readIndex, writeCommits, writeHEAD } from "./fileSystem";
 import { Hash, hashObject, readHashDictionary } from "./hashManager";
-import CommitObject from "./Object.commit";
+import CommitObject, { CommitRecord } from "./Object.commit";
 
 export default function commit() {
-    const directoryPath = process.argv[3];
+    const index = readIndex();
+    const head = readHEAD();
 
-    const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
-    const head = fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
-
-    const commitHistory = readHashDictionary(directoryPath, head)?.split("\n")?.[0];
-    const topHash: Hash = commitHistory?.split(" ")?.[1];
+    const { curTreeHash: topHash }: CommitRecord = CommitObject.parse(readHashDictionary(head));
 
     if (index !== topHash) {
         const commit = new CommitObject("HEAD", [head, index]);
-        hashObject(commit, directoryPath, false);
+        hashObject(commit, false);
 
-        const commits: Buffer = fs.readFileSync(`${directoryPath}/.mit/commits`);
+        const commits: Hash[] = readCommits();
 
-        fs.writeFileSync(`${directoryPath}/.mit/commits`, `${commit.hash}\n${commits}`);
-        fs.writeFileSync(`${directoryPath}/.mit/HEAD`, commit.hash);
+        writeCommits([commit.hash, ...commits]);
+        writeHEAD(commit.hash);
     }
 }

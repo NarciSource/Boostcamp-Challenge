@@ -1,8 +1,5 @@
-import fs from "fs";
-import { glob } from "glob";
-import { Path } from "./main";
+import { Path, readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
 import { hashObject } from "./hashManager";
-import BlobObject from "./Object.Blob";
 import TreeObject from "./Object.Tree";
 
 /**
@@ -10,26 +7,20 @@ import TreeObject from "./Object.Tree";
  * https://www.npmjs.com/package/glob
  */
 export default async function add() {
-    const directoryPath = process.argv[3];
+    const filePaths = await readDirectory();
 
-    const filePaths = await glob(`${directoryPath}/**/*`, {
-        ignore: ["node_modules/**", ".mit/**"],
-    });
-
-    const blobObjects = filePaths
-        .map((filePath: Path) => [filePath, fs.readFileSync(filePath)])
-        .map(([filePath, fileContent]: [string, Buffer]) => new BlobObject(filePath, fileContent));
+    const blobObjects = filePaths.map((filePath: Path) => readFile(filePath));
 
     for (const blobObject of blobObjects) {
-        hashObject(blobObject, directoryPath, true);
+        hashObject(blobObject, true);
     }
 
     const curStaging = new TreeObject("staging", blobObjects);
-    hashObject(curStaging, directoryPath, false);
+    hashObject(curStaging, false);
 
-    const preStagingHash = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
+    const preStagingHash = readIndex();
 
     if (curStaging.hash !== preStagingHash) {
-        fs.writeFileSync(`${directoryPath}/.mit/index`, curStaging.hash);
+        writeIndex(curStaging.hash);
     }
 }
