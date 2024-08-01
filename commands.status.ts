@@ -1,6 +1,6 @@
 import fs from "fs";
 import { Path } from "./main";
-import { Hash, hashObject, readHashDictionary } from "./hash";
+import { Hash, hashObject, readHashDictionary } from "./hashManager";
 import { glob } from "glob";
 import CommitObject from "./Object.commit";
 import BlobObject from "./Object.Blob";

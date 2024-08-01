@@ -1,5 +1,5 @@
 import fs from "fs";
-import { Hash, hashObject, readHashDictionary } from "./hash";
+import { Hash, hashObject, readHashDictionary } from "./hashManager";
 import CommitObject from "./Object.commit";
 
 export default function commit() {

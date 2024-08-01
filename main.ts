@@ -6,7 +6,7 @@ import commit from "./commands.commit";
 import log from "./commands.log";
 import checkout from "./commands.checkout";
 import restore from "./commands.restore";
-import { Hash } from "./hash";
+import { Hash } from "./hashManager";
 
 export type Path = string;
 

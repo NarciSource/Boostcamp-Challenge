@@ -1,4 +1,4 @@
-import { Hash } from "./hash";
+import { Hash } from "./hashManager";
 import MitObject from "./Object";
 
 export interface CommitRecord {

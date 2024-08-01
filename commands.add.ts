@@ -1,7 +1,7 @@
 import fs from "fs";
 import { glob } from "glob";
 import { Path } from "./main";
-import { hashObject } from "./hash";
+import { hashObject } from "./hashManager";
 import BlobObject from "./Object.Blob";
 import TreeObject from "./Object.Tree";
 

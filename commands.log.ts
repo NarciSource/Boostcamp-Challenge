@@ -1,5 +1,5 @@
 import fs from "fs";
-import { Hash, readHashDictionary } from "./hash";
+import { Hash, readHashDictionary } from "./hashManager";
 import { compareAdjacent } from "./utils";
 import { SnapshotRecord } from "./Object.Tree";
 import CommitObject, { CommitRecord } from "./Object.commit";

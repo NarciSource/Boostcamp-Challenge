@@ -1,5 +1,5 @@
 import fs from "fs";
-import { Hash } from "./hash";
+import { Hash } from "./hashManager";
 import checkout from "./commands.checkout";
 
 export default function restore() {
