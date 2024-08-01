@@ -1,10 +1,16 @@
 import fs from "fs";
-import zlib from "zlib";
 import crypto from "crypto";
 import BlobObject from "./Blob";
 import { Path } from "./main";
 
 export type Hash = string;
+
+export function hashing(data: Buffer): Hash {
+    const hash = crypto.createHash("sha256");
+    hash.update(data);
+    const hashCode = hash.digest("hex");
+    return hashCode;
+}
 
 /**
  * 파일을 순회하며 blob객체 생성
@@ -14,15 +20,10 @@ export type Hash = string;
  * https://nodejs.org/api/zlib.html
  * sha256
  */
-export function hashObject(filePath: Path, directoryPath: Path): Hash {
-    const fileSize = fs.statSync(filePath).size;
-    const fileContent = fs.readFileSync(filePath);
-    const compressedContent = zlib.deflateSync(fileContent);
-    const blobObject = new BlobObject(fileSize, compressedContent);
-    const hash = crypto.createHash("sha256");
+export function hashObject(blobObject: BlobObject, directoryPath: Path): Hash {
+    blobObject.compress();
 
-    hash.update(blobObject.content);
-    const hashCode = hash.digest("hex");
+    const hashCode = blobObject.hash;
 
     writeHashDictionary(directoryPath, hashCode, hashCode);
 
