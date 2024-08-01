@@ -2,6 +2,7 @@ import init from "./commands.init";
 import add from "./commands.add";
 import status from "./commands.status";
 import commit from "./commands.commit";
+import log from "./commands.log";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
@@ -29,6 +30,7 @@ switch (command) {
         commit(directoryPath as Path);
         break;
     case "log":
+        log(directoryPath as Path);
         break;
     case "restore":
         break;
