@@ -18,7 +18,7 @@ export default class TreeObject extends MitObject {
         return Buffer.from(
             this.#content
                 .map((blobObject) => `${blobObject.hash} ${blobObject.size} ${blobObject.name}`)
-                .join(" "),
+                .join("\n"),
         );
     }
 }
