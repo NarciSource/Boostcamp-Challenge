@@ -20,24 +20,26 @@ export function hashing(data: Buffer): Hash {
  * https://nodejs.org/api/zlib.html
  * sha256
  */
-export function hashObject(blobObject: BlobObject, directoryPath: Path): Hash {
-    blobObject.compress();
+export function hashObject(blobObject: BlobObject, directoryPath: Path, compress = false): Hash {
+    if (compress) {
+        blobObject.compress();
+    }
 
     const hashCode = blobObject.hash;
 
-    writeHashDictionary(directoryPath, hashCode, hashCode);
+    writeHashDictionary(directoryPath, hashCode, blobObject);
 
     return hashCode;
 }
 
-export function writeHashDictionary(directoryPath: Path, hash: Hash, data: any): void {
+export function writeHashDictionary(directoryPath: Path, hash: Hash, data: BlobObject): void {
     try {
         fs.mkdirSync(`${directoryPath}/.mit/objects/${hash.substring(0, 8)}`, {
             recursive: true,
         });
         fs.writeFileSync(
             `${directoryPath}/.mit/objects/${hash.substring(0, 8)}/${hash.substring(8)}`,
-            data.toString(),
+            data.content,
         );
     } catch (error) {
         console.log(error);

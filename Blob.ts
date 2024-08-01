@@ -6,9 +6,9 @@ export default class BlobObject {
     content: Buffer;
     #hash: Hash;
 
-    constructor(size: number, content: Buffer) {
-        this.size = size;
+    constructor(content: Buffer) {
         this.content = content;
+        this.size = content.length;
     }
 
     compress() {

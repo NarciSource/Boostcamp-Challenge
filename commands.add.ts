@@ -1,9 +1,7 @@
 import fs from "fs";
 import { glob } from "glob";
-import crypto from "crypto";
 import { Path } from "./main";
-import { readFile } from "./fileSystem";
-import { hashObject, writeHashDictionary, Hash } from "./hash";
+import { hashObject, Hash } from "./hash";
 import BlobObject from "./Blob";
 
 /**
@@ -16,18 +14,17 @@ export default async function add(directoryPath: Path) {
     });
 
     const curStaging: Hash[] = filePaths
-        .map((filePath) => readFile(filePath))
-        .map(([fileContent, fileSize]) => new BlobObject(fileSize, fileContent))
-        .map((blobObject) => hashObject(blobObject, directoryPath));
-
-    const hash = crypto.createHash("sha256");
-    const curStagingHash = hash.update(curStaging.join(" ")).digest("hex");
+        .map((filePath: Path) => fs.readFileSync(filePath))
+        .map((fileContent: Buffer) => new BlobObject(fileContent))
+        .map((blobObject: BlobObject): Hash => hashObject(blobObject, directoryPath, true));
 
     const preStagingHash = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
 
+    const buffer = Buffer.from(curStaging.join(" "));
+    const blobObject = new BlobObject(buffer);
+    const curStagingHash = hashObject(blobObject, directoryPath, false);
+
     if (curStagingHash !== preStagingHash) {
         fs.writeFileSync(`${directoryPath}/.mit/index`, curStagingHash);
-
-        writeHashDictionary(directoryPath, curStagingHash, curStaging);
     }
 }

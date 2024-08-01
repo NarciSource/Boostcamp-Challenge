@@ -1,14 +1,13 @@
 import fs from "fs";
 import { Path } from "./main";
-import { hashObject, readHashDictionary } from "./hash";
+import { Hash, hashObject, readHashDictionary } from "./hash";
 import { glob } from "glob";
-import { readFile } from "./fileSystem";
 import BlobObject from "./Blob";
 
 export default async function status(directoryPath: Path): Promise<void> {
-    const key = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
+    const index = fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
 
-    const staging = readHashDictionary(directoryPath, key).split(",");
+    const staging = readHashDictionary(directoryPath, index).split(" ");
 
     const filePaths: Path[] = await glob(`${directoryPath}/**/*`, {
         ignore: ["node_modules/**", ".mit/**"],
@@ -16,9 +15,9 @@ export default async function status(directoryPath: Path): Promise<void> {
 
     filePaths
         .filter((filePath) => {
-            const [fileContent, fileSize] = readFile(filePath);
-            const blobObject = new BlobObject(fileSize, fileContent);
-            const hashCode = hashObject(blobObject, directoryPath);
+            const fileContent: Buffer = fs.readFileSync(filePath);
+            const blobObject = new BlobObject(fileContent);
+            const hashCode: Hash = hashObject(blobObject, directoryPath, true);
             return !staging.includes(hashCode);
         })
         .forEach((filePath) => {
