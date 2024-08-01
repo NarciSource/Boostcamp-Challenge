@@ -2,6 +2,7 @@ import fs from "fs";
 import { Path } from "./main";
 import { Hash, readHashDictionary } from "./hash";
 import { compareAdjacent } from "./utils";
+import { BlobRecord } from "./Object.Blob";
 
 export default function log(directoryPath: Path) {
     const commits: Hash[] = fs.readFileSync(`${directoryPath}/.mit/commits`, "utf8").split(/\s/);
@@ -16,19 +17,19 @@ export default function log(directoryPath: Path) {
             time,
         }));
 
-    const snapshotHistory: { hash: Hash; size: number; fileName: string }[][] = commitHistory
+    const snapshotHistory: BlobRecord[][] = commitHistory
         .map(({ hashPair: [preCommitHash, curCommitHash] }) =>
             readHashDictionary(directoryPath, curCommitHash)?.split("\n"),
         )
         .map((snapshotLines: string[]) =>
             snapshotLines?.map((line) => {
-                const [hash, size, fileName] = line.split(/\s/);
-                return { hash, size: parseInt(size), fileName };
+                const [hash, size, name] = line.split(/\s/);
+                return { hash, size: parseInt(size), name };
             }),
         );
 
     // find changes in snapshot history
-    const entriesFunc = ({ hash, size, fileName }) => [hash, fileName];
+    const entriesFunc = ({ hash, size, name }) => [hash, name];
     const diff = compareAdjacent(snapshotHistory, entriesFunc);
 
     for (let i = 0; i < diff.length; i++) {

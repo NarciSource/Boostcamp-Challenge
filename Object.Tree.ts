@@ -1,10 +1,10 @@
 import MitObject from "./Object";
-import BlobObject from "./Object.Blob";
+import BlobObject, { BlobRecord } from "./Object.Blob";
 
 export default class TreeObject extends MitObject {
     name: string;
     size: number;
-    #content: BlobObject[];
+    #content: BlobRecord[];
 
     constructor(name: string, content: BlobObject[]) {
         super();

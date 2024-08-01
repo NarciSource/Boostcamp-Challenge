@@ -1,5 +1,12 @@
 import zlib from "zlib";
 import MitObject from "./Object";
+import { Hash } from "./hash";
+
+export interface BlobRecord {
+    hash: Hash;
+    name: string;
+    size: number;
+}
 
 export default class BlobObject extends MitObject {
     name: string;
