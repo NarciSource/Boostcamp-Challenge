@@ -4,6 +4,7 @@ import status from "./commands.status";
 import commit from "./commands.commit";
 import log from "./commands.log";
 import checkout from "./commands.checkout";
+import restore from "./commands.restore";
 
 export type Path = string;
 
@@ -16,5 +17,5 @@ export type Path = string;
  * restore 디렉토리명 {8자리 | 64자리 커밋해시값}
  */
 
-const commands = { init, add, status, commit, log, checkout };
+const commands = { init, add, status, commit, log, checkout, restore };
 commands[process.argv[2]]();
