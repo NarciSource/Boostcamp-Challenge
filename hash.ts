@@ -47,8 +47,12 @@ export function writeHashDictionary(directoryPath: Path, hash: Hash, data: MitOb
 }
 
 export function readHashDictionary(directoryPath: Path, key: Hash): any {
-    return fs.readFileSync(
-        `${directoryPath}/.mit/objects/${key.substring(0, 8)}/${key.substring(8)}`,
-        "utf8",
-    );
+    try {
+        return fs.readFileSync(
+            `${directoryPath}/.mit/objects/${key.substring(0, 8)}/${key.substring(8)}`,
+            "utf8",
+        );
+    } catch {
+        return;
+    }
 }

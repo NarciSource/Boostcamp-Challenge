@@ -1,6 +1,7 @@
 import init from "./commands.init";
 import add from "./commands.add";
 import status from "./commands.status";
+import commit from "./commands.commit";
 
 const [, , command, directoryPath, hashValue] = process.argv;
 
@@ -23,6 +24,9 @@ switch (command) {
         break;
     case "status":
         status(directoryPath as Path);
+        break;
+    case "commit":
+        commit(directoryPath as Path);
         break;
     case "log":
         break;

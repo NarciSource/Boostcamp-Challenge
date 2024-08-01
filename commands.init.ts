@@ -11,4 +11,5 @@ export default function init(directoryPath: Path) {
         console.log(error);
     });
     fs.writeFileSync(`${directoryPath}/.mit/index`, "");
+    fs.writeFileSync(`${directoryPath}/.mit/HEAD`, "");
 }
