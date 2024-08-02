@@ -39,6 +39,7 @@ export default class TreeObject extends MitObject {
 
     static makeTree(directoryName: string, records: StagingRecord): TreeObject {
         const regex = /([^\\]+)(?:\\(.+))?/;
+
         const files: StagingRecord = records.filter(({ name }) => !regex.exec(name)[2]);
         const directoryDictionary: { [key: string]: StagingRecord } = records
             .filter(({ name }) => {

@@ -181,16 +181,16 @@ sequenceDiagram
 
         HEAD->>objects: read()
         objects->>HEAD: [parent_hash, snapshot_hash, time]
-        HEAD->>Index: snapshot_hash as committed_snapshot_hash
+        HEAD->>Index: snapshot_hash as committed_hash
 
         Index->>objects: read()
-        objects->>Index: [hash size filename] <- staging_record
+        objects->>Index: [hash size name] : staging_record
         Index->>tree_objects: make_tree
-        tree_objects->>Index: snapshotHash
+        tree_objects->>Index: snapshot_hash
 
-        alt if snapshotHash !== committed_snapshot_hash
-            HEAD->>Commit: committed_snapshot_hash
-            Index->>Commit: snapshotHash
+        alt if snapshot_hash !== committed_hash
+            HEAD->>Commit: committed_hash
+            Index->>Commit: snapshot_hash
             Commit->>objects: [parentHash, snapshotHash, time]
         end
     ```
@@ -216,7 +216,6 @@ sequenceDiagram
         HEAD->>current_files: snapshot
 
         current_files->>current_files: hashing()
-
 
         alt if hash not in snapshot and staging
             current_files->>user: "Changes to be committed"

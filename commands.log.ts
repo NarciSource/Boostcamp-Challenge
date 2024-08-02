@@ -1,5 +1,5 @@
 import { readCommits } from "./fileSystem";
-import { readHashDictionary } from "./hashObject";
+import { readHashDictionary } from "./commands.hash-object";
 import { compareAdjacent } from "./utils";
 import CommitObject, { CommitRecord } from "./Object.Commit";
 import { StagingRecord } from "./Object.StagingArea";

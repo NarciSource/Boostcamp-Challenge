@@ -1,5 +1,5 @@
-import { readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
-import { hashObject } from "./hashObject";
+import { Path, readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
+import { hashObject } from "./commands.hash-object";
 import stagingArea from "./Object.StagingArea";
 
 /**
@@ -7,7 +7,7 @@ import stagingArea from "./Object.StagingArea";
  * https://www.npmjs.com/package/glob
  */
 export default async function add() {
-    const filePaths = await readDirectory();
+    const filePaths: Path[] = await readDirectory();
 
     const blobObjects = filePaths.map(readFile);
 
