@@ -2,7 +2,7 @@ import { readCommits } from "./fileSystem";
 import { readHashDictionary } from "./hashObject";
 import { compareAdjacent } from "./utils";
 import CommitObject, { CommitRecord } from "./Object.Commit";
-import { StagingRecord } from "./StagingArea";
+import { StagingRecord } from "./Object.StagingArea";
 import { Hash } from "./hashManager";
 import TreeObject from "./Object.Tree";
 

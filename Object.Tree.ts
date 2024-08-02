@@ -1,7 +1,7 @@
 import { Hash } from "./hashManager";
 import MitObject from "./Object";
 import { BlobRecord } from "./Object.Blob";
-import { StagingRecord } from "./StagingArea";
+import { StagingRecord } from "./Object.StagingArea";
 
 export interface TreeRecord {
     mode: string;

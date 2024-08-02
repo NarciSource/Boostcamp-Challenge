@@ -1,6 +1,6 @@
 import { readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
 import { hashObject } from "./hashObject";
-import stagingArea from "./StagingArea";
+import stagingArea from "./Object.StagingArea";
 
 /**
  * 현재 디렉토리 아래의 전체 파일 탐색

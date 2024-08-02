@@ -4,7 +4,7 @@ import { hashObject, readHashDictionary } from "./hashObject";
 import BlobObject from "./Object.Blob";
 import CommitObject, { CommitRecord } from "./Object.Commit";
 import { makeTree } from "./Object.Tree";
-import { StagingRecord } from "./StagingArea";
+import { StagingRecord } from "./Object.StagingArea";
 
 export default function commit() {
     const head = readHEAD();
