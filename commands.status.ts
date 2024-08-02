@@ -1,5 +1,6 @@
 import { Path, readDirectory, readFile, readHEAD, readIndex } from "./fileSystem";
-import { Hash, hashObject, readHashDictionary } from "./hashManager";
+import { Hash } from "./hashManager";
+import { hashObject, readHashDictionary } from "./hashObject";
 import CommitObject from "./Object.Commit";
 import stagingArea, { StagingRecord } from "./StagingArea";
 

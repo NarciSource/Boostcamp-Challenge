@@ -1,5 +1,5 @@
 import { readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
-import { hashObject } from "./hashManager";
+import { hashObject } from "./hashObject";
 import stagingArea from "./StagingArea";
 
 /**

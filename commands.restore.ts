@@ -1,6 +1,6 @@
 import { readCommits, writeCommits } from "./fileSystem";
-import { Hash } from "./hashManager";
 import checkout from "./commands.checkout";
+import { Hash } from "./hashManager";
 
 export default function restore() {
     const restoreHash = process.argv[4];

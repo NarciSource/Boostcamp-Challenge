@@ -1,5 +1,5 @@
 import { writeHEAD, writeIndex } from "./fileSystem";
-import { readHashDictionary } from "./hashManager";
+import { readHashDictionary } from "./hashObject";
 import CommitObject from "./Object.Commit";
 
 export default function checkout() {

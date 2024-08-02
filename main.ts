@@ -7,8 +7,6 @@ import log from "./commands.log";
 import checkout from "./commands.checkout";
 import restore from "./commands.restore";
 import { Hash } from "./hashManager";
-
-
 /**
  * init 디렉토리명
  * add 디렉토리명

@@ -1,4 +1,4 @@
-import { Hash, hashObject } from "./hashManager";
+import { Hash } from "./hashManager";
 import MitObject from "./Object";
 import { BlobRecord } from "./Object.Blob";
 import { StagingRecord } from "./StagingArea";
@@ -9,19 +9,19 @@ export interface SnapshotRecord {
     hash: Hash;
 }
 
-class TreeObject extends MitObject {
+export default class TreeObject extends MitObject {
     #directoryName: string;
-    #content: (TreeObject | BlobRecord)[];
+    #contents: (TreeObject | BlobRecord)[];
 
     constructor(directoryName: string, content: (TreeObject | BlobRecord)[]) {
         super();
 
         this.#directoryName = directoryName;
-        this.#content = content;
+        this.#contents = content;
     }
 
     get content(): Buffer {
-        const str = this.#content
+        const str = this.#contents
             .map((each) => {
                 if (each instanceof TreeObject) {
                     return `tree ${each.hash} ${each.#directoryName}`;
@@ -31,6 +31,10 @@ class TreeObject extends MitObject {
             })
             .join("\n");
         return Buffer.from(str);
+    }
+
+    get childrenTree(): TreeObject[] {
+        return this.#contents.filter((record) => record instanceof TreeObject);
     }
 
     static makeTree(directoryName: string, records: StagingRecord): TreeObject {
@@ -51,12 +55,9 @@ class TreeObject extends MitObject {
             }, {});
 
         const directories: TreeObject[] = Object.entries(directoryDictionary).map(
-            ([directoryName, records]) => makeTree(directoryName, records),
+            ([directoryName, records]) => TreeObject.makeTree(directoryName, records),
         );
-        const tree = new TreeObject(directoryName, [...files, ...directories]);
-
-        hashObject(tree, false);
-        return tree;
+        return new TreeObject(directoryName, [...files, ...directories]);
     }
 }
 

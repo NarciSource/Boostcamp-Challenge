@@ -1,8 +1,9 @@
 import { readCommits } from "./fileSystem";
-import { Hash, readHashDictionary } from "./hashManager";
+import { readHashDictionary } from "./hashObject";
 import { compareAdjacent } from "./utils";
 import CommitObject, { CommitRecord } from "./Object.Commit";
 import { StagingRecord } from "./StagingArea";
+import { Hash } from "./hashManager";
 
 export default function log() {
     const commits: Hash[] = readCommits();

@@ -1,7 +1,7 @@
 import fs from "fs";
 import { glob } from "glob";
-import { Hash } from "./hashManager";
 import BlobObject from "./Object.Blob";
+import { Hash } from "./hashManager";
 
 export type Path = string;
 

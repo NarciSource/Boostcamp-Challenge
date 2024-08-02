@@ -6,7 +6,8 @@ import {
     writeCommits,
     writeHEAD,
 } from "./fileSystem";
-import { Hash, hashObject, readHashDictionary } from "./hashManager";
+import { Hash } from "./hashManager";
+import { hashObject, readHashDictionary } from "./hashObject";
 import CommitObject, { CommitRecord } from "./Object.Commit";
 import { makeTree } from "./Object.Tree";
 import StagingArea, { StagingRecord } from "./StagingArea";
@@ -21,6 +22,7 @@ export default function commit() {
     const stagingRecord: StagingRecord = StagingArea.parse(readObjects(index));
     const tree = makeTree("root", stagingRecord);
     const snapshotHash: Hash = tree.hash;
+    hashObject(tree, false);
 
     if (snapshotHash !== committedSnapshotHash) {
         const commit = new CommitObject("HEAD", head, snapshotHash);
