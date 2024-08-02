@@ -170,16 +170,22 @@ sequenceDiagram
         participant objects
         participant HEAD
         participant Index
+        participant tree_objects
         participant Commit
 
         HEAD->>objects: read()
-        objects->>HEAD: [pre_tree_hash, top_tree_hash, time]
-        HEAD->>Index: top_tree_hash
+        objects->>HEAD: [parent_hash, snapshot_hash, time]
+        HEAD->>Index: snapshot_hash as committed_snapshot_hash
 
-        alt if Index !== top_tree_hash
-            HEAD->>Commit: top_tree_hash
-            Index->>Commit: hash
-            Commit->>objects: [top_tree_hash, hash, time]
+        Index->>objects: read()
+        objects->>Index: [hash size filename] <- staging_record
+        Index->>tree_objects: make_tree
+        tree_objects->>Index: snapshotHash
+
+        alt if snapshotHash !== committed_snapshot_hash
+            HEAD->>Commit: committed_snapshot_hash
+            Index->>Commit: snapshotHash
+            Commit->>objects: [parentHash, snapshotHash, time]
         end
     ```
 

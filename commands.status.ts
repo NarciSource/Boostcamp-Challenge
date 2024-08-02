@@ -12,8 +12,8 @@ export default async function status(): Promise<void> {
 
     // read commit snapshot
     const head: Hash = readHEAD();
-    const { curTreeHash: topTreeHash } = CommitObject.parse(readHashDictionary(head));
-    const snapshot: StagingRecord = stagingArea.parse(readHashDictionary(topTreeHash));
+    const { snapshotHash } = CommitObject.parse(readHashDictionary(head));
+    const snapshot: StagingRecord = stagingArea.parse(readHashDictionary(snapshotHash));
     const hashesOfSnapshot = snapshot.map((blobRecord) => blobRecord.hash);
 
     // read current files

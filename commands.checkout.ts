@@ -5,8 +5,8 @@ import CommitObject from "./Object.Commit";
 export default function checkout() {
     const restoreHash = process.argv[4];
 
-    const { curTreeHash } = CommitObject.parse(readHashDictionary(restoreHash));
+    const { snapshotHash } = CommitObject.parse(readHashDictionary(restoreHash));
 
     writeHEAD(restoreHash);
-    writeIndex(curTreeHash);
+    writeIndex(snapshotHash);
 }

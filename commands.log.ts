@@ -12,7 +12,7 @@ export default function log() {
     );
 
     const snapshotHistory: StagingRecord[] = commitHistory
-        .map(({ preTreeHash, curTreeHash }) => readHashDictionary(curTreeHash)?.split("\n"))
+        .map(({ snapshotHash }) => readHashDictionary(snapshotHash)?.split("\n"))
         .map((snapshotLines: string[]) =>
             snapshotLines?.map((line) => {
                 const [hash, size, name] = line.split(/\s/);
