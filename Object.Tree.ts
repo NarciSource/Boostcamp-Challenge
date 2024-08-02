@@ -1,5 +1,5 @@
-import { writeObjects } from "./fileSystem";
-import { Hash, hashing } from "./hashManager";
+import { Hash, hashObject } from "./hashManager";
+import MitObject from "./Object";
 import { BlobRecord } from "./Object.Blob";
 import { StagingRecord } from "./StagingArea";
 
@@ -9,40 +9,55 @@ export interface SnapshotRecord {
     hash: Hash;
 }
 
-export function makeTree(records: StagingRecord): Hash {
-    const regex = /([^\\]+)(?:\\(.+))?/;
-    const directories: { [key: string]: StagingRecord } = {};
-    const files: StagingRecord = [];
+class TreeObject extends MitObject {
+    #directoryName: string;
+    #content: (TreeObject | BlobRecord)[];
 
-    for (const { hash, name, size } of records) {
-        let [, directory, filename] = regex.exec(name);
-        if (!filename) {
-            filename = directory;
-            directory = null;
+    constructor(directoryName: string, content: (TreeObject | BlobRecord)[]) {
+        super();
 
-            const record: BlobRecord = { hash, name: filename, size };
-            files.push(record);
-        }
-        if (directory) {
-            const record: BlobRecord = { hash, name: filename, size };
-
-            directories[directory] = [...(directories[directory] || []), record];
-        }
+        this.#directoryName = directoryName;
+        this.#content = content;
     }
 
-    const save = files.map(({ hash, name }) => `blob ${hash} ${name}`);
-
-    for (const [directory, records] of Object.entries(directories)) {
-        const hash = makeTree(records);
-
-        save.push(`tree ${hash} ${directory}`);
+    get content(): Buffer {
+        const str = this.#content
+            .map((each) => {
+                if (each instanceof TreeObject) {
+                    return `tree ${each.hash} ${each.#directoryName}`;
+                } else {
+                    return `blob ${each.hash} ${each.name}`;
+                }
+            })
+            .join("\n");
+        return Buffer.from(str);
     }
 
-    const str = save.join("\n");
+    static makeTree(directoryName: string, records: StagingRecord): TreeObject {
+        const regex = /([^\\]+)(?:\\(.+))?/;
+        const files: StagingRecord = records.filter(({ name }) => !regex.exec(name)[2]);
+        const directoryDictionary: { [key: string]: StagingRecord } = records
+            .filter(({ name }) => {
+                const [, directoryName, filename] = regex.exec(name);
+                return directoryName && filename;
+            })
+            .reduce((acc, { hash, name, size }) => {
+                const [, directoryName, filename] = regex.exec(name);
+                const record: BlobRecord = { hash, name: filename, size };
 
-    const buffer = Buffer.from(str);
-    const hash = hashing(buffer);
+                acc[directoryName] = [...(acc[directoryName] || []), record];
 
-    writeObjects(hash.substring(0, 8), hash.substring(8), buffer);
-    return hash;
+                return acc;
+            }, {});
+
+        const directories: TreeObject[] = Object.entries(directoryDictionary).map(
+            ([directoryName, records]) => makeTree(directoryName, records),
+        );
+        const tree = new TreeObject(directoryName, [...files, ...directories]);
+
+        hashObject(tree, false);
+        return tree;
+    }
 }
+
+export const makeTree = TreeObject.makeTree;

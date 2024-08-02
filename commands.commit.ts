@@ -19,7 +19,8 @@ export default function commit() {
 
     const index = readIndex();
     const stagingRecord: StagingRecord = StagingArea.parse(readObjects(index));
-    const snapshotHash: Hash = makeTree(stagingRecord);
+    const tree = makeTree("root", stagingRecord);
+    const snapshotHash: Hash = tree.hash;
 
     if (snapshotHash !== committedSnapshotHash) {
         const commit = new CommitObject("HEAD", head, snapshotHash);
