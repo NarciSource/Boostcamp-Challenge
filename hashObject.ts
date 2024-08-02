@@ -24,18 +24,14 @@ export function hashObject(mitObject: MitObject, compress = false): Hash {
 
     const hashCode = mitObject.hash;
 
-    writeHashDictionary(hashCode, mitObject);
+    writeObjects(hashCode, mitObject.content);
 
     return hashCode;
 }
 
-export function writeHashDictionary(hash: Hash, data: MitObject): void {
-    writeObjects(hash.substring(0, 8), hash.substring(8), data.content);
-}
-
-export function readHashDictionary(key: Hash): any {
+export function readHashDictionary(key: Hash, parser: Function): any {
     try {
-        return readObjects(key);
+        return parser(readObjects(key));
     } catch (e) {
         return null;
     }

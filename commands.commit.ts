@@ -14,12 +14,13 @@ import StagingArea, { StagingRecord } from "./StagingArea";
 
 export default function commit() {
     const head = readHEAD();
-    const { snapshotHash: committedSnapshotHash }: CommitRecord = CommitObject.parse(
-        readHashDictionary(head),
+    const { snapshotHash: committedSnapshotHash }: CommitRecord = readHashDictionary(
+        head,
+        CommitObject.parse,
     );
 
     const index = readIndex();
-    const stagingRecord: StagingRecord = StagingArea.parse(readObjects(index));
+    const stagingRecord: StagingRecord = readHashDictionary(index, StagingArea.parse);
     const tree = makeTree("root", stagingRecord);
     const snapshotHash: Hash = tree.hash;
     hashObject(tree, false);

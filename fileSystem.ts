@@ -5,7 +5,7 @@ import { Hash } from "./hashManager";
 
 export type Path = string;
 
-export async function readDirectory(): Promise<string[]> {
+export async function readDirectory(): Promise<Path[]> {
     const directoryPath = process.argv[3];
 
     return glob(`${directoryPath}/**/*`, {
@@ -47,16 +47,18 @@ export function writeCommits(hashes: Hash[]): void {
     fs.writeFileSync(`${directoryPath}/.mit/commits`, hashes.join("\n"));
 }
 
-export function readObjects(hash: Path): any {
+export function readObjects(hash: Hash): any {
     const directoryPath = process.argv[3];
+    const [directory, filePath] = [hash.substring(0, 8), hash.substring(8)];
 
     return fs.readFileSync(
-        `${directoryPath}/.mit/objects/${hash.substring(0, 8)}/${hash.substring(8)}`,
+        `${directoryPath}/.mit/objects/${directory}/${filePath}`,
         "utf8",
     );
 }
-export function writeObjects(directory: Path, filePath: Path, buffer: Buffer): void {
+export function writeObjects(hash: Hash, buffer: Buffer): void {
     const directoryPath = process.argv[3];
+    const [directory, filePath] = [hash.substring(0, 8), hash.substring(8)];
 
     fs.mkdirSync(`${directoryPath}/.mit/objects/${directory}`, {
         recursive: true,
