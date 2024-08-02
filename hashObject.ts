@@ -1,6 +1,7 @@
 import { readObjects, writeObjects } from "./fileSystem";
 import { Hash } from "./hashManager";
 import MitObject from "./Object";
+import TreeObject from "./Object.Tree";
 
 /**
  * 파일을 순회하며 blob객체 생성
@@ -11,6 +12,12 @@ import MitObject from "./Object";
  * sha256
  */
 export function hashObject(mitObject: MitObject, compress = false): Hash {
+    if (mitObject instanceof TreeObject) {
+        mitObject.childrenTree
+            .filter((each) => each instanceof TreeObject)
+            .forEach((tree) => hashObject(tree));
+    }
+
     if (compress) {
         mitObject.compress();
     }
