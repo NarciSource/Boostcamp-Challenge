@@ -47,10 +47,13 @@ export function writeCommits(hashes: Hash[]): void {
     fs.writeFileSync(`${directoryPath}/.mit/commits`, hashes.join("\n"));
 }
 
-export function readObjects(directory: Path, filePath: Path): any {
+export function readObjects(hash: Path): any {
     const directoryPath = process.argv[3];
 
-    return fs.readFileSync(`${directoryPath}/.mit/objects/${directory}/${filePath}`, "utf8");
+    return fs.readFileSync(
+        `${directoryPath}/.mit/objects/${hash.substring(0, 8)}/${hash.substring(8)}`,
+        "utf8",
+    );
 }
 export function writeObjects(directory: Path, filePath: Path, buffer: Buffer): void {
     const directoryPath = process.argv[3];

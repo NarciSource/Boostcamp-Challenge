@@ -1,6 +1,15 @@
-import { readCommits, readHEAD, readIndex, writeCommits, writeHEAD } from "./fileSystem";
+import {
+    readCommits,
+    readHEAD,
+    readIndex,
+    readObjects,
+    writeCommits,
+    writeHEAD,
+} from "./fileSystem";
 import { Hash, hashObject, readHashDictionary } from "./hashManager";
 import CommitObject, { CommitRecord } from "./Object.Commit";
+import { makeTree } from "./Object.Tree";
+import StagingArea, { StagingRecord } from "./StagingArea";
 
 export default function commit() {
     const index = readIndex();
@@ -8,8 +17,11 @@ export default function commit() {
 
     const { curTreeHash: topHash }: CommitRecord = CommitObject.parse(readHashDictionary(head));
 
-    if (index !== topHash) {
-        const commit = new CommitObject("HEAD", [head, index]);
+    if (index === topHash) {
+        const stagingRecord: StagingRecord = StagingArea.parse(readObjects(index));
+        const snapshotHash: Hash = makeTree(stagingRecord);
+
+        const commit = new CommitObject("HEAD", [head, snapshotHash]);
         hashObject(commit, false);
 
         const commits: Hash[] = readCommits();

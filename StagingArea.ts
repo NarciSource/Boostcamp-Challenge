@@ -1,18 +1,18 @@
 import MitObject from "./Object";
 import BlobObject, { BlobRecord } from "./Object.Blob";
 
-export type SnapshotRecord = BlobRecord[];
+export type StagingRecord = BlobRecord[];
 
 class StagingArea extends MitObject {
-    #content: SnapshotRecord;
+    #content: StagingRecord;
 
     constructor() {
         super();
     }
 
-    update(snapshotRecord: SnapshotRecord): StagingArea {
+    update(StagingRecord: StagingRecord): StagingArea {
         this.name = "StagingArea";
-        this.#content = snapshotRecord;
+        this.#content = StagingRecord;
         this.size = this.content.length;
         return this;
     }
@@ -25,7 +25,7 @@ class StagingArea extends MitObject {
         );
     }
 
-    static parse(str: string): SnapshotRecord {
+    parse(str: string): StagingRecord {
         return str.split("\n").map(BlobObject.parse);
     }
 }
