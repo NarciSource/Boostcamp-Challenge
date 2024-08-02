@@ -13,13 +13,13 @@ export default function log() {
         readHashDictionary(commitHash, CommitObject.parse),
     );
 
-    const snapshotHistory: StagingRecord[] = commitHistory.map(({ snapshotHash }) =>
-        readHashDictionary(snapshotHash, TreeObject.parse),
-    );
+    const snapshotHistory: StagingRecord[] = commitHistory
+        .filter((i) => i)
+        .map(({ snapshotHash }) => readHashDictionary(snapshotHash, TreeObject.parse));
 
     // find changes in snapshot history
     const entriesFunc = ({ hash, name }) => [hash, name];
-    const diff = compareAdjacent(snapshotHistory, entriesFunc);
+    const diff = compareAdjacent([...snapshotHistory, []], entriesFunc);
 
     for (let i = 0; i < diff.length; i++) {
         console.log(commits[i], commitHistory[i].time);
