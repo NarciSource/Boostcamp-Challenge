@@ -17,7 +17,7 @@ export default function commit() {
 
     const { curTreeHash: topHash }: CommitRecord = CommitObject.parse(readHashDictionary(head));
 
-    if (index === topHash) {
+    if (index !== topHash) {
         const stagingRecord: StagingRecord = StagingArea.parse(readObjects(index));
         const snapshotHash: Hash = makeTree(stagingRecord);
 

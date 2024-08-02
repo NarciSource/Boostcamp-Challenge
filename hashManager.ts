@@ -36,5 +36,9 @@ export function writeHashDictionary(hash: Hash, data: MitObject): void {
 }
 
 export function readHashDictionary(key: Hash): any {
-    return readObjects(key);
+    try {
+        return readObjects(key);
+    } catch (e) {
+        return null;
+    }
 }
