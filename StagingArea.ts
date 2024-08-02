@@ -25,7 +25,7 @@ class StagingArea extends MitObject {
         );
     }
 
-    parse(str: string): StagingRecord {
+    parse(str: string): BlobRecord[] {
         return str.split("\n").map(BlobObject.parse);
     }
 }

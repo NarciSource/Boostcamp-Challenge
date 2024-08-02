@@ -1,20 +1,22 @@
 import { Path, readDirectory, readFile, readHEAD, readIndex } from "./fileSystem";
 import { Hash } from "./hashManager";
 import { hashObject, readHashDictionary } from "./hashObject";
+import { BlobRecord } from "./Object.Blob";
 import CommitObject from "./Object.Commit";
-import stagingArea, { StagingRecord } from "./StagingArea";
+import TreeObject, { SnapshotRecord } from "./Object.Tree";
+import stagingArea from "./StagingArea";
 
 export default async function status(): Promise<void> {
     // read staging
     const index: Hash = readIndex();
 
-    const staging: StagingRecord = stagingArea.parse(readHashDictionary(index));
+    const staging: BlobRecord[] = stagingArea.parse(readHashDictionary(index));
     const hashesOfStaging = staging.map((blobRecord) => blobRecord.hash);
 
     // read commit snapshot
     const head: Hash = readHEAD();
     const { snapshotHash } = CommitObject.parse(readHashDictionary(head));
-    const snapshot: StagingRecord = stagingArea.parse(readHashDictionary(snapshotHash));
+    const snapshot: SnapshotRecord[] = TreeObject.parse(readHashDictionary(snapshotHash));
     const hashesOfSnapshot = snapshot.map((blobRecord) => blobRecord.hash);
 
     // read current files

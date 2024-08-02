@@ -59,6 +59,12 @@ export default class TreeObject extends MitObject {
         );
         return new TreeObject(directoryName, [...files, ...directories]);
     }
+
+    static parse(str: string): SnapshotRecord[] {
+        return str
+            ?.split("\n")
+            .map((line) => (([mode, hash, name]) => ({ mode, name, hash }))(line.split(" ")));
+    }
 }
 
 export const makeTree = TreeObject.makeTree;
