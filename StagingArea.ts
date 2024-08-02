@@ -1,5 +1,5 @@
 import MitObject from "./Object";
-import BlobObject, { BlobRecord } from "./Object.Blob";
+import { BlobRecord } from "./Object.Blob";
 
 export type StagingRecord = BlobRecord[];
 
@@ -23,10 +23,6 @@ class StagingArea extends MitObject {
                 .map((blobObject) => `${blobObject.hash} ${blobObject.size} ${blobObject.name}`)
                 .join("\n"),
         );
-    }
-
-    parse(str: string): BlobRecord[] {
-        return str.split("\n").map(BlobObject.parse);
     }
 }
 

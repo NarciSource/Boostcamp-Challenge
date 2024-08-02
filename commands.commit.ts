@@ -1,16 +1,10 @@
-import {
-    readCommits,
-    readHEAD,
-    readIndex,
-    readObjects,
-    writeCommits,
-    writeHEAD,
-} from "./fileSystem";
+import { readCommits, readHEAD, readIndex, writeCommits, writeHEAD } from "./fileSystem";
 import { Hash } from "./hashManager";
 import { hashObject, readHashDictionary } from "./hashObject";
+import BlobObject from "./Object.Blob";
 import CommitObject, { CommitRecord } from "./Object.Commit";
 import { makeTree } from "./Object.Tree";
-import StagingArea, { StagingRecord } from "./StagingArea";
+import { StagingRecord } from "./StagingArea";
 
 export default function commit() {
     const head = readHEAD();
@@ -20,7 +14,7 @@ export default function commit() {
     );
 
     const index = readIndex();
-    const stagingRecord: StagingRecord = readHashDictionary(index, StagingArea.parse);
+    const stagingRecord: StagingRecord = readHashDictionary(index, BlobObject.parse);
     const tree = makeTree("root", stagingRecord);
     const snapshotHash: Hash = tree.hash;
     hashObject(tree, false);

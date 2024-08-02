@@ -24,8 +24,11 @@ export default class BlobObject extends MitObject {
         this.size = this.content.length;
     }
 
-    static parse(str: string): BlobRecord {
-        const [hash, size, name] = str.split(/\s/);
-        return { hash, size: parseInt(size), name };
+    static parse(str: string): BlobRecord[] {
+        return str
+            ?.split("\n")
+            .map((line) =>
+                (([hash, size, name]) => ({ hash, size: parseInt(size), name }))(line.split(/\s/)),
+            );
     }
 }

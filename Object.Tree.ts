@@ -3,7 +3,7 @@ import MitObject from "./Object";
 import { BlobRecord } from "./Object.Blob";
 import { StagingRecord } from "./StagingArea";
 
-export interface SnapshotRecord {
+export interface TreeRecord {
     mode: string;
     name: string;
     hash: Hash;
@@ -60,10 +60,10 @@ export default class TreeObject extends MitObject {
         return new TreeObject(directoryName, [...files, ...directories]);
     }
 
-    static parse(str: string): SnapshotRecord[] {
+    static parse(str: string): TreeRecord[] {
         return str
             ?.split("\n")
-            .map((line) => (([mode, hash, name]) => ({ mode, name, hash }))(line.split(" ")));
+            .map((line) => (([mode, hash, name]) => ({ mode, name, hash }))(line.split(/\s/)));
     }
 }
 

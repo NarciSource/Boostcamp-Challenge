@@ -124,6 +124,12 @@
 -   commit 오브젝트
 -   index = staging area
 
+#### 인터페이스
+
+-   BlobRecord [hash, size, name]
+-   TreeRecord [mode, hash, name]
+-   CommitRecord [parentHash, snapshotHash, time]
+
 #### mit 시퀀스 다이어그램
 
 ```mermaid
