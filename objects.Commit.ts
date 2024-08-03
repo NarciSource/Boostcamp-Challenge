@@ -1,5 +1,5 @@
-import Hash, { createHash } from "./Hash";
-import MitObject from "./Object";
+import Hash, { createHash } from "./collections.Hash";
+import MitObject from "./objects.Base";
 
 export interface CommitRecord {
     parentHash: Hash;

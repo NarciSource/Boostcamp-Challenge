@@ -1,10 +1,10 @@
 import { readCommits } from "./fileSystem";
 import { readHashDictionary } from "./commands.hash-object";
 import { compareAdjacent } from "./utils";
-import CommitObject, { CommitRecord } from "./Object.Commit";
-import { StagingRecord } from "./Object.StagingArea";
-import Hash from "./Hash";
-import TreeObject from "./Object.Tree";
+import CommitObject, { CommitRecord } from "./objects.Commit";
+import { StagingRecord } from "./objects.StagingArea";
+import Hash from "./collections.Hash";
+import TreeObject from "./objects.Tree";
 import chalk from "chalk";
 
 export default function log() {

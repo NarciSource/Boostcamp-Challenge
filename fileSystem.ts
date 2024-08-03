@@ -1,7 +1,7 @@
 import fs from "fs";
 import { glob } from "glob";
-import BlobObject from "./Object.Blob";
-import Hash, { createHash } from "./Hash";
+import BlobObject from "./objects.Blob";
+import Hash, { createHash } from "./collections.Hash";
 import { spawn } from "child_process";
 
 export type Path = string;

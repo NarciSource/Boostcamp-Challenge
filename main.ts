@@ -7,7 +7,7 @@ import commit from "./commands.commit";
 import log from "./commands.log";
 import checkout from "./commands.checkout";
 import restore from "./commands.restore";
-import { isHash, isShortHash } from "./Hash";
+import { isHash, isShortHash } from "./collections.Hash";
 import { Command } from "commander";
 import show from "./commands.show";
 /**

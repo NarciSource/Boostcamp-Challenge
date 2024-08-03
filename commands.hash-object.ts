@@ -1,8 +1,8 @@
 import { readObjects, writeObjects } from "./fileSystem";
-import Hash from "./Hash";
-import MitObject from "./Object";
-import BlobObject from "./Object.Blob";
-import TreeObject from "./Object.Tree";
+import Hash from "./collections.Hash";
+import MitObject from "./objects.Base";
+import BlobObject from "./objects.Blob";
+import TreeObject from "./objects.Tree";
 
 /**
  * 파일을 순회하며 blob객체 생성

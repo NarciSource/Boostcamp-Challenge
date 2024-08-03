@@ -1,8 +1,8 @@
 import { readCommits, readHEAD, writeCommits, writeHEAD, writeIndex } from "./fileSystem";
-import Hash, { createHash } from "./Hash";
+import Hash, { createHash } from "./collections.Hash";
 import log from "./commands.log";
 import { readHashDictionary } from "./commands.hash-object";
-import CommitObject from "./Object.Commit";
+import CommitObject from "./objects.Commit";
 
 export default function restore() {
     const head: Hash = readHEAD();

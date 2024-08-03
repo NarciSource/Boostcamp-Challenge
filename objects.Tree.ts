@@ -1,7 +1,7 @@
-import Hash, { createHash } from "./Hash";
-import MitObject from "./Object";
-import { BlobRecord } from "./Object.Blob";
-import { StagingRecord } from "./Object.StagingArea";
+import Hash, { createHash } from "./collections.Hash";
+import MitObject from "./objects.Base";
+import { BlobRecord } from "./objects.Blob";
+import { StagingRecord } from "./objects.StagingArea";
 
 export interface TreeRecord {
     mode: string;

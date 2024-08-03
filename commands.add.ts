@@ -1,6 +1,6 @@
 import { Path, readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
 import { hashObject } from "./commands.hash-object";
-import stagingArea from "./Object.StagingArea";
+import stagingArea from "./objects.StagingArea";
 import chalk from "chalk";
 
 /**

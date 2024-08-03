@@ -1,11 +1,11 @@
 import { Path, readDirectory, readFile, readHEAD, readIndex } from "./fileSystem";
-import Hash from "./Hash";
+import Hash from "./collections.Hash";
 import { hashObject, readHashDictionary } from "./commands.hash-object";
-import BlobObject, { BlobRecord } from "./Object.Blob";
-import TreeObject, { TreeRecord } from "./Object.Tree";
-import CommitObject from "./Object.Commit";
+import BlobObject, { BlobRecord } from "./objects.Blob";
+import TreeObject, { TreeRecord } from "./objects.Tree";
+import CommitObject from "./objects.Commit";
 import chalk from "chalk";
-import DefaultDict, { DefaultDictProperties } from "./DefaultDict";
+import DefaultDict, { DefaultDictProperties } from "./collections.DefaultDict";
 
 export default async function status(): Promise<void> {
     // collect to hash

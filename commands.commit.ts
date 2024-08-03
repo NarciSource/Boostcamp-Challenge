@@ -1,10 +1,10 @@
 import { readCommits, readHEAD, readIndex, writeCommits, writeHEAD } from "./fileSystem";
-import Hash from "./Hash";
+import Hash from "./collections.Hash";
 import { hashObject, readHashDictionary } from "./commands.hash-object";
-import BlobObject from "./Object.Blob";
-import CommitObject, { CommitRecord } from "./Object.Commit";
-import { makeTree } from "./Object.Tree";
-import { StagingRecord } from "./Object.StagingArea";
+import BlobObject from "./objects.Blob";
+import CommitObject, { CommitRecord } from "./objects.Commit";
+import { makeTree } from "./objects.Tree";
+import { StagingRecord } from "./objects.StagingArea";
 import chalk from "chalk";
 
 export default function commit() {

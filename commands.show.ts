@@ -1,5 +1,5 @@
 import { readHashDictionary } from "./commands.hash-object";
-import { createHash } from "./Hash";
+import { createHash } from "./collections.Hash";
 import { writeLess } from "./fileSystem";
 
 export default function show() {

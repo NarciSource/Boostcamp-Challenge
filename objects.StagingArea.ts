@@ -1,5 +1,5 @@
-import MitObject from "./Object";
-import { BlobRecord } from "./Object.Blob";
+import MitObject from "./objects.Base";
+import { BlobRecord } from "./objects.Blob";
 
 export type StagingRecord = BlobRecord[];
 

@@ -1,6 +1,6 @@
 import zlib from "zlib";
-import MitObject from "./Object";
-import Hash, { createHash } from "./Hash";
+import MitObject from "./objects.Base";
+import Hash, { createHash } from "./collections.Hash";
 
 export interface BlobRecord {
     hash: Hash;

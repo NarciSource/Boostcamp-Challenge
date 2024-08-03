@@ -1,8 +1,8 @@
 import { readHEAD, writeHEAD, writeIndex } from "./fileSystem";
 import { readHashDictionary } from "./commands.hash-object";
-import CommitObject from "./Object.Commit";
-import Hash, { createHash } from "./Hash";
-import TreeObject from "./Object.Tree";
+import CommitObject from "./objects.Commit";
+import Hash, { createHash } from "./collections.Hash";
+import TreeObject from "./objects.Tree";
 import chalk from "chalk";
 
 export default function checkout() {
