@@ -8,7 +8,7 @@ export type Path = string;
 export async function readDirectory(): Promise<Path[]> {
     const directoryPath = process.argv[3];
 
-    return glob(`${directoryPath}/**/*`, {
+    return glob.sync(`${directoryPath}/**/*`, {
         ignore: ["node_modules/**", ".mit/**"],
         nodir: true,
     });

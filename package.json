@@ -2,9 +2,11 @@
   "name": "day13",
   "version": "1.0.0",
   "description": "소스 저장 오브젝트",
+  "type": "module",
   "main": "main.ts",
   "scripts": {
-    "start": "ts-node main.ts",
+    "build": "npx tsc && npx babel dist --out-dir dist --extensions \".js\"",
+    "start": "node .\\dist\\main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
@@ -21,7 +23,13 @@
   },
   "homepage": "https://gist.github.com/4006ac426805369346ae36ffa9537e35",
   "devDependencies": {
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.25.2",
+    "@babel/node": "^7.25.0",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/register": "^7.24.6",
     "@types/glob": "^8.1.0",
+    "babel-plugin-add-import-extension": "^1.6.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
