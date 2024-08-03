@@ -18,7 +18,7 @@ export default class CommitObject extends MitObject {
         this.name = name;
         this.parentHash = parentHash;
         this.snapshotHash = snapshotHash;
-        this.time = new Date().toLocaleDateString();
+        this.time = new Date().toLocaleTimeString();
         this.size = this.content.length;
     }
 

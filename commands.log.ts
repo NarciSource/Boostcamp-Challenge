@@ -21,6 +21,7 @@ export default function log() {
     const entriesFunc = ({ hash, name }) => [hash, name];
     const diff = compareAdjacent([...snapshotHistory, []], entriesFunc);
 
+    // display
     for (let i = 0; i < diff.length; i++) {
         console.log(commits[i], commitHistory[i].time);
         console.log(diff[i]);

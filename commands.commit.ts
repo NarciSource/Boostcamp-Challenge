@@ -9,10 +9,8 @@ import { StagingRecord } from "./Object.StagingArea";
 export default function commit() {
     // read staging of previous commit
     const head: Hash = readHEAD();
-    const { snapshotHash: committedHash }: CommitRecord = readHashDictionary(
-        head,
-        CommitObject.parse,
-    );
+    const { snapshotHash: committedHash }: CommitRecord =
+        readHashDictionary(head, CommitObject.parse) || {};
 
     // read staging
     const index = readIndex();
@@ -32,5 +30,10 @@ export default function commit() {
         writeCommits([commit.hash, ...commits]);
 
         writeHEAD(commit.hash);
+
+        // display
+        console.log(commit);
+    } else {
+        console.log("Nothing changed.");
     }
 }

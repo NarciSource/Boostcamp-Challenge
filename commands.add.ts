@@ -26,5 +26,12 @@ export default async function add() {
     if (curStaging.hash !== preStagingHash) {
         // update
         writeIndex(curStaging.hash);
+
+        // display
+        console.log(curStaging);
+        console.log();
+        console.log(blobObjects);
+    } else {
+        console.log("Nothing changed.");
     }
 }

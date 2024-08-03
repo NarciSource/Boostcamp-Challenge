@@ -10,4 +10,10 @@ export default function init() {
     writeIndex("");
     writeHEAD("");
     writeCommits([]);
+
+    console.log(
+        `Initialized empty mit repository in ${__dirname}${
+            !process.argv[3] || process.argv[3] === "." ? "" : "\\" + process.argv[3] + "\\"
+        }\\.mit`,
+    );
 }

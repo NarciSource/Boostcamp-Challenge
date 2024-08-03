@@ -19,7 +19,7 @@ export function readIndex(): Hash {
 
     return fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
 }
-export function writeIndex(hash: Hash): void {
+export function writeIndex(hash: Hash = ""): void {
     const directoryPath = process.argv[3];
 
     fs.writeFileSync(`${directoryPath}/.mit/index`, hash);
@@ -30,7 +30,7 @@ export function readHEAD(): Hash {
 
     return fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
 }
-export function writeHEAD(hash: Hash): void {
+export function writeHEAD(hash: Hash = ""): void {
     const directoryPath = process.argv[3];
 
     fs.writeFileSync(`${directoryPath}/.mit/HEAD`, hash);
@@ -51,10 +51,7 @@ export function readObjects(hash: Hash): any {
     const directoryPath = process.argv[3];
     const [directory, file] = [hash.substring(0, 8), hash.substring(8)];
 
-    return fs.readFileSync(
-        `${directoryPath}/.mit/objects/${directory}/${file}`,
-        "utf8",
-    );
+    return fs.readFileSync(`${directoryPath}/.mit/objects/${directory}/${file}`, "utf8");
 }
 export function writeObjects(hash: Hash, buffer: Buffer): void {
     const directoryPath = process.argv[3];
