@@ -8,8 +8,13 @@ export type Path = string;
 export async function readDirectory(): Promise<Path[]> {
     const directoryPath = process.argv[3];
 
+    const ignore = fs
+        .readFileSync(`${directoryPath}/.mitignore`, "utf8")
+        .split(/\r\n/)
+        .map((each) => `${each}/**`);
+
     return glob.sync(`${directoryPath}/**/*`, {
-        ignore: ["node_modules/**", ".mit/**"],
+        ignore,
         nodir: true,
     });
 }
