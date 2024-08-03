@@ -4,8 +4,9 @@ import { hashObject, readHashDictionary } from "./commands.hash-object";
 import BlobObject, { BlobRecord } from "./objects.Blob";
 import TreeObject, { TreeRecord } from "./objects.Tree";
 import CommitObject from "./objects.Commit";
-import chalk from "chalk";
+import chalk, { ChalkInstance } from "chalk";
 import DefaultDict, { DefaultDictProperties } from "./collections.DefaultDict";
+import { Operation, Status } from "./commands.status.enum";
 
 export default async function status(): Promise<void> {
     // collect to hash
@@ -44,34 +45,37 @@ export default async function status(): Promise<void> {
     }
 
     // collect to status
-    type StatusCollection = { "new file": string[]; modified: string[]; deleted: string[] };
+    type StatusCollection = {
+        [Operation.new]: string[];
+        [Operation.modified]: string[];
+        [Operation.deleted]: string[];
+    };
     const statusDictionary = Object.entries<HashCollection>(
         hashDictionary as DefaultDictProperties<HashCollection>,
     )
-        .map(([name, { staged, committed, current }]) => {
-            let status: string = null;
-            let operation: string = null;
+        .map(([name, { staged, committed, current }]): [string, Status, Operation] => {
+            let status: Status = null;
+            let operation: Operation = null;
 
             if (!!current && !staged && !committed) {
-                status = "Untracked files";
-                operation = "new file";
+                status = Status.untracked;
+                operation = Operation.new;
             } else if (!!current && !!staged && !!committed) {
                 if (current !== staged && staged === committed) {
-                    status = "Changes not staged for commit";
-                    operation = "modified";
+                    status = Status.notStaged;
                 } else if (staged !== committed) {
-                    status = "Changes to be committed";
-                    operation = "modified";
+                    status = Status.toBeCommitted;
                 }
+                operation = Operation.modified;
             } else if (!!current && !!staged && !committed) {
-                status = "Changes to be committed";
-                operation = "new file";
+                status = Status.toBeCommitted;
+                operation = Operation.new;
             } else if (!current && !staged && !!committed) {
-                status = "Changes to be committed";
-                operation = "deleted";
+                status = Status.toBeCommitted;
+                operation = Operation.deleted;
             } else if (!current && !!staged && !!committed) {
-                status = "Changes not staged for commit";
-                operation = "deleted";
+                status = Status.notStaged;
+                operation = Operation.deleted;
             }
 
             return [name, status, operation];
@@ -84,9 +88,9 @@ export default async function status(): Promise<void> {
                 return acc;
             },
             new DefaultDict<StatusCollection>(() => ({
-                "new file": [],
-                modified: [],
-                deleted: [],
+                [Operation.new]: [],
+                [Operation.modified]: [],
+                [Operation.deleted]: [],
             })),
         );
 
@@ -97,15 +101,21 @@ export default async function status(): Promise<void> {
         console.log(status);
         for (const [operation, names] of Object.entries(operations)) {
             for (const name of names) {
-                if (status === "Changes to be committed") {
-                    console.log("\t", chalk.green(operation, ":", name));
+                let color: ChalkInstance;
+
+                switch (status) {
+                    case Status.toBeCommitted:
+                        color = chalk.green;
+                        break;
+                    case Status.notStaged:
+                        color = chalk.red;
+                        break;
+                    case Status.untracked:
+                        color = chalk.gray;
+                        break;
                 }
-                if (status === "Changes not staged for commit") {
-                    console.log("\t", chalk.red(operation, ":", name));
-                }
-                if (status === "Untracked files") {
-                    console.log("\t", chalk.gray(operation, ":", name));
-                }
+
+                console.log("\t", color(operation, ":", name));
             }
         }
         console.log();
