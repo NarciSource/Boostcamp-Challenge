@@ -311,6 +311,12 @@ sequenceDiagram
 
     <br><br>
 
+### 결과
+
+![demo](https://gist.github.com/user-attachments/assets/5cf0f938-b4f5-4c6a-9e4a-b06aec1bc15e)
+![log](https://gist.github.com/user-attachments/assets/71ebc587-cca4-4f59-9942-3be52efceb2f)
+![show](https://gist.github.com/user-attachments/assets/4c5a7e21-3bfa-4638-85d9-24e854940f6a)
+
 ## 학습 메모
 
 git 내부 4가지 object 이해  
