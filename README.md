@@ -148,6 +148,8 @@ sequenceDiagram
     History->>Unmodified: reset
 ```
 
+<br><br>
+
 1.  add
 
     ```mermaid
@@ -168,6 +170,38 @@ sequenceDiagram
             Index->>Index: update()
         end
     ```
+
+    <br><br>
+
+    ```js
+    function add
+        function hash-object
+            hash <- hashing(blob_file)
+
+            ./mit/objects/[hash] <- blob_file
+
+        function update-tree
+            tree <- [blob_hash blob_size blob_name]
+
+            hash <- hashing(tree)
+
+            ./mit/objects/[hash] <- tree
+
+
+        files
+            map to make blob_object
+            for
+                blob_hash <- hash-object(blob_object)
+                tree_hash <- update-tree(blob_hash)
+
+        pre_staging <- ./mit/index/
+
+        if diff(pre_staging, cur_staging) is not same
+
+            ./mit/index <- [file_name hash mode size]
+    ```
+
+    <br><br>
 
 2.  commit
 
@@ -194,6 +228,8 @@ sequenceDiagram
             Commit->>objects: [parentHash, snapshotHash, time]
         end
     ```
+
+    <br><br>
 
 3.  status
 
@@ -224,6 +260,19 @@ sequenceDiagram
         end
     ```
 
+    <br><br>
+
+    | Status                        | Operation | Committed | Snapshot | Staging |
+    | ----------------------------- | --------- | --------- | -------- | ------- |
+    | Untracked files               |           |           | n        |         |
+    | Changes not staged for commit | modified  | c         | n        | c       |
+    |                               | deleted   | c         |          | c       |
+    | Changes to be committed       | new file  |           | n        | n       |
+    |                               | modified  | c         | n        | n       |
+    |                               | deleted   | c         |          |         |
+
+    <br><br>
+
 4.  log
 
     ```mermaid
@@ -239,6 +288,8 @@ sequenceDiagram
         commits->>commits: compare_adjacent()
         commits->>user: difference
     ```
+
+    <br><br>
 
 5.  restore
 
@@ -258,35 +309,7 @@ sequenceDiagram
         user->>HEAD: restore_hash
     ```
 
-### pseudo code
-
-```js
-function add
-    function hash-object
-        hash <- hashing(blob_file)
-
-        ./mit/objects/[hash] <- blob_file
-
-    function update-tree
-        tree <- [blob_hash blob_size blob_name]
-
-        hash <- hashing(tree)
-
-        ./mit/objects/[hash] <- tree
-
-
-    files
-        map to make blob_object
-        for
-            blob_hash <- hash-object(blob_object)
-            tree_hash <- update-tree(blob_hash)
-
-    pre_staging <- ./mit/index/
-
-    if diff(pre_staging, cur_staging) is not same
-
-        ./mit/index <- [file_name hash mode size]
-```
+    <br><br>
 
 ## 학습 메모
 
