@@ -1,3 +1,5 @@
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import chalk from "chalk";
 import { writeCommits, writeDirectory, writeHEAD, writeIndex } from "./fileSystem";
 
@@ -12,6 +14,7 @@ export default function init() {
     writeHEAD("");
     writeCommits([]);
 
+    const __dirname = dirname(fileURLToPath(import.meta.url));
     console.log(
         chalk.red(
             `Initialized empty mit repository in ${__dirname}${
