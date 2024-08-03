@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fs from "fs";
 import init from "./commands.init";
 import add from "./commands.add";
@@ -7,6 +9,7 @@ import log from "./commands.log";
 import checkout from "./commands.checkout";
 import restore from "./commands.restore";
 import { Hash } from "./hashManager";
+import { Command } from "commander";
 /**
  * init 디렉토리명
  * add 디렉토리명
@@ -28,5 +31,20 @@ if (process.argv[4]?.length === 8) {
     }
 }
 
-const commands = { init, add, status, commit, log, checkout, restore };
-commands[process.argv[2]]();
+type Func = (...args: any[]) => void;
+const commands: [Func, string][] = [
+    [init, "Create an empty Mit repository or reinitialize an existing one"],
+    [add, "Add file contents to the index"],
+    [status, "Show the working tree status"],
+    [commit, "Record changes to the repository"],
+    [log, "Show commit logs"],
+    [checkout, "Switch branches or restore working tree files"],
+    [restore, "Restore working tree files"],
+];
+
+const program = new Command();
+
+commands.forEach(([func, description]) => {
+    program.command(func.name).description(description).action(func);
+});
+program.version("1.0.0").description("CLI for git clone").parse(process.argv);

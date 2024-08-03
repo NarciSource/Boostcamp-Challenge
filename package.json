@@ -5,12 +5,12 @@
   "type": "module",
   "main": "main.ts",
   "scripts": {
-    "build": "npx tsc && npx babel dist --out-dir dist --extensions \".js\"",
+    "build": "npx tsc && npx babel dist --out-dir dist --extensions \".js\" && npm link",
     "start": "node .\\dist\\main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "mit": "main.ts"
+    "mit": "./dist/main.js"
   },
   "repository": {
     "type": "git",
