@@ -9,6 +9,7 @@ import checkout from "./commands.checkout";
 import restore from "./commands.restore";
 import { isHash, isShortHash } from "./Hash";
 import { Command } from "commander";
+import show from "./commands.show";
 /**
  * init 디렉토리명
  * add 디렉토리명
@@ -34,6 +35,7 @@ const commands: [Func, string][] = [
     [log, "Show commit logs"],
     [checkout, "Switch branches or restore working tree files"],
     [restore, "Restore working tree files"],
+    [show, "Show various types of objects"],
 ];
 
 const program = new Command();

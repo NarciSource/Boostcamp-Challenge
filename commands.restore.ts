@@ -25,4 +25,3 @@ export default function restore() {
     console.log();
     log();
 }
-//s

@@ -23,6 +23,10 @@ export default class BlobObject extends MitObject {
         this.content = zlib.deflateSync(this.content);
         this.size = this.content.length;
     }
+    decompress(): void {
+        this.content = zlib.inflateSync(this.content);
+        this.size = this.content.length;
+    }
 
     static parse(str: string): BlobRecord[] {
         return str

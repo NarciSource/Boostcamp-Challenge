@@ -1,6 +1,7 @@
 import { readObjects, writeObjects } from "./fileSystem";
 import Hash from "./Hash";
 import MitObject from "./Object";
+import BlobObject from "./Object.Blob";
 import TreeObject from "./Object.Tree";
 
 /**
@@ -31,7 +32,12 @@ export function hashObject(mitObject: MitObject, compress = false): Hash {
 
 export function readHashDictionary(key: Hash, parser: Function): any {
     try {
-        return parser(readObjects(key));
+        const blobObject = new BlobObject(null, readObjects(key));
+        try {
+            blobObject.decompress();
+        } catch (e) {}
+
+        return parser(blobObject.content.toString());
     } catch (e) {
         return null;
     }
