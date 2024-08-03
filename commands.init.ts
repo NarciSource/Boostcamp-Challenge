@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { writeCommits, writeDirectory, writeHEAD, writeIndex } from "./fileSystem";
 
 /**
@@ -12,8 +13,10 @@ export default function init() {
     writeCommits([]);
 
     console.log(
-        `Initialized empty mit repository in ${__dirname}${
-            !process.argv[3] || process.argv[3] === "." ? "" : "\\" + process.argv[3] + "\\"
-        }\\.mit`,
+        chalk.red(
+            `Initialized empty mit repository in ${__dirname}${
+                !process.argv[3] || process.argv[3] === "." ? "" : "\\" + process.argv[3] + "\\"
+            }\\.mit`,
+        ),
     );
 }

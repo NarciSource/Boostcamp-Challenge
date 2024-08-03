@@ -5,6 +5,7 @@ import BlobObject from "./Object.Blob";
 import CommitObject, { CommitRecord } from "./Object.Commit";
 import { makeTree } from "./Object.Tree";
 import { StagingRecord } from "./Object.StagingArea";
+import chalk from "chalk";
 
 export default function commit() {
     // read staging of previous commit
@@ -34,6 +35,6 @@ export default function commit() {
         // display
         console.log(commit);
     } else {
-        console.log("Nothing changed.");
+        console.log(chalk.red("Nothing changed."));
     }
 }

@@ -4,6 +4,7 @@ import { hashObject, readHashDictionary } from "./commands.hash-object";
 import BlobObject, { BlobRecord } from "./Object.Blob";
 import CommitObject from "./Object.Commit";
 import TreeObject, { TreeRecord } from "./Object.Tree";
+import chalk from "chalk";
 
 export default async function status(): Promise<void> {
     // read staging
@@ -28,11 +29,11 @@ export default async function status(): Promise<void> {
     console.log("Changes to be committed:");
     hashes
         .filter(([hash]) => !hashesOfSnapshot.includes(hash) && !hashesOfStaging.includes(hash))
-        .forEach(([, filePath]) => console.log(filePath));
+        .forEach(([, filePath]) => console.log("\t", chalk.green(filePath)));
     console.log();
 
     console.log("Changes not staged for commit:");
     hashes
         .filter(([hash]) => !hashesOfSnapshot.includes(hash) && hashesOfStaging.includes(hash))
-        .map(([, filePath]) => console.log(filePath));
+        .map(([, filePath]) => console.log("\t", chalk.red(filePath)));
 }

@@ -5,11 +5,12 @@ import CommitObject, { CommitRecord } from "./Object.Commit";
 import { StagingRecord } from "./Object.StagingArea";
 import { Hash } from "./hashManager";
 import TreeObject from "./Object.Tree";
+import chalk from "chalk";
 
 export default function log() {
-    const commits: Hash[] = readCommits();
+    const hashes: Hash[] = readCommits();
 
-    const commitHistory: CommitRecord[] = commits.map((commitHash: Hash) =>
+    const commitHistory: CommitRecord[] = hashes.map((commitHash: Hash) =>
         readHashDictionary(commitHash, CommitObject.parse),
     );
 
@@ -23,7 +24,7 @@ export default function log() {
 
     // display
     for (let i = 0; i < diff.length; i++) {
-        console.log(commits[i], commitHistory[i].time);
+        console.log(chalk.blue(hashes[i]), commitHistory[i].time);
         console.log(diff[i]);
     }
 }

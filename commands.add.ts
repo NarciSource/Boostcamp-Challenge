@@ -1,6 +1,7 @@
 import { Path, readDirectory, readFile, readIndex, writeIndex } from "./fileSystem";
 import { hashObject } from "./commands.hash-object";
 import stagingArea from "./Object.StagingArea";
+import chalk from "chalk";
 
 /**
  * 현재 디렉토리 아래의 전체 파일 탐색
@@ -32,6 +33,6 @@ export default async function add() {
         console.log();
         console.log(blobObjects);
     } else {
-        console.log("Nothing changed.");
+        console.log(chalk.red("Nothing changed."));
     }
 }

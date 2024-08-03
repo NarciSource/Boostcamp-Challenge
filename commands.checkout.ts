@@ -3,6 +3,7 @@ import { readHashDictionary } from "./commands.hash-object";
 import CommitObject from "./Object.Commit";
 import { Hash } from "./hashManager";
 import TreeObject from "./Object.Tree";
+import chalk from "chalk";
 
 export default function checkout() {
     const head: Hash = readHEAD();
@@ -16,6 +17,6 @@ export default function checkout() {
     // display
     console.log("Snapshot");
     console.log();
-    console.log(snapshotHash);
+    console.log(chalk.blue(snapshotHash));
     console.log(...readHashDictionary(snapshotHash, TreeObject.parse));
 }
