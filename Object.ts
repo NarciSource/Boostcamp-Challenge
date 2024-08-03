@@ -1,4 +1,4 @@
-import { Hash, hashing } from "./hashManager";
+import Hash, { hashing } from "./Hash";
 
 export default abstract class MitObject {
     name: string;

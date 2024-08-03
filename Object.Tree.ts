@@ -1,4 +1,4 @@
-import { Hash } from "./hashManager";
+import Hash, { createHash } from "./Hash";
 import MitObject from "./Object";
 import { BlobRecord } from "./Object.Blob";
 import { StagingRecord } from "./Object.StagingArea";
@@ -64,7 +64,11 @@ export default class TreeObject extends MitObject {
     static parse(str: string): TreeRecord[] {
         return str
             ?.split("\n")
-            .map((line) => (([mode, hash, name]) => ({ mode, name, hash }))(line.split(/\s/)));
+            .map((line) =>
+                (([mode, hash, name]) => ({ mode, name, hash: createHash(hash) }))(
+                    line.split(/\s/),
+                ),
+            );
     }
 }
 

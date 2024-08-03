@@ -3,7 +3,7 @@ import { readHashDictionary } from "./commands.hash-object";
 import { compareAdjacent } from "./utils";
 import CommitObject, { CommitRecord } from "./Object.Commit";
 import { StagingRecord } from "./Object.StagingArea";
-import { Hash } from "./hashManager";
+import Hash from "./Hash";
 import TreeObject from "./Object.Tree";
 import chalk from "chalk";
 

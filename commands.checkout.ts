@@ -1,13 +1,13 @@
 import { readHEAD, writeHEAD, writeIndex } from "./fileSystem";
 import { readHashDictionary } from "./commands.hash-object";
 import CommitObject from "./Object.Commit";
-import { Hash } from "./hashManager";
+import Hash, { createHash } from "./Hash";
 import TreeObject from "./Object.Tree";
 import chalk from "chalk";
 
 export default function checkout() {
     const head: Hash = readHEAD();
-    const restoreHash: Hash = process.argv[4] || head;
+    const restoreHash: Hash = createHash(process.argv[4]) || head;
 
     const { snapshotHash } = readHashDictionary(restoreHash, CommitObject.parse);
 

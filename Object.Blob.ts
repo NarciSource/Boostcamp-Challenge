@@ -1,6 +1,6 @@
 import zlib from "zlib";
 import MitObject from "./Object";
-import { Hash } from "./hashManager";
+import Hash, { createHash } from "./Hash";
 
 export interface BlobRecord {
     hash: Hash;
@@ -28,7 +28,9 @@ export default class BlobObject extends MitObject {
         return str
             ?.split("\n")
             .map((line) =>
-                (([hash, size, name]) => ({ hash, size: parseInt(size), name }))(line.split(/\s/)),
+                (([hash, size, name]) => ({ hash: createHash(hash), size: parseInt(size), name }))(
+                    line.split(/\s/),
+                ),
             );
     }
 }

@@ -1,7 +1,7 @@
 import fs from "fs";
 import { glob } from "glob";
 import BlobObject from "./Object.Blob";
-import { Hash } from "./hashManager";
+import Hash, { createHash } from "./Hash";
 
 export type Path = string;
 
@@ -18,33 +18,43 @@ export async function readDirectory(): Promise<Path[]> {
         nodir: true,
     });
 }
+export function readAllHash() {
+    const directoryPath = process.argv[3];
+    const pattern = `${directoryPath}/.mit/objects/**/*`;
+    const regex = /([^\\]+)\\([^\\]+)$/;
+
+    return glob
+        .sync(pattern, { nodir: true })
+        .map((path) => regex.exec(path))
+        .map(([, prefix, suffix]) => [prefix, suffix]);
+}
 
 export function readIndex(): Hash {
     const directoryPath = process.argv[3];
 
-    return fs.readFileSync(`${directoryPath}/.mit/index`, "utf8");
+    return createHash(fs.readFileSync(`${directoryPath}/.mit/index`, "utf8"));
 }
-export function writeIndex(hash: Hash = ""): void {
+export function writeIndex(hash: Hash = createHash("")): void {
     const directoryPath = process.argv[3];
 
-    fs.writeFileSync(`${directoryPath}/.mit/index`, hash);
+    fs.writeFileSync(`${directoryPath}/.mit/index`, hash.toString());
 }
 
 export function readHEAD(): Hash {
     const directoryPath = process.argv[3];
 
-    return fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8");
+    return createHash(fs.readFileSync(`${directoryPath}/.mit/HEAD`, "utf8"));
 }
-export function writeHEAD(hash: Hash = ""): void {
+export function writeHEAD(hash: Hash = createHash("")): void {
     const directoryPath = process.argv[3];
 
-    fs.writeFileSync(`${directoryPath}/.mit/HEAD`, hash);
+    fs.writeFileSync(`${directoryPath}/.mit/HEAD`, hash.toString());
 }
 
 export function readCommits(): Hash[] {
     const directoryPath = process.argv[3];
 
-    return fs.readFileSync(`${directoryPath}/.mit/commits`, "utf8").split("\n");
+    return fs.readFileSync(`${directoryPath}/.mit/commits`, "utf8").split("\n").map(createHash);
 }
 export function writeCommits(hashes: Hash[]): void {
     const directoryPath = process.argv[3];
@@ -52,7 +62,7 @@ export function writeCommits(hashes: Hash[]): void {
     fs.writeFileSync(`${directoryPath}/.mit/commits`, hashes.join("\n"));
 }
 
-export function readObjects(hash: Hash): any {
+export function readObjects(hash: Hash): string {
     const directoryPath = process.argv[3];
     const [directory, file] = [hash.substring(0, 8), hash.substring(8)];
 

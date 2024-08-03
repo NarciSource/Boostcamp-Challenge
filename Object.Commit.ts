@@ -1,4 +1,4 @@
-import { Hash } from "./hashManager";
+import Hash, { createHash } from "./Hash";
 import MitObject from "./Object";
 
 export interface CommitRecord {
@@ -32,8 +32,8 @@ export default class CommitObject extends MitObject {
         const time = lines?.[1];
 
         return {
-            parentHash,
-            snapshotHash,
+            parentHash: createHash(parentHash),
+            snapshotHash: createHash(snapshotHash),
             time,
         };
     }

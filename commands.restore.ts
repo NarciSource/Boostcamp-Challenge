@@ -1,10 +1,14 @@
-import { readCommits, writeCommits } from "./fileSystem";
-import checkout from "./commands.checkout";
-import { Hash } from "./hashManager";
+import { readCommits, readHEAD, writeCommits, writeHEAD, writeIndex } from "./fileSystem";
+import Hash, { createHash } from "./Hash";
 import log from "./commands.log";
+import { readHashDictionary } from "./commands.hash-object";
+import CommitObject from "./Object.Commit";
 
 export default function restore() {
-    const restoreHash = process.argv[4];
+    const head: Hash = readHEAD();
+    const restoreHash = createHash(process.argv[4]) || head;
+
+    const { snapshotHash } = readHashDictionary(restoreHash, CommitObject.parse);
 
     const commits: Hash[] = readCommits();
     let index = commits.findIndex((hash) => hash === restoreHash);
@@ -13,11 +17,12 @@ export default function restore() {
 
     writeCommits(restored);
 
-    checkout();
+    writeHEAD(restoreHash);
+    writeIndex(snapshotHash);
 
     // display
-    console.log();
     console.log("Log");
     console.log();
     log();
 }
+//s

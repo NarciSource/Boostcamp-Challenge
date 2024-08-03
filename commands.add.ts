@@ -30,8 +30,6 @@ export default async function add() {
 
         // display
         console.log(curStaging);
-        console.log();
-        console.log(blobObjects);
     } else {
         console.log(chalk.red("Nothing changed."));
     }

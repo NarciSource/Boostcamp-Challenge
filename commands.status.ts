@@ -1,5 +1,5 @@
 import { Path, readDirectory, readFile, readHEAD, readIndex } from "./fileSystem";
-import { Hash } from "./hashManager";
+import Hash from "./Hash";
 import { hashObject, readHashDictionary } from "./commands.hash-object";
 import BlobObject, { BlobRecord } from "./Object.Blob";
 import CommitObject from "./Object.Commit";

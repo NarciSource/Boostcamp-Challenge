@@ -10,8 +10,8 @@ import { writeCommits, writeDirectory, writeHEAD, writeIndex } from "./fileSyste
  */
 export default function init() {
     writeDirectory("objects");
-    writeIndex("");
-    writeHEAD("");
+    writeIndex();
+    writeHEAD();
     writeCommits([]);
 
     const __dirname = dirname(fileURLToPath(import.meta.url));

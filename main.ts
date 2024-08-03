@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import fs from "fs";
 import init from "./commands.init";
 import add from "./commands.add";
 import status from "./commands.status";
@@ -8,9 +7,8 @@ import commit from "./commands.commit";
 import log from "./commands.log";
 import checkout from "./commands.checkout";
 import restore from "./commands.restore";
-import { Hash, isHash } from "./hashManager";
+import { isHash, isShortHash } from "./Hash";
 import { Command } from "commander";
-import { readCommits } from "./fileSystem";
 /**
  * init 디렉토리명
  * add 디렉토리명
@@ -22,17 +20,8 @@ import { readCommits } from "./fileSystem";
 (function processingArguments() {
     if (!process.argv[3]) {
         process.argv[3] = ".";
-    } else if (isHash(process.argv[3])) {
+    } else if (isHash(process.argv[3]) || isShortHash(process.argv[3])) {
         [process.argv[3], process.argv[4]] = [".", process.argv[3]];
-    }
-
-    if (process.argv[4]?.length === 8) {
-        const commits: Hash[] = readCommits();
-        const found = commits.filter((hash) => hash.includes(process.argv[4]));
-
-        if (found.length === 1) {
-            process.argv[4] = found[0];
-        }
     }
 })();
 

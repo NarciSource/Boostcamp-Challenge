@@ -1,5 +1,5 @@
 import { readCommits, readHEAD, readIndex, writeCommits, writeHEAD } from "./fileSystem";
-import { Hash } from "./hashManager";
+import Hash from "./Hash";
 import { hashObject, readHashDictionary } from "./commands.hash-object";
 import BlobObject from "./Object.Blob";
 import CommitObject, { CommitRecord } from "./Object.Commit";
@@ -17,14 +17,13 @@ export default function commit() {
     const index = readIndex();
     const stagingRecord: StagingRecord = readHashDictionary(index, BlobObject.parse);
     // make snapshot
-    const tree = makeTree("root", stagingRecord);
-    const snapshotHash: Hash = tree.hash;
+    const snapshot = makeTree("root", stagingRecord);
     // save tree recursive
-    hashObject(tree, false);
+    hashObject(snapshot, false);
 
     // compare
-    if (snapshotHash !== committedHash) {
-        const commit = new CommitObject("HEAD", head, snapshotHash);
+    if (snapshot.hash !== committedHash) {
+        const commit = new CommitObject("HEAD", head, snapshot.hash);
         hashObject(commit, false);
 
         const commits: Hash[] = readCommits();

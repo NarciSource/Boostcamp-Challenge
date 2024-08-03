@@ -1,5 +1,5 @@
 import { readObjects, writeObjects } from "./fileSystem";
-import { Hash } from "./hashManager";
+import Hash from "./Hash";
 import MitObject from "./Object";
 import TreeObject from "./Object.Tree";
 
@@ -22,11 +22,11 @@ export function hashObject(mitObject: MitObject, compress = false): Hash {
         mitObject.compress();
     }
 
-    const hashCode = mitObject.hash;
+    const hash = mitObject.hash;
 
-    writeObjects(hashCode, mitObject.content);
+    writeObjects(hash, mitObject.content);
 
-    return hashCode;
+    return hash;
 }
 
 export function readHashDictionary(key: Hash, parser: Function): any {
