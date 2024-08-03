@@ -8,3 +8,7 @@ export function hashing(data: Buffer): Hash {
     const hashCode = hash.digest("hex");
     return hashCode;
 }
+
+export function isHash(str: string): boolean {
+    return str.length === 64 || str.length === 8;
+}

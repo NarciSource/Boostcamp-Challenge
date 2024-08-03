@@ -8,8 +8,9 @@ import commit from "./commands.commit";
 import log from "./commands.log";
 import checkout from "./commands.checkout";
 import restore from "./commands.restore";
-import { Hash } from "./hashManager";
+import { Hash, isHash } from "./hashManager";
 import { Command } from "commander";
+import { readCommits } from "./fileSystem";
 /**
  * init 디렉토리명
  * add 디렉토리명
@@ -18,18 +19,22 @@ import { Command } from "commander";
  * log 디렉토리명
  * restore 디렉토리명 {8자리 | 64자리 커밋해시값}
  */
-[process.argv[3], process.argv[4]] = !process.argv[4]
-    ? [".", process.argv[3]]
-    : [process.argv[3], process.argv[4]];
-
-if (process.argv[4]?.length === 8) {
-    const commits: Hash[] = fs.readFileSync(`${process.argv[3]}/.mit/commits`, "utf8").split(/\s/);
-    const found = commits.filter((hash) => hash.includes(process.argv[4]));
-
-    if (found.length === 1) {
-        process.argv[4] = found[0];
+(function processingArguments() {
+    if (!process.argv[3]) {
+        process.argv[3] = ".";
+    } else if (isHash(process.argv[3])) {
+        [process.argv[3], process.argv[4]] = [".", process.argv[3]];
     }
-}
+
+    if (process.argv[4]?.length === 8) {
+        const commits: Hash[] = readCommits();
+        const found = commits.filter((hash) => hash.includes(process.argv[4]));
+
+        if (found.length === 1) {
+            process.argv[4] = found[0];
+        }
+    }
+})();
 
 type Func = (...args: any[]) => void;
 const commands: [Func, string][] = [
