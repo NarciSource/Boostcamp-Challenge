@@ -2,41 +2,53 @@ import { Path, readDirectory, readFile, readHEAD, readIndex } from "./fileSystem
 import Hash from "./Hash";
 import { hashObject, readHashDictionary } from "./commands.hash-object";
 import BlobObject, { BlobRecord } from "./Object.Blob";
-import CommitObject from "./Object.Commit";
 import TreeObject, { TreeRecord } from "./Object.Tree";
+import CommitObject from "./Object.Commit";
 import chalk from "chalk";
+import DefaultDict, { DefaultDictProperties } from "./DefaultDict";
 
 export default async function status(): Promise<void> {
+    // collect to hash
     type HashCollection = { staged: Hash; committed: Hash; current: Hash };
-    type StatusCollection = { "new file": []; modified: []; deleted: [] };
-
-    const hashDictionary: { [name: string]: HashCollection } = {};
+    const hashDictionary = new DefaultDict<HashCollection>(() => ({
+        staged: null,
+        committed: null,
+        current: null,
+    }));
 
     // read staging
     const index: Hash = readIndex();
     const stagingArea: BlobRecord[] = readHashDictionary(index, BlobObject.parse);
-    stagingArea
-        .map(({ name, hash }) => [name, hash])
-        .forEach(([name, hash]: [string, Hash]) => (hashDictionary[name].staged = hash));
+
+    for (const { name, hash } of stagingArea) {
+        hashDictionary[name].staged = hash;
+    }
 
     // read commit snapshot
     const head: Hash = readHEAD();
     const { snapshotHash } = readHashDictionary(head, CommitObject.parse);
     const tree: TreeRecord[] = readHashDictionary(snapshotHash, TreeObject.parse);
-    tree.map(({ name, hash }) => [name, hash]).forEach(([name, hash]: [string, Hash]) => {
-        hashDictionary[name] ||= {} as HashCollection;
+
+    for (const { name, hash } of tree) {
         hashDictionary[name].committed = hash;
-    });
+    }
 
     // read current files
     const filePaths: Path[] = await readDirectory();
-    const blobObjects = filePaths.map(readFile);
-    blobObjects
-        .map((blobObject) => [blobObject.name, hashObject(blobObject, true)])
-        .forEach(([name, hash]: [string, Hash]) => (hashDictionary[name].current = hash));
+    const blobObjects = filePaths
+        .map(readFile)
+        .map((blobObject) => hashObject(blobObject, true) && blobObject);
 
-    const statusDictionary: { [status: string]: StatusCollection } = Object.entries(hashDictionary)
-        .map(([name, { staged, committed, current }]): [string, string, string] => {
+    for (const { name, hash } of blobObjects) {
+        hashDictionary[name].current = hash;
+    }
+
+    // collect to status
+    type StatusCollection = { "new file": string[]; modified: string[]; deleted: string[] };
+    const statusDictionary = Object.entries<HashCollection>(
+        hashDictionary as DefaultDictProperties<HashCollection>,
+    )
+        .map(([name, { staged, committed, current }]) => {
             let status: string = null;
             let operation: string = null;
 
@@ -65,15 +77,23 @@ export default async function status(): Promise<void> {
             return [name, status, operation];
         })
         .filter(([, status, operation]) => !!status && !!operation)
-        .reduce((acc, [name, status, operation]) => {
-            acc[status] ||= {} as StatusCollection;
-            acc[status][operation] ||= [];
-            acc[status][operation].push(name);
-            return acc;
-        }, {} as { [status: string]: StatusCollection });
+        .reduce(
+            (acc, [name, status, operation]) => {
+                acc[status][operation].push(name);
+
+                return acc;
+            },
+            new DefaultDict<StatusCollection>(() => ({
+                "new file": [],
+                modified: [],
+                deleted: [],
+            })),
+        );
 
     // display
-    for (const [status, operations] of Object.entries(statusDictionary)) {
+    for (const [status, operations] of Object.entries<StatusCollection>(
+        statusDictionary as DefaultDictProperties<StatusCollection>,
+    )) {
         console.log(status);
         for (const [operation, names] of Object.entries(operations)) {
             for (const name of names) {
