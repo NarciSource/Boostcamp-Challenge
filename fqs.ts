@@ -55,6 +55,9 @@ export default function fqs(request: Request): Response {
                     header = { code: 402, message: "Row not found" };
                 }
                 break;
+            case "EEXIST":
+                header = { code: 409, message: "Table already exists" };
+                break;
             default:
                 header = { code: 500, message: "Request format error" };
                 console.error(error);
