@@ -1,6 +1,13 @@
-export default function parse(line: string): [string, string, string] {
+import { Condition } from "./File.type";
+
+export default function parse(line: string): Condition {
     const condition_regex = /Condition:\s*(\w+)(=|>|<)(\d+|"\w+")/i;
 
-    const [, condition_column, operand, condition_value] = condition_regex.exec(line);
-    return [condition_column, condition_value, operand];
+    const [, name, operand, value] = condition_regex.exec(line) as unknown as [
+        any,
+        string,
+        "=" | ">" | "<",
+        string | number,
+    ];
+    return { name, value, operand };
 }

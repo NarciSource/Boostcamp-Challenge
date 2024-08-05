@@ -23,12 +23,12 @@ export default function fqs(request: Request): Response {
     let header: Header;
     let body: Body;
     try {
+        body = query[type](request.header.table_name, request.body);
+
         header = {
             code: 200,
             message: "OK",
         };
-
-        body = query[type](request.header.table_name, request.body);
 
         if (body) {
             header = {

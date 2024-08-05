@@ -6,9 +6,20 @@ export interface Schema {
     }[];
 }
 
+type Value = string | number;
+
+export type Tuple = {
+    name: string;
+    value: Value;
+};
+
+export type Condition = Tuple & {
+    operand: "=" | ">" | "<";
+};
+
 export type Record = {
     id: number;
-    [field: string]: string | number;
+    [name: string]: Value;
 };
 
 export type Body = Record[];

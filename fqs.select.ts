@@ -1,13 +1,14 @@
 import { Body } from "./bttp.Response.type";
 import readTable from "./File.read";
+import { Condition } from "./File.type";
 
 export default function select(
     table_name: string,
-    [condition_column, condition_value]: [string, string],
+    condition: Condition,
 ): Body {
     const file = readTable(table_name);
 
-    const records = file.select([condition_column, condition_value]);
+    const records = file.select(condition);
 
     const data = JSON.stringify(records);
 

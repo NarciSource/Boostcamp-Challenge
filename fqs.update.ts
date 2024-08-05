@@ -1,17 +1,18 @@
 import { Body } from "./bttp.Response.type";
 import readTable from "./File.read";
+import { Condition } from "./File.type";
 import writeTable from "./File.write";
 
 export default function update(
     table_name: string,
-    [condition_column, condition_value]: [string, string],
+    condition: Condition,
     [restore_column, restore_value]: [string, string],
 ): Body {
     const file = readTable(table_name);
 
     const records = file.update(
         [restore_column, restore_value],
-        [condition_column, condition_value],
+        condition,
     );
     const data = JSON.stringify(records);
 

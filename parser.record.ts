@@ -9,7 +9,7 @@ export default function parse(lines: string[]): Record {
 
     const record: Record = tuple_lines
         .map(restore_parse)
-        .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {} as Record);
+        .reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {} as Record);
 
     return record;
 }

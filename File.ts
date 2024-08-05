@@ -1,4 +1,4 @@
-import { Body, Record, Schema } from "./File.type";
+import { Body, Condition, Record, Schema } from "./File.type";
 
 export default class File {
     schema: Schema;
@@ -55,8 +55,9 @@ export default class File {
         this.validate();
     }
 
-    select([condition_column, condition_value]): Record[] {
-        const records = this.body.filter((field) => field[condition_column] === condition_value);
+    select({ name, value, operand }: Condition): Record[] {
+        const records = this.body.filter((field) => compare(field[name], value, operand));
+
         if (records.length) {
             return records;
         } else {
@@ -64,11 +65,11 @@ export default class File {
         }
     }
 
-    update([restore_column, restore_value], [condition_column, condition_value]): Record[] {
-        const selected = this.select([condition_column, condition_value]);
+    update([restore_column, restore_value], condition: Condition): Record[] {
+        const selected = this.select(condition);
 
         this.body = this.body.map((record) => {
-            if (record[condition_column] === condition_value) {
+            if (compare(record[condition.name], condition.value, condition.operand)) {
                 record[restore_column] = restore_value;
             }
             return record;
@@ -78,8 +79,8 @@ export default class File {
         return selected;
     }
 
-    delete([condition_column, condition_value]): Record[] {
-        const selected = new Set(this.select([condition_column, condition_value]));
+    delete(condition: Condition): Record[] {
+        const selected = new Set(this.select(condition));
 
         this.body = this.body.filter((record) => !selected.has(record));
         return [...selected];
@@ -96,5 +97,16 @@ export default class File {
         if (!is_field_valid) {
             throw { code: "INVALID_FIELD_MATCHING" };
         }
+    }
+}
+
+function compare(a: string | number, b: string | number, operand: "=" | ">" | "<") {
+    switch (operand) {
+        case "=":
+            return a === b;
+        case ">":
+            return a > b;
+        case "<":
+            return a < b;
     }
 }
