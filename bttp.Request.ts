@@ -11,8 +11,8 @@ export default class Request {
         this.body = body;
     }
 
-    post(callback: (response: Response) => void) {
-        const response = fqs(this);
-        callback(response);
+    async post(): Promise<Response> {
+        const response = await fqs(this);
+        return response;
     }
 }

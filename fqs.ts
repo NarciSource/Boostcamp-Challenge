@@ -17,7 +17,7 @@ const query = {
     drop,
 };
 
-export default function fqs(request: Request): Response {
+export default async function fqs(request: Request): Promise<Response> {
     const type = request.header.query_type.toLocaleLowerCase();
 
     let header: Header;

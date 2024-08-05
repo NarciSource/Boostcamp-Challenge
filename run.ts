@@ -5,9 +5,8 @@ import condition_parse from "./parser.condition";
 import Request from "./bttp.Request";
 import record_parse from "./parser.record";
 import restore_parse from "./parser.restore";
-import Response from "./bttp.Response";
 
-export default function run(path: string) {
+export default async function run(path: string) {
     try {
         const [query_type, filename, ext] = path.split(".");
         const raw = fs.readFileSync(path, "utf8");
@@ -39,23 +38,21 @@ export default function run(path: string) {
                 break;
         }
 
-        const callback = (response: Response) => {
-            console.log("<<<<<<<<");
-            for (const [key, value] of Object.entries(response.header)) {
-                console.log(key, value);
-            }
-            if (response.body) {
-                console.log();
-                if (response.header["Content-Type"] === "Text/JSON") {
-                    console.log(JSON.parse(response.body.data));
-                } else {
-                    console.log(response.body.data);
-                }
-            }
-        };
-
         const request = new Request(header, body);
-        request.post(callback);
+        const response = await request.post();
+
+        console.log("<<<<<<<<");
+        for (const [key, value] of Object.entries(response.header)) {
+            console.log(key, value);
+        }
+        if (response.body) {
+            console.log();
+            if (response.header["Content-Type"] === "Text/JSON") {
+                console.log(JSON.parse(response.body.data));
+            } else {
+                console.log(response.body.data);
+            }
+        }
     } catch (e) {
         console.log(e);
         console.error("파일이 존재하지 않습니다.");
