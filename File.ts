@@ -19,6 +19,28 @@ export default class File {
         this.body = [...this.body, record];
     }
 
+    select([condition_column, condition_value]): Record[] {
+        const records = this.body.filter((field) => field[condition_column] === condition_value);
+        if (records.length) {
+            return records;
+        } else {
+            throw { code: "NOT_FOUND_RECORD" };
+        }
+    }
+
+    update([restore_column, restore_value], [condition_column, condition_value]): Record[] {
+        const selected = this.select([condition_column, condition_value]);
+
+        this.body = this.body.map((record) => {
+            if (record[condition_column] === condition_value) {
+                record[restore_column] = restore_value;
+            }
+            return record;
+        });
+
+        return selected;
+    }
+
     check_valid(record: Record): never | void {
         if (Object.keys(record).length !== this.fields.length) {
             throw { code: "INVALID_FIELD_COUNT" };

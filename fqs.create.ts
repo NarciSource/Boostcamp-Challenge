@@ -3,15 +3,11 @@ import Papa from "papaparse";
 import File from "./File";
 import { Schema } from "./File.type";
 
-export default function create(table_name: string, schema: Schema) {
+export default function create(table_name: string, schema: Schema): void {
     const file = new File(schema);
 
     const fields = file.fields;
 
-    try {
-        const save_csv = Papa.unparse({ fields });
-        fs.writeFileSync(table_name + ".csv", save_csv);
-    } catch (e) {
-        console.error(e);
-    }
+    const save_csv = Papa.unparse({ fields });
+    fs.writeFileSync(table_name + ".csv", save_csv);
 }

@@ -1,9 +1,9 @@
-import { Body, Header } from "./bttp.Response.type";
+import { Body } from "./bttp.Response.type";
 import readTable from "./File.read";
 import { Record } from "./File.type";
 import writeTable from "./File.write";
 
-export default function insert(table_name: string, record: Record): [Header, Body?] {
+export default function insert(table_name: string, record: Record): Body {
     const file = readTable(table_name);
 
     file.insert(record);
@@ -12,13 +12,5 @@ export default function insert(table_name: string, record: Record): [Header, Bod
 
     const data = JSON.stringify(record);
 
-    const header: Header = {
-        code: 200,
-        message: "OK",
-        "Content-Type": "Text/JSON",
-        "Content-Length": data.length,
-    };
-    const body: Body = { data };
-
-    return [header, body];
+    return { data };
 }

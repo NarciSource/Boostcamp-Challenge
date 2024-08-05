@@ -6,8 +6,9 @@ export default function delete_query(
     [condition_column, condition_value]: [string, string],
 ) {
     const file = readTable(table_name);
+    const records = file.select([condition_column, condition_value]);
 
-    file.body = file.body.filter((field) => field[condition_column] !== condition_value);
+    file.body = records;
 
     writeTable(table_name, file.body);
 }

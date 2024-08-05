@@ -6,7 +6,7 @@ import select from "./fqs.select";
 import update from "./fqs.update";
 import Request from "./bttp.Request";
 import Response from "./bttp.Response";
-import { Header } from "./bttp.Response.type";
+import { Body, Header } from "./bttp.Response.type";
 
 const query = {
     create,
@@ -23,7 +23,20 @@ export default function fqs(request: Request): Response {
     let header: Header;
     let body: Body;
     try {
-        [header, body] = query[type](request.header.table_name, request.body);
+        header = {
+            code: 200,
+            message: "OK",
+        };
+
+        body = query[type](request.header.table_name, request.body);
+
+        if (body) {
+            header = {
+                ...header,
+                "Content-Type": "Text/JSON",
+                "Content-Length": body.data.length,
+            };
+        }
     } catch (error) {
         switch (error.code) {
             case "ENOENT":
@@ -35,8 +48,16 @@ export default function fqs(request: Request): Response {
             case "INVALID_FIELD_MATCHING":
                 header = { code: 401, message: "Column not found" };
                 break;
+            case "NOT_FOUND_RECORD":
+                if (type === "select") {
+                    header = { code: 100, message: "Trying" };
+                } else {
+                    header = { code: 402, message: "Row not found" };
+                }
+                break;
             default:
                 header = { code: 500, message: "Request format error" };
+                console.error(error);
         }
     }
     const response = new Response(header, body);
