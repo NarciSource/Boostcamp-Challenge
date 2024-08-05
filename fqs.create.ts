@@ -1,12 +1,12 @@
 import fs from "fs";
 import Papa from "papaparse";
-import Table from "./objects.Table";
-import { Schema } from "./objects.Table.type";
+import File from "./File";
+import { Schema } from "./File.type";
 
 export default function create(table_name: string, schema: Schema) {
-    const table = new Table(schema);
+    const file = new File(schema);
 
-    const fields = table.columns;
+    const fields = file.fields;
 
     try {
         const save_csv = Papa.unparse({ fields });

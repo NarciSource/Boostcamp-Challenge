@@ -1,6 +1,6 @@
-import { Body, Record, Schema } from "./objects.Table.type";
+import { Body, Record, Schema } from "./File.type";
 
-export default class Table {
+export default class File {
     schema: Schema;
     body: Body;
 
@@ -9,8 +9,8 @@ export default class Table {
         this.body = body || [];
     }
 
-    get columns(): string[] {
-        return this.schema.columns.map((column) => column.name);
+    get fields(): string[] {
+        return this.schema.fields.map((field) => field.name);
     }
 
     insert(record: Record) {

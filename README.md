@@ -137,6 +137,15 @@
 -   _파일에서 읽은 내용_
     -   파일 시스템으로 읽고 SaaS DBS 호출하듯 사용하라는건가...?
 
+### 파일시스템 데이터베이스
+
+| 파일 시스템 | 데이터베이스 모델링 | 관계형 데이터베이스 |
+| ----------- | ------------------- | ------------------- |
+| File        | Entity              | Table               |
+| Record      | Tuple               | Row                 |
+| Key         | Id                  | Primary Key         |
+| Field       | Attribute           | Column              |
+
 ## 학습 메모
 
 [Vorpal](https://vorpal.js.org/)

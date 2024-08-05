@@ -1,12 +1,12 @@
 export interface Schema {
-    columns: {
+    fields: {
         name: string;
         type: string;
     }[];
 }
 
 export type Record = {
-    [column: string]: string;
+    [field: string]: string;
 };
 
 export type Body = Record[];

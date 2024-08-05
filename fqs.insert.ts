@@ -1,10 +1,10 @@
-import readTable from "./objects.Table.read";
-import { Record } from "./objects.Table.type";
-import writeTable from "./objects.Table.write";
+import readTable from "./File.read";
+import { Record } from "./File.type";
+import writeTable from "./File.write";
 
 export default function insert(table_name: string, record: Record) {
-    const table = readTable(table_name);
-    table.insert(record);
+    const file = readTable(table_name);
+    file.insert(record);
 
-    writeTable(table_name, table.body);
+    writeTable(table_name, file.body);
 }

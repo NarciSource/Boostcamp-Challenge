@@ -1,4 +1,4 @@
-import { Record } from "./objects.Table.type";
+import { Record } from "./File.type";
 import { zip } from "./utils";
 
 export default function parse(lines: string[]): Record {

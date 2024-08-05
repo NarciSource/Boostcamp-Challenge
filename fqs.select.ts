@@ -1,12 +1,12 @@
-import readTable from "./objects.Table.read";
+import readTable from "./File.read";
 
 export default function select(
     table_name: string,
     [condition_column, condition_value]: [string, string],
 ) {
-    const table = readTable(table_name);
+    const file = readTable(table_name);
 
-    const found_fields = table.body.filter((record) => {
+    const found_fields = file.body.filter((record) => {
         return record[condition_column] === condition_value;
     });
 

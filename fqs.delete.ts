@@ -1,13 +1,13 @@
-import readTable from "./objects.Table.read";
-import writeTable from "./objects.Table.write";
+import readTable from "./File.read";
+import writeTable from "./File.write";
 
 export default function delete_query(
     table_name: string,
     [condition_column, condition_value]: [string, string],
 ) {
-    const table = readTable(table_name);
+    const file = readTable(table_name);
 
-    table.body = table.body.filter((field) => field[condition_column] !== condition_value);
+    file.body = file.body.filter((field) => field[condition_column] !== condition_value);
 
-    writeTable(table_name, table.body);
+    writeTable(table_name, file.body);
 }
