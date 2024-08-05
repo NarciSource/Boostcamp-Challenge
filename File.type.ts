@@ -7,7 +7,8 @@ export interface Schema {
 }
 
 export type Record = {
-    [field: string]: string;
+    id: number;
+    [field: string]: string | number;
 };
 
 export type Body = Record[];

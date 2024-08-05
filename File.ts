@@ -7,7 +7,12 @@ export default class File {
     constructor(schema: Schema, body?: Body) {
         this.schema = schema;
         this.body = body || [];
+
         this.validate();
+    }
+
+    indexing() {
+        this.body = this.body.map((record, id) => ({ ...record, id }));
     }
 
     validate() {
@@ -28,6 +33,7 @@ export default class File {
                 }
             }
         }
+        this.indexing();
     }
 
     get fields(): string[] {
