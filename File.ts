@@ -12,7 +12,7 @@ export default class File {
     }
 
     indexing() {
-        this.body = this.body.map((record, id) => ({ ...record, id }));
+        this.body = this.body.map((record, index) => ({ ...record, id: index + 1 }));
     }
 
     validate() {
@@ -76,6 +76,13 @@ export default class File {
 
         this.validate();
         return selected;
+    }
+
+    delete([condition_column, condition_value]): Record[] {
+        const selected = new Set(this.select([condition_column, condition_value]));
+
+        this.body = this.body.filter((record) => !selected.has(record));
+        return [...selected];
     }
 
     validate_insert(record: Record): never | void {
