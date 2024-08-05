@@ -21,7 +21,7 @@ export default function select(
             "Content-Type": "Text/JSON",
             "Content-Length": data.length,
         };
-        const body = { data };
+        const body: Body = { data };
 
         return [header, body];
     } else {

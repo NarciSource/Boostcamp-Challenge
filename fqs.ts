@@ -25,10 +25,18 @@ export default function fqs(request: Request): Response {
     try {
         [header, body] = query[type](request.header.table_name, request.body);
     } catch (error) {
-        if (error.code === "ENOENT") {
-            header = { code: 300, message: "Table not found" };
-        } else {
-            header = { code: 500, message: "Request format error" };
+        switch (error.code) {
+            case "ENOENT":
+                header = { code: 300, message: "Table not found" };
+                break;
+            case "INVALID_FIELD_COUNT":
+                header = { code: 400, message: "Column not matched" };
+                break;
+            case "INVALID_FIELD_MATCHING":
+                header = { code: 401, message: "Column not found" };
+                break;
+            default:
+                header = { code: 500, message: "Request format error" };
         }
     }
     const response = new Response(header, body);
