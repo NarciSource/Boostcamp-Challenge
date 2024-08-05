@@ -1,3 +1,4 @@
+import { code } from "./File.code";
 import { Body, Condition, Record, Schema, Tuple } from "./File.type";
 
 export default class File {
@@ -21,26 +22,26 @@ export default class File {
 
         for (const record of this.body) {
             if (this.fields.length <= 1 || this.fields.length >= 9) {
-                throw { code: "INVALID_FIELD_LENGTH" };
+                throw { code: code.INVALID_FIELD_LENGTH };
             }
 
             if (Object.keys(record).length !== this.fields.length) {
-                throw { code: "INVALID_FORMAT" };
+                throw { code: code.INVALID_FORMAT };
             }
 
             for (const [name, value] of Object.entries(record)) {
                 const type = this.schema.fields[name].type;
 
                 if (type === "Numeric" && isNaN(Number(value))) {
-                    throw { code: "INVALID_TYPE" };
+                    throw { code: code.INVALID_TYPE };
                 }
 
                 if (/\s/.test(value.toString())) {
-                    throw { code: "INVALID_WHITESPACE" };
+                    throw { code: code.INVALID_WHITESPACE };
                 }
 
                 if (value === null) {
-                    throw { code: "INVALID_NULL_VALUE" };
+                    throw { code: code.INVALID_NULL_VALUE };
                 }
             }
         }
@@ -63,7 +64,7 @@ export default class File {
         if (records.length) {
             return records;
         } else {
-            throw { code: "NOT_FOUND_RECORD" };
+            throw { code: code.NOT_FOUND_RECORD };
         }
     }
 
@@ -90,14 +91,14 @@ export default class File {
 
     validate_insert(record: Record): never | void {
         if (Object.keys(record).length !== this.fields.length - 1) {
-            throw { code: "INVALID_FIELD_COUNT" };
+            throw { code: code.INVALID_FIELD_COUNT };
         }
 
         const schema_field_set = new Set(this.fields);
         const is_field_valid = Object.keys(record).every((field) => schema_field_set.has(field));
 
         if (!is_field_valid) {
-            throw { code: "INVALID_FIELD_MATCHING" };
+            throw { code: code.INVALID_FIELD_MATCHING };
         }
     }
 }

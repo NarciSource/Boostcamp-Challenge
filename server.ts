@@ -1,6 +1,8 @@
 import Request from "./bttp.Request";
 import Response from "./bttp.Response";
 import { Header, Body } from "./bttp.Response.type";
+import { code } from "./File.code";
+import { code as fqs_code } from "./fqs.code";
 import fqs from "./fqs";
 
 export default async function server(request: Request): Promise<Response> {
@@ -26,24 +28,25 @@ export default async function server(request: Request): Promise<Response> {
                 };
             }
         } catch (error) {
+            console.log(error);
             switch (error.code) {
-                case "ENOENT":
+                case fqs_code.ENOENT:
                     header = { code: 300, message: "Table not found" };
                     break;
-                case "INVALID_FIELD_COUNT":
+                case code.INVALID_FIELD_COUNT:
                     header = { code: 400, message: "Column not matched" };
                     break;
-                case "INVALID_FIELD_MATCHING":
+                case code.INVALID_FIELD_MATCHING:
                     header = { code: 401, message: "Column not found" };
                     break;
-                case "NOT_FOUND_RECORD":
+                case code.NOT_FOUND_RECORD:
                     if (type === "select") {
                         header = { code: 100, message: "Trying" };
                     } else {
                         header = { code: 402, message: "Row not found" };
                     }
                     break;
-                case "EEXIST":
+                case fqs_code.EEXIST:
                     header = { code: 409, message: "Table already exists" };
                     break;
                 default:
