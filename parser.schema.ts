@@ -1,12 +1,12 @@
 import { Schema } from "./File.type";
 
 export default function parse(lines: string[]): Schema {
-    const column_regex = /Column:\s*(\w+)\s*=\s*(\w+)/;
+    const column_regex = /Column:\s*(\w+)\s*=\s*(String|Numeric)/;
 
     try {
         const fields: Schema["fields"] = lines
             .map((line) => column_regex.exec(line))
-            .map(([, name, type]) => ({ name, type }));
+            .map(([, name, type]) => ({ [name]: { type } }));
 
         return { fields };
     } catch (e) {

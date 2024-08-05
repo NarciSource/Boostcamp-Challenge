@@ -1,7 +1,8 @@
 export interface Schema {
     fields: {
-        name: string;
-        type: string;
+        [name: string]: {
+            type: string;
+        };
     }[];
 }
 

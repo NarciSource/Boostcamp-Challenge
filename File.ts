@@ -7,16 +7,34 @@ export default class File {
     constructor(schema: Schema, body?: Body) {
         this.schema = schema;
         this.body = body || [];
+        this.validate();
+    }
+
+    validate() {
+        for (const record of this.body) {
+            if (Object.keys(record).length !== this.fields.length) {
+                throw { code: "INVALID_FORMAT" };
+            }
+
+            for (const [name, value] of Object.entries(record)) {
+                const type = this.schema.fields[name].type;
+
+                if (type === "Numeric" && isNaN(Number(value))) {
+                    throw { code: "INVALID_TYPE" };
+                }
+            }
+        }
     }
 
     get fields(): string[] {
-        return this.schema.fields.map((field) => field.name);
+        return Object.keys(this.schema.fields);
     }
 
     insert(record: Record) {
-        this.check_valid(record);
+        this.validate_insert(record);
 
         this.body = [...this.body, record];
+        this.validate();
     }
 
     select([condition_column, condition_value]): Record[] {
@@ -38,15 +56,16 @@ export default class File {
             return record;
         });
 
+        this.validate();
         return selected;
     }
 
-    check_valid(record: Record): never | void {
+    validate_insert(record: Record): never | void {
         if (Object.keys(record).length !== this.fields.length) {
             throw { code: "INVALID_FIELD_COUNT" };
         }
 
-        const schema_field_set = new Set(this.schema.fields.map(({ name }) => name));
+        const schema_field_set = new Set(this.fields);
         const is_field_valid = Object.keys(record).every((field) => schema_field_set.has(field));
 
         if (!is_field_valid) {
