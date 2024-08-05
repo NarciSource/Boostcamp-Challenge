@@ -1,10 +1,10 @@
-export interface Schema {
+export type Schema = {
     fields: {
         [name: string]: {
             type: "Numeric" | "String";
         };
     };
-}
+};
 
 type Value = string | number;
 

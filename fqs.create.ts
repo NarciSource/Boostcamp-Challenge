@@ -3,6 +3,7 @@ import Papa from "papaparse";
 import File from "./File";
 import { Schema } from "./File.type";
 import { code } from "./fqs.code";
+import { writeMeta } from "./fqs.meta";
 
 export default function create(file_name: string, schema: Schema): void {
     const file = new File(schema);
@@ -14,5 +15,6 @@ export default function create(file_name: string, schema: Schema): void {
         throw { code: code.EEXIST };
     }
 
+    writeMeta(file_name, schema);
     fs.writeFileSync(file_name + ".csv", save_csv);
 }
