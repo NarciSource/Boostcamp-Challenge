@@ -1,4 +1,4 @@
-import { Tuple } from "./File.type";
+import { Tuple } from "./parser.type";
 
 export default function parse([column_line, value_line]: [string, string]): Tuple {
     const column_regex = /Column:\s*(\w+)/;

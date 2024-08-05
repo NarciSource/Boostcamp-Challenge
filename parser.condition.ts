@@ -1,4 +1,4 @@
-import { Condition } from "./File.type";
+import { Condition } from "./parser.type";
 
 export default function parse(line: string): Condition {
     const condition_regex = /Condition:\s*(\w+)(=|>|<)(\d+|"\w+")/i;

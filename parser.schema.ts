@@ -1,4 +1,4 @@
-import { Schema } from "./File.type";
+import { Schema } from "./parser.type";
 
 export default function parse(lines: string[]): Schema {
     const column_regex = /Column:\s*(\w+)\s*=\s*(String|Numeric)/;

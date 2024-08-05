@@ -1,5 +1,5 @@
-import { Record } from "./File.type";
 import { zip } from "./utils";
+import { Record } from "./parser.type";
 import restore_parse from "./parser.restore";
 
 export default function parse(lines: string[]): Record {

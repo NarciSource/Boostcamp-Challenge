@@ -1,4 +1,4 @@
-import { Body, Condition, Record, Schema } from "./File.type";
+import { Body, Condition, Record, Schema, Tuple } from "./File.type";
 
 export default class File {
     schema: Schema;
@@ -65,12 +65,12 @@ export default class File {
         }
     }
 
-    update([restore_column, restore_value], condition: Condition): Record[] {
+    update(restore: Tuple, condition: Condition): Record[] {
         const selected = this.select(condition);
 
         this.body = this.body.map((record) => {
             if (compare(record[condition.name], condition.value, condition.operand)) {
-                record[restore_column] = restore_value;
+                record[restore.name] = restore.value;
             }
             return record;
         });
