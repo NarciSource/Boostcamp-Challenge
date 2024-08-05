@@ -1,29 +1,45 @@
 import fs from "fs";
-import { create } from "./fqs.create";
-import { insert } from "./fqs.insert";
-import delete_query from "./fqs.delete";
-import update from "./fqs.update";
-import select from "./fqs.select";
-import drop from "./fqs.drop";
-
-const fqs = {
-    create,
-    insert,
-    delete: delete_query,
-    update,
-    select,
-    drop,
-};
+import header_parse from "./parser.header";
+import schema_parse from "./parser.schema";
+import condition_parse from "./parser.condition";
+import Request from "./bttp.Request";
+import record_parse from "./parser.record";
+import restore_parse from "./parser.restore";
 
 export default function run(path: string) {
     try {
         const [query_type, filename, ext] = path.split(".");
-        const file = fs.readFileSync(path, "utf8");
+        const raw = fs.readFileSync(path, "utf8");
 
         console.log(">>>>>>>>");
-        console.log(file);
+        console.log(raw);
 
-        fqs[query_type](file);
+        const header = header_parse(raw.split("\r\n")[0]);
+
+        let body: any;
+        switch (query_type) {
+            case "create":
+                body = schema_parse(raw.split("\r\n").slice(1));
+                break;
+            case "delete":
+                body = condition_parse(raw.split("\r\n")[1]);
+                break;
+            case "insert":
+                body = record_parse(raw.split("\r\n").slice(1));
+                break;
+            case "select":
+                body = condition_parse(raw.split("\r\n")[1]);
+                break;
+            case "update":
+                body = {
+                    condition: condition_parse(raw.split("\r\n")[3]),
+                    restore: restore_parse(raw.split("\r\n").slice(1, 3)),
+                };
+                break;
+        }
+
+        const request = new Request(header, body);
+        request.post();
     } catch (e) {
         console.log(e);
         console.error("파일이 존재하지 않습니다.");

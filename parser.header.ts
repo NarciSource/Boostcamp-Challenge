@@ -1,4 +1,4 @@
-import { Header } from "./objects.Request";
+import { Header } from "./bttp.Request.type";
 
 export default function parse(raw: string): Header {
     const header_regex = /(\w+) (\w+) (\w+)/;
