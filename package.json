@@ -18,7 +18,11 @@
   },
   "homepage": "https://gist.github.com/11167c02d574a6373104a82350b935fc",
   "devDependencies": {
+    "@types/vorpal": "^1.12.8",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "vorpal": "^1.12.0"
   }
 }
