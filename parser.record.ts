@@ -6,12 +6,12 @@ export default function parse(lines: string[]): Record {
     const field_regex = /Value:\s*(\d+|"[\w\s]+")/;
 
     const column_names = lines
-        .slice(1, 1 + (lines.length - 1) / 2)
+        .slice(0, lines.length / 2)
         .map((line) => column_regex.exec(line))
         .map(([, name]) => name);
 
     const column_values = lines
-        .slice(1 + (lines.length - 1) / 2)
+        .slice(lines.length / 2)
         .map((line) => field_regex.exec(line))
         .map(([, value]) => value);
 

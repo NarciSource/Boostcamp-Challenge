@@ -1,9 +1,9 @@
-export default function parse(lines: string[]): [string, string] {
+export default function parse(column_line: string, value_line: string): [string, string] {
     const column_regex = /Column:\s*(\w+)/;
     const value_regex = /Value:\s*"(\w+)"/;
 
-    const [, restore_column] = column_regex.exec(lines[1]);
-    const [, restore_value] = value_regex.exec(lines[2]);
+    const [, restore_column] = column_regex.exec(column_line);
+    const [, restore_value] = value_regex.exec(value_line);
 
     return [restore_column, restore_value];
 }
