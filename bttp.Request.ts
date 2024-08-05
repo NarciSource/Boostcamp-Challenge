@@ -1,6 +1,6 @@
 import { Header } from "./bttp.Request.type";
 import Response from "./bttp.Response";
-import fqs from "./fqs";
+import server from "./server";
 
 export default class Request {
     header: Header;
@@ -12,7 +12,7 @@ export default class Request {
     }
 
     async post(): Promise<Response> {
-        const response = await fqs(this);
+        const response = await server(this);
         return response;
     }
 }
