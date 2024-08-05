@@ -31,6 +31,14 @@ export default class File {
                 if (type === "Numeric" && isNaN(Number(value))) {
                     throw { code: "INVALID_TYPE" };
                 }
+
+                if (/\s/.test(value.toString())) {
+                    throw { code: "INVALID_WHITESPACE" };
+                }
+
+                if (value === null) {
+                    throw { code: "INVALID_NULL_VALUE" };
+                }
             }
         }
         this.indexing();
