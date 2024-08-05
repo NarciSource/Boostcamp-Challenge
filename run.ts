@@ -34,7 +34,7 @@ export default function run(path: string) {
             case "update":
                 body = {
                     condition: condition_parse(raw.split("\r\n")[3]),
-                    restore: restore_parse(...(raw.split("\r\n").slice(1, 3) as [string, string])),
+                    restore: restore_parse(raw.split("\r\n").slice(1, 3) as [string, string]),
                 };
                 break;
         }

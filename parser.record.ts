@@ -1,24 +1,15 @@
 import { Record } from "./File.type";
 import { zip } from "./utils";
+import restore_parse from "./parser.restore";
 
 export default function parse(lines: string[]): Record {
-    const column_regex = /Column:\s*(\w+)/;
-    const field_regex = /Value:\s*(\d+|"[\w\s]+")/;
+    const column_lines = lines.slice(0, lines.length / 2);
+    const value_lines = lines.slice(lines.length / 2);
+    const tuple_lines = [...zip(column_lines, value_lines)] as [string, string][];
 
-    const column_names = lines
-        .slice(0, lines.length / 2)
-        .map((line) => column_regex.exec(line))
-        .map(([, name]) => name);
-
-    const column_values = lines
-        .slice(lines.length / 2)
-        .map((line) => field_regex.exec(line))
-        .map(([, value]) => value);
-
-    const record: Record = [...zip(column_names, column_values)].reduce(
-        (acc, [name, value]) => ({ ...acc, [name]: value }),
-        {} as Record,
-    );
+    const record: Record = tuple_lines
+        .map(restore_parse)
+        .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {} as Record);
 
     return record;
 }
