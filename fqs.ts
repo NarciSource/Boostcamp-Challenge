@@ -19,18 +19,10 @@ const query = {
 export default function fqs(request: Request): Response {
     const type = request.header.query_type.toLocaleLowerCase();
 
-    let code: number;
-    let message: string;
     try {
-        query[type](request.header.table_name, request.body);
+        const [header, body] = query[type](request.header.table_name, request.body);
 
-        code = 200;
-        message = "OK";
-    } catch ([error_code, error_message]) {
-        code = error_code;
-        message = error_message;
-    }
-
-    const response = new Response({ code, message }, null);
-    return response;
+        const response = new Response(header, body);
+        return response;
+    } catch (e) {}
 }

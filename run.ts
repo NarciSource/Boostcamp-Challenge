@@ -34,16 +34,23 @@ export default function run(path: string) {
             case "update":
                 body = {
                     condition: condition_parse(raw.split("\r\n")[3]),
-                    restore: restore_parse(raw.split("\r\n").slice(1, 3)),
+                    restore: restore_parse(...(raw.split("\r\n").slice(1, 3) as [string, string])),
                 };
                 break;
         }
 
         const callback = (response: Response) => {
             console.log("<<<<<<<<");
-            console.log(response.header.code, response.header.message);
+            for (const [key, value] of Object.entries(response.header)) {
+                console.log(key, value);
+            }
             if (response.body) {
-                console.log(response.body);
+                console.log();
+                if (response.header["Content-Type"] === "Text/JSON") {
+                    console.log(JSON.parse(response.body.data));
+                } else {
+                    console.log(response.body.data);
+                }
             }
         };
 
