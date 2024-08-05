@@ -1,10 +1,12 @@
 import fs from "fs";
 import { create } from "./fqs.create";
 import { insert } from "./fqs.insert";
+import delete_query from "./fqs.delete";
 
 const fqs = {
     create,
     insert,
+    delete: delete_query,
 };
 
 export default function run(path: string) {
@@ -14,7 +16,7 @@ export default function run(path: string) {
 
         fqs[query_type](file);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         console.error("파일이 존재하지 않습니다.");
     }
 }
