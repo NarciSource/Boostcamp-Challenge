@@ -42,8 +42,11 @@ export default async function run(path: string) {
         const response = await request.post();
 
         console.log("<<<<<<<<");
+        console.log(response.header.code, response.header.message);
         for (const [key, value] of Object.entries(response.header)) {
-            console.log(key, value);
+            if (key !== "code" && key !== "message") {
+                console.log(key, value);
+            }
         }
         if (response.body) {
             console.log();

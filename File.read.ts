@@ -3,8 +3,8 @@ import Papa from "papaparse";
 import File from "./File";
 import { Schema } from "./File.type";
 
-export default function readTable(table_name: string): File {
-    const raw = fs.readFileSync(table_name + ".csv", "utf8");
+export default function readFile(file_name: string): File {
+    const raw = fs.readFileSync(file_name + ".csv", "utf8");
     const csv = Papa.parse(raw, { header: true, skipEmptyLines: true });
 
     const fields = csv.meta.fields.reduce(

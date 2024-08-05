@@ -1,5 +1,5 @@
 export interface Header {
     query_type: string;
-    table_name: string;
+    file_name: string;
     bttp: string;
 }

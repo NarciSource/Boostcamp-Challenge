@@ -1,8 +1,8 @@
-import readTable from "./File.read";
+import readFile from "./File.read";
 import { Condition, Record } from "./File.type";
 
-export default function select(table_name: string, condition: Condition): Record[] {
-    const file = readTable(table_name);
+export default function select(file_name: string, condition: Condition): Record[] {
+    const file = readFile(file_name);
 
     const records = file.select(condition);
 

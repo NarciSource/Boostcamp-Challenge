@@ -1,13 +1,13 @@
-import readTable from "./File.read";
+import readFile from "./File.read";
 import { Condition, Record } from "./File.type";
-import writeTable from "./File.write";
+import writeFile from "./File.write";
 
-export default function delete_query(table_name: string, condition: Condition): Record[] {
-    const file = readTable(table_name);
+export default function delete_query(file_name: string, condition: Condition): Record[] {
+    const file = readFile(file_name);
 
     const records = file.delete(condition);
 
-    writeTable(table_name, file.body);
+    writeFile(file_name, file.body);
 
     return records;
 }

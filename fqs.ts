@@ -14,8 +14,8 @@ const query = {
     drop,
 };
 
-export default async function fqs(type: string, table_name: string, arg: any): Promise<string> {
-    const data = query[type](table_name, arg);
+export default async function fqs(type: string, file_name: string, arg: any): Promise<string> {
+    const data = query[type](file_name, arg);
 
     return JSON.stringify(data);
 }

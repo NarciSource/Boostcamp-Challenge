@@ -12,7 +12,7 @@ export default async function server(request: Request): Promise<Response> {
         let header: Header;
         let body: Body;
         try {
-            const data = await fqs(type, request.header.table_name, request.body);
+            const data = await fqs(type, request.header.file_name, request.body);
             body = { data };
 
             header = {
@@ -28,7 +28,6 @@ export default async function server(request: Request): Promise<Response> {
                 };
             }
         } catch (error) {
-            console.log(error);
             switch (error.code) {
                 case fqs_code.ENOENT:
                     header = { code: 300, message: "Table not found" };
@@ -51,7 +50,6 @@ export default async function server(request: Request): Promise<Response> {
                     break;
                 default:
                     header = { code: 500, message: "Request format error" };
-                    console.error(error);
             }
         }
         const response = new Response(header, body);
