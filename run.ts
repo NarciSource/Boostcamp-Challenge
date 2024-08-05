@@ -1,9 +1,17 @@
 import fs from "fs";
-import RequestObject from "./objects.Request";
+import { create } from "./fqs.create";
 
-export default function run(filename: string) {
-    const file = fs.readFileSync(filename, "utf8");
+const fqs = {
+    create,
+};
 
-    const requestObject = RequestObject.parse(file);
-    console.log(requestObject);
+export default function run(path: string) {
+    try {
+        const [query_type, filename, ext] = path.split(".");
+        const file = fs.readFileSync(path, "utf8");
+
+        fqs[query_type](file);
+    } catch (e) {
+        console.error("파일이 존재하지 않습니다.");
+    }
 }

@@ -23,6 +23,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "json2csv": "^6.0.0-alpha.2",
     "vorpal": "^1.12.0"
   }
 }
