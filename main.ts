@@ -1,9 +1,10 @@
 import Vorpal, { Args } from "vorpal";
+import run from "./run";
 
 const cli = new Vorpal();
 
 cli.command("run <file>", "Input a query file and run it.").action(async function (args: Args) {
-    this.log(args.file);
+    run(args.file);
 });
 
 cli.delimiter("fqs$").show();

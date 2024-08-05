@@ -1,0 +1,4 @@
+CREATE billboard BTTP
+Column: singer=String
+Column: year=Numeric
+column: song=String
