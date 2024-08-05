@@ -1,31 +1,22 @@
-import fs from "fs";
-import Papa from "papaparse";
-import RequestObject, { Field } from "./objects.Request";
+import { Field } from "./objects.Request";
+import readTable from "./readTable";
+import header_parse from "./headerParse";
 import { zip } from "./utils";
+import writeTable from "./writeTable";
 
-export function insert(file: string) {
-    const header_regex = /(\w+) (\w+) (\w+)/;
+export function insert(raw: string) {
+    const header = header_parse(raw.split("\r\n")[0]);
+    const field = parse(raw.split("\r\n").slice(1));
+
+    const table = readTable(header);
+    table.insert(field);
+
+    writeTable(header.table_name, table.body);
+}
+
+function parse(lines: string[]): Field {
     const column_regex = /Column:\s*(\w+)/;
     const field_regex = /Value:\s*(\d+|"[\w\s]+")/;
-
-    console.log(">>>>>>>>");
-    console.log(file);
-
-    const lines = file.split("\r\n");
-    const [, query_type, table_name, bttp] = header_regex.exec(lines[0]);
-
-    const csv = fs.readFileSync(table_name + ".csv", "utf8");
-    const result = Papa.parse(csv, { header: true, skipEmptyLines: true });
-
-    const header = { query_type, bttp };
-    const columns = result.meta.fields.map((name: string) => ({ name, type: "String" }));
-    const schema = { table_name, columns };
-
-    const request_object = new RequestObject(header, schema);
-
-    if (lines.length - 1 !== columns.length * 2) {
-        throw "";
-    }
 
     const column_names = lines
         .slice(1, 1 + (lines.length - 1) / 2)
@@ -42,12 +33,5 @@ export function insert(file: string) {
         {} as Field,
     );
 
-    request_object.insert(field);
-
-    const save_csv = Papa.unparse(request_object.body, { quote: false });
-    console.log(save_csv);
-    fs.writeFileSync(table_name + ".csv", save_csv);
-
-    console.log("<<<<<<<<");
-    console.log(request_object.body);
+    return field;
 }

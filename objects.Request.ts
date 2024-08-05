@@ -1,10 +1,10 @@
-interface Header {
+export interface Header {
     query_type: string;
+    table_name: string;
     bttp: string;
 }
 
-interface Schema {
-    table_name: string;
+export interface Schema {
     columns: {
         name: string;
         type: string;
@@ -15,49 +15,24 @@ export interface Field {
     [column: string]: string;
 }
 
-type Body = Field[];
+export type Body = Field[];
 
 export default class RequestObject {
     header: Header;
     schema: Schema;
-    body: Body = [];
+    body: Body;
 
-    constructor(header: Header, schema: Schema) {
+    constructor(header: Header, schema: Schema, body?: Body) {
         this.header = header;
         this.schema = schema;
+        this.body = body || [];
+    }
+
+    get columns(): string[] {
+        return this.schema.columns.map((column) => column.name);
     }
 
     insert(field: Field) {
         this.body = [...this.body, field];
     }
-
-    static make(str: string): RequestObject {
-        try {
-            const header_regex = /(\w+) (\w+) (\w+)/;
-            const column_regex = /[c|C]olumn:\s*(\w+)\s*=\s*(\w+)/;
-
-            console.log(">>>>>>>>");
-            console.log(str);
-
-            const lines = str.split("\r\n");
-            const [, query_type, table_name, bttp] = header_regex.exec(lines[0]);
-            const header: Header = { query_type, bttp };
-
-            const columns: Schema["columns"] = lines
-                .slice(1)
-                .map((line) => column_regex.exec(line))
-                .map(([, name, type]) => ({ name, type }));
-
-            const schema: Schema = {
-                table_name,
-                columns,
-            };
-
-            return new RequestObject(header, schema);
-        } catch (e) {
-            console.error("파일이 올바르지 않은 포맷입니다.");
-        }
-    }
 }
-
-export const make_table = RequestObject.make;

@@ -20,6 +20,9 @@ export default function run(path: string) {
         const [query_type, filename, ext] = path.split(".");
         const file = fs.readFileSync(path, "utf8");
 
+        console.log(">>>>>>>>");
+        console.log(file);
+
         fqs[query_type](file);
     } catch (e) {
         console.log(e);
