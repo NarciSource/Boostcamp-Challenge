@@ -12,12 +12,15 @@ export default class File {
     }
 
     indexing() {
+        this.schema.fields = { ...this.schema.fields, id: { type: "Numeric" } };
         this.body = this.body.map((record, index) => ({ ...record, id: index + 1 }));
     }
 
     validate() {
+        this.indexing();
+
         for (const record of this.body) {
-            if (this.fields.length < 1 || this.fields.length > 9) {
+            if (this.fields.length <= 1 || this.fields.length >= 9) {
                 throw { code: "INVALID_FIELD_LENGTH" };
             }
 
@@ -41,7 +44,6 @@ export default class File {
                 }
             }
         }
-        this.indexing();
     }
 
     get fields(): string[] {
@@ -87,7 +89,7 @@ export default class File {
     }
 
     validate_insert(record: Record): never | void {
-        if (Object.keys(record).length !== this.fields.length) {
+        if (Object.keys(record).length !== this.fields.length - 1) {
             throw { code: "INVALID_FIELD_COUNT" };
         }
 
