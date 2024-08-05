@@ -11,19 +11,30 @@ interface Schema {
     }[];
 }
 
+export interface Field {
+    [column: string]: string;
+}
+
+type Body = Field[];
+
 export default class RequestObject {
     header: Header;
     schema: Schema;
+    body: Body = [];
 
     constructor(header: Header, schema: Schema) {
         this.header = header;
         this.schema = schema;
     }
 
+    insert(field: Field) {
+        this.body = [...this.body, field];
+    }
+
     static make(str: string): RequestObject {
         try {
             const header_regex = /(\w+) (\w+) (\w+)/;
-            const columns_regex = /\s*[c|C]olumn:\s*(\w+)\s*=\s*(\w+)\s*/;
+            const column_regex = /[c|C]olumn:\s*(\w+)\s*=\s*(\w+)/;
 
             console.log(">>>>>>>>");
             console.log(str);
@@ -34,7 +45,7 @@ export default class RequestObject {
 
             const columns: Schema["columns"] = lines
                 .slice(1)
-                .map((line) => columns_regex.exec(line))
+                .map((line) => column_regex.exec(line))
                 .map(([, name, type]) => ({ name, type }));
 
             const schema: Schema = {
