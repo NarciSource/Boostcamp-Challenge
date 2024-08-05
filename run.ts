@@ -4,6 +4,7 @@ import { insert } from "./fqs.insert";
 import delete_query from "./fqs.delete";
 import update from "./fqs.update";
 import select from "./fqs.select";
+import drop from "./fqs.drop";
 
 const fqs = {
     create,
@@ -11,6 +12,7 @@ const fqs = {
     delete: delete_query,
     update,
     select,
+    drop,
 };
 
 export default function run(path: string) {

@@ -113,7 +113,7 @@
     DROP table_name BTTP
     ```
 
-    -   [ ] 테이블 이름(table_name)과 동일한 CSV 파일도 같이 삭제한다.
+    -   [x] 테이블 이름(table_name)과 동일한 CSV 파일도 같이 삭제한다.
 
 ## 문제 해결 과정
 
