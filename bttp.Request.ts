@@ -1,4 +1,5 @@
 import { Header } from "./bttp.Request.type";
+import Response from "./bttp.Response";
 import fqs from "./fqs";
 
 export default class Request {
@@ -10,7 +11,8 @@ export default class Request {
         this.body = body;
     }
 
-    post() {
-        fqs(this);
+    post(callback: (response: Response) => void) {
+        const response = fqs(this);
+        callback(response);
     }
 }

@@ -5,6 +5,7 @@ import condition_parse from "./parser.condition";
 import Request from "./bttp.Request";
 import record_parse from "./parser.record";
 import restore_parse from "./parser.restore";
+import Response from "./bttp.Response";
 
 export default function run(path: string) {
     try {
@@ -38,8 +39,16 @@ export default function run(path: string) {
                 break;
         }
 
+        const callback = (response: Response) => {
+            console.log("<<<<<<<<");
+            console.log(response.header.code, response.header.message);
+            if (response.body) {
+                console.log(response.body);
+            }
+        };
+
         const request = new Request(header, body);
-        request.post();
+        request.post(callback);
     } catch (e) {
         console.log(e);
         console.error("파일이 존재하지 않습니다.");
