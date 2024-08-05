@@ -103,7 +103,7 @@ export default class File {
 function compare(a: string | number, b: string | number, operand: "=" | ">" | "<") {
     switch (operand) {
         case "=":
-            return a === b;
+            return a == b;
         case ">":
             return a > b;
         case "<":

@@ -2,7 +2,10 @@ import readTable from "./File.read";
 import { Condition, Record, Tuple } from "./File.type";
 import writeTable from "./File.write";
 
-export default function update(table_name: string, condition: Condition, restore: Tuple): Record[] {
+export default function update(
+    table_name: string,
+    { condition, restore }: { condition: Condition; restore: Tuple },
+): Record[] {
     const file = readTable(table_name);
 
     const records = file.update(restore, condition);
