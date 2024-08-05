@@ -2,11 +2,13 @@ import fs from "fs";
 import { create } from "./fqs.create";
 import { insert } from "./fqs.insert";
 import delete_query from "./fqs.delete";
+import update from "./fqs.update";
 
 const fqs = {
     create,
     insert,
     delete: delete_query,
+    update,
 };
 
 export default function run(path: string) {
