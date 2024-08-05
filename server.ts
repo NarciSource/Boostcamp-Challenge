@@ -18,7 +18,7 @@ export default async function server(request: Request): Promise<Response> {
                 message: "OK",
             };
 
-            if (body) {
+            if (data) {
                 header = {
                     ...header,
                     "Content-Type": "Text/JSON",

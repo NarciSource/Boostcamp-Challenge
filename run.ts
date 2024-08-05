@@ -49,12 +49,17 @@ export default async function run(path: string) {
             console.log();
             if (response.header["Content-Type"] === "Text/JSON") {
                 console.log(JSON.parse(response.body.data));
-            } else {
+            } else if (response.body.data) {
                 console.log(response.body.data);
             }
         }
-    } catch (e) {
-        console.log(e);
-        console.error("파일이 존재하지 않습니다.");
+    } catch (error) {
+        switch (error.code) {
+            case "ENOENT":
+                console.error("파일이 존재하지 않습니다.");
+                break;
+            default:
+                console.error("파일이 올바르지 않은 포맷입니다.");
+        }
     }
 }
