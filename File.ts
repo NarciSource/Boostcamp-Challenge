@@ -12,6 +12,10 @@ export default class File {
 
     validate() {
         for (const record of this.body) {
+            if (this.fields.length < 1 || this.fields.length > 9) {
+                throw { code: "INVALID_FIELD_LENGTH" };
+            }
+
             if (Object.keys(record).length !== this.fields.length) {
                 throw { code: "INVALID_FORMAT" };
             }
