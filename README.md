@@ -99,10 +99,10 @@
 
     ```sql
     SELECT table_name BTTP
-     Condition: condition
+    Condition: condition
     ```
 
-    -   [ ] 테이블에서 condition 조건이 맞는 레코드에 모든 레코드의 모든 컬럼을 출력한다.
+    -   [x] 테이블에서 condition 조건이 맞는 레코드에 모든 레코드의 모든 컬럼을 출력한다.
     -   [ ] condition 조건은 = , >, < 를 구현한다.
     -   [ ] condition 은 컬럼 중에 하나만 넣을 수 있다.
     -   [ ] 다음과 같이 조건에 맞는 레코드 개수를 표시한다.
