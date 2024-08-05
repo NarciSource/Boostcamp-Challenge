@@ -1,6 +1,6 @@
+import readTable from "./objects.Table.read";
+import writeTable from "./objects.Table.write";
 import header_parse from "./headerParse";
-import readTable from "./readTable";
-import writeTable from "./writeTable";
 
 export default function delete_query(raw: string) {
     const header = header_parse(raw.split("\r\n")[0]);

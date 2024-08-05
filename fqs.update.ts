@@ -1,6 +1,6 @@
-import readTable from "./readTable";
+import readTable from "./objects.Table.read";
 import header_parse from "./headerParse";
-import writeTable from "./writeTable";
+import writeTable from "./objects.Table.write";
 
 export default function update(raw: string) {
     const header = header_parse(raw.split("\r\n")[0]);

@@ -1,5 +1,5 @@
+import readTable from "./objects.Table.read";
 import header_parse from "./headerParse";
-import readTable from "./readTable";
 
 export default function select(raw: string) {
     const header = header_parse(raw.split("\r\n")[0]);

@@ -1,6 +1,6 @@
 import fs from "fs";
 import Papa from "papaparse";
-import { Body } from "./objects.Request";
+import { Body } from "./objects.Table.type";
 
 export default function writeTable(table_name: string, body: Body) {
     try {

@@ -1,16 +1,19 @@
 import fs from "fs";
 import Papa from "papaparse";
-import RequestObject, { Schema } from "./objects.Request";
+import RequestObject from "./objects.Request";
+import Table from "./objects.Table";
+import { Schema } from "./objects.Table.type";
 import header_parse from "./headerParse";
 
 export function create(raw: string) {
     const header = header_parse(raw.split("\r\n")[0]);
     const schema = parse(raw.split("\r\n").slice(1));
 
-    const request_object = new RequestObject(header, schema);
+    const table = new Table(schema);
+    const request_object = new RequestObject(header, table);
 
     const table_name = request_object.header.table_name;
-    const fields = request_object.columns;
+    const fields = table.columns;
 
     try {
         const save_csv = Papa.unparse({ fields });
