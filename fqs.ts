@@ -6,6 +6,7 @@ import select from "./fqs.select";
 import update from "./fqs.update";
 import Request from "./bttp.Request";
 import Response from "./bttp.Response";
+import { Header } from "./bttp.Response.type";
 
 const query = {
     create,
@@ -19,10 +20,17 @@ const query = {
 export default function fqs(request: Request): Response {
     const type = request.header.query_type.toLocaleLowerCase();
 
+    let header: Header;
+    let body: Body;
     try {
-        const [header, body] = query[type](request.header.table_name, request.body);
-
-        const response = new Response(header, body);
-        return response;
-    } catch (e) {}
+        [header, body] = query[type](request.header.table_name, request.body);
+    } catch (error) {
+        if (error.code === "ENOENT") {
+            header = { code: 300, message: "Table not found" };
+        } else {
+            header = { code: 500, message: "Request format error" };
+        }
+    }
+    const response = new Response(header, body);
+    return response;
 }
