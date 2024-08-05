@@ -2,9 +2,9 @@
   "name": "day16",
   "version": "1.0.0",
   "description": "파일데이터 시스템",
-  "main": "main.ts",
+  "main": "client.ts",
   "scripts": {
-    "start": "ts-node ./main.ts",
+    "start": "ts-node ./client.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

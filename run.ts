@@ -62,4 +62,5 @@ export default async function run(path: string) {
                 console.error("파일이 올바르지 않은 포맷입니다.");
         }
     }
+    console.log();
 }

@@ -1,7 +1,7 @@
 export interface Schema {
     fields: {
         [name: string]: {
-            type: string;
+            type: "Numeric" | "String";
         };
     };
 }
