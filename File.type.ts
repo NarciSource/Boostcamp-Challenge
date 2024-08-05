@@ -3,7 +3,7 @@ export interface Schema {
         [name: string]: {
             type: string;
         };
-    }[];
+    };
 }
 
 type Value = string | number;
