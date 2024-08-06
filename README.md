@@ -158,17 +158,20 @@
 sequenceDiagram
     participant Client
     participant Server
-    participant FQS
+    participant FileQuerySystem
     participant FileSystem
 
-    Client->>Server: bttp.request [Header, Body]
-    Server->>FQS: query(Header.query_type)
-    FQS->>FileSystem: read()
-    FileSystem->>FQS: file
-    FQS->>FQS: process()
-    FQS->>FileSystem: write()
-    FQS->>Server: data
-    Server->>Client: bttp.response [Header, Body]
+    loop CLI
+        Client->>Client: Parsing(~~~.bttp)
+        Client->>Server: bttp.request [Header, Body]
+        Server->>FileQuerySystem: query(Header.query_type)
+        FileQuerySystem->>FileSystem: read()
+        FileSystem->>FileQuerySystem: file
+        FileQuerySystem->>FileQuerySystem: process()
+        FileQuerySystem->>FileSystem: write()
+        FileQuerySystem->>Server: data
+        Server->>Client: bttp.response [Header, Body]
+    end
 
 ```
 
