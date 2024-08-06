@@ -1,5 +1,6 @@
 import { code } from "./File.code";
 import { Body, Condition, Record, Schema, Tuple } from "./File.type";
+import { compare } from "./utils";
 
 export default class File {
     schema: Schema;
@@ -59,12 +60,16 @@ export default class File {
     }
 
     select({ name, value, operand }: Condition): Record[] {
-        const records = this.body.filter((field) => compare(field[name], value, operand));
+        try {
+            const records = this.body.filter((field) => compare(field[name], value, operand));
 
-        if (records.length) {
-            return records;
-        } else {
-            throw { code: code.NOT_FOUND_RECORD };
+            if (records.length) {
+                return records;
+            } else {
+                throw { code: code.NOT_FOUND_RECORD };
+            }
+        } catch (error) {
+            throw { code: code.INVALID_FIELD_TYPE_MATCHING };
         }
     }
 
@@ -100,16 +105,5 @@ export default class File {
         if (!is_field_valid) {
             throw { code: code.INVALID_FIELD_MATCHING };
         }
-    }
-}
-
-function compare(a: string | number, b: string | number, operand: "=" | ">" | "<") {
-    switch (operand) {
-        case "=":
-            return a == b;
-        case ">":
-            return a > b;
-        case "<":
-            return a < b;
     }
 }
