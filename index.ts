@@ -55,6 +55,9 @@ const server = net.createServer(function (client) {
               broadCast(loggedIn, param);
             }
             break;
+          case "finish":
+            isChat = false;
+            break;
         }
 
         client.write(buffer);
