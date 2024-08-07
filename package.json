@@ -1,0 +1,23 @@
+{
+  "name": "day18",
+  "version": "1.0.0",
+  "description": "챌린지 GPT 서버",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gist.github.com/a8fb97d21f91edf3becf501e0967eb46.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/a8fb97d21f91edf3becf501e0967eb46"
+  },
+  "homepage": "https://gist.github.com/a8fb97d21f91edf3becf501e0967eb46",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
