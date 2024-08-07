@@ -1,9 +1,23 @@
 import net from "node:net";
+import { checkIn } from "./checkIn";
 
 const clients = [];
+const groups = {};
+let groupId = 1;
 
 const server = net.createServer(function (client) {
   clients.push(client);
+
+  if (!groups[groupId]) {
+    groups[groupId] = [];
+  }
+
+  groups[groupId].push(client);
+  console.log(groups[groupId]);
+
+  if (groups[groupId].length >= 4) {
+    groupId++;
+  }
 
   const { remoteAddress, remotePort } = client;
 
@@ -20,9 +34,14 @@ const server = net.createServer(function (client) {
 
     // windows 줄넘김 = \r\n
     if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
-      for (const client of clients) {
-        client.write(buffer);
+      let [cmd, camperId] = buffer.split(" ");
+
+      switch (cmd) {
+        case "checkin":
+          checkIn(camperId, client, groupId);
+          break;
       }
+
       client.write(buffer);
       buffer = "";
     }
