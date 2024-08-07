@@ -1,11 +1,14 @@
-export function checkIn(id, client, groupId) {
-  const newId = parseInt(id.slice(1));
+import { Socket } from "node:net";
+import { pushToGroups } from "./group";
+
+export function checkIn(camperId: string, client: Socket) {
+  const newId = parseInt(camperId.slice(1));
 
   if (newId > 256) {
-    client.write("camperId is larger than 0 and smaller than 256.");
-    return;
+    throw "ID_LARGER_THAN_256";
   }
 
-  client.write(`checkin success to group#${groupId}`);
+  pushToGroups(camperId, client);
+
   console.log(newId);
 }
