@@ -4,6 +4,8 @@ import { checkOut } from "./checkout";
 import { summary } from "./summary";
 import { broadCast } from "./broadCast";
 import { direct } from "./direct";
+import { sendError } from "./error";
+import { clap } from "./clap";
 
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;
@@ -68,21 +70,7 @@ const server = net.createServer(function (client) {
         buffer = "";
       }
     } catch (error) {
-      console.log(error);
-      switch (error) {
-        case "ID_LARGER_THAN_256":
-          client.write("camperId is larger than 0 and smaller than 256.\n");
-          break;
-        case "ID_ALREADY":
-          client.write("already checked in. try another camperId.\n");
-          break;
-        case "maxCountOver":
-          client.write("maxCount is over. please reset Count");
-          break;
-        case "notIsChat":
-          client.write("you did not opened chat.");
-          break;
-      }
+      sendError(error, client);
     }
   });
   client.on("end", function () {
