@@ -5,8 +5,14 @@ export const checkedIn = new Map();
 
 export const groups = new DefaultDict(() => []);
 
-export default groups;
 export let groupId = 1;
+
+export function messageToPeer(id, camperId) {
+  groups[id].forEach((peer) => {
+    console.log(peer);
+    peer.write(`${camperId} is getting Out!`);
+  });
+}
 
 export function pushToGroups(camperId: string, client: Socket) {
   if (checkedIn.has(camperId)) {
@@ -26,10 +32,10 @@ export function pushToGroups(camperId: string, client: Socket) {
 
 export function popFromGroups(camperId, client) {
   const newId = checkedIn.get(camperId);
- 
-  groups[newId] = groups[newId].filter((group) => {
-    group !== client
-  })
 
-  console.log(groups[newId]);
+  groups[newId] = groups[newId].filter((group) => {
+    return group !== client;
+  });
+
+  return newId;
 }

@@ -22,7 +22,6 @@ const server = net.createServer(function (client) {
       if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
         const [cmd, param] = buffer.split(/\s/);
 
-        //checkout
         switch (cmd) {
           case "checkin":
             checkIn(param, client);

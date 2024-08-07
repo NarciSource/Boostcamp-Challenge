@@ -1,7 +1,8 @@
-import { popFromGroups } from "./group"
+import { popFromGroups, messageToPeer } from "./group";
+
 
 export function checkOut(camperId, client) {
-  popFromGroups(camperId, client);
-
+  const id = popFromGroups(camperId, client);
   
+  messageToPeer(id, camperId);
 }
