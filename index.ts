@@ -13,7 +13,7 @@ const server = net.createServer(function (client) {
     const view = encoder.encode(message);
     buffer += message;
 
-    // window 줄넘김 = \r\n
+    // windows 줄넘김 = \r\n
     if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
       client.write(buffer);
       buffer = "";
