@@ -17,12 +17,13 @@ const server = net.createServer(function (client) {
   let maxCount;
   let currentCount;
   let isChat = false;
+  let queue = [];
   const encoder = new TextEncoder();
 
   client.on("data", function (data: Buffer) {
     let message = data.toString();
     const view = encoder.encode(message);
-    console.log(message)
+    console.log(message);
 
     try {
       if (view.length <= 1024 && message.length >= 4) {
@@ -65,6 +66,7 @@ const server = net.createServer(function (client) {
             break;
           case "clap":
             client.write(`clap count is ${clap}`);
+            break;
         }
 
         client.write(message);

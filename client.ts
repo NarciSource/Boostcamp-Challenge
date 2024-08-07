@@ -10,8 +10,17 @@ const r1 = readline.createInterface({
   output: process.stdout,
 });
 
+let cmdHistory = [];
+
 r1.on("line", async (input) => {
-  client.write(input);
+  if (input === "!history") {
+    cmdHistory.forEach((cmd, idx) => {
+      console.log(`${idx + 1} ${cmd}`)
+    })
+  } else {
+    cmdHistory.push(input);
+    client.write(input);
+  }
 });
 
 let checkedInTime: number;
