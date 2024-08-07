@@ -3,6 +3,7 @@ import { checkIn } from "./checkIn";
 import { checkOut } from "./checkout";
 import { summary } from "./summary";
 import { broadCast } from "./broadCast";
+import { direct } from "./direct";
 
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;
@@ -25,24 +26,24 @@ const server = net.createServer(function (client) {
     try {
       // windows 줄넘김 = \r\n
       if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
-        const [cmd, param] = buffer.split(/\s/);
+        const [cmd, ...params] = buffer.split(/\s/);
 
         switch (cmd) {
           case "checkin":
-            checkIn(param, client);
-            loggedIn = param;
+            checkIn(params[0], client);
+            loggedIn = params[0];
             break;
           case "checkout":
             checkOut(loggedIn, client);
             break;
           case "summary":
             if (loggedIn) {
-              summary(param, client);
+              summary(params[0], client);
             }
             break;
           case "chat":
             currentCount = 0;
-            maxCount = param;
+            maxCount = params[0];
             isChat = true;
             break;
           case "broadcast":
@@ -52,11 +53,14 @@ const server = net.createServer(function (client) {
               throw "notIsChat";
             } else {
               currentCount++;
-              broadCast(loggedIn, param);
+              broadCast(loggedIn, params[0]);
             }
             break;
           case "finish":
             isChat = false;
+            break;
+          case "direct":
+            direct(params as [string, string, string]);
             break;
         }
 

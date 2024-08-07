@@ -9,6 +9,4 @@ export function checkIn(camperId: string, client: Socket) {
   }
 
   pushToGroups(camperId, client);
-
-  console.log(newId);
 }

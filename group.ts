@@ -19,7 +19,7 @@ export function pushToGroups(camperId: string, client: Socket) {
     throw "ID_ALREADY";
   }
 
-  checkedIn.set(camperId, groupId);
+  checkedIn.set(camperId, { groupId, client });
 
   groups[groupId].push(client);
 
@@ -31,19 +31,19 @@ export function pushToGroups(camperId: string, client: Socket) {
 }
 
 export function popFromGroups(camperId, client) {
-  const newId = checkedIn.get(camperId);
+  const { groupId } = checkedIn.get(camperId);
 
-  groups[newId] = groups[newId].filter((group) => {
+  groups[groupId] = groups[groupId].filter((group) => {
     return group !== client;
   });
 
-  return newId;
+  return groupId;
 }
 
 export function broadCastPeer(camperId, text) {
-  const newId = checkedIn.get(camperId);
+  const { groupId } = checkedIn.get(camperId);
 
-  groups[newId].forEach((peer) => {
+  groups[groupId].forEach((peer) => {
     peer.write(text);
-  })
+  });
 }
