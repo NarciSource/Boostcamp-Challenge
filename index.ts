@@ -1,5 +1,6 @@
 import net from "node:net";
 import { checkIn } from "./checkIn";
+import { checkOut } from "./checkout";
 
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;
@@ -7,6 +8,7 @@ const server = net.createServer(function (client) {
   console.log("Client connected", remoteAddress, remotePort);
   client.write("Client connected " + remotePort);
 
+  let loggedIn;
   let buffer = "";
   const encoder = new TextEncoder();
 
@@ -18,11 +20,16 @@ const server = net.createServer(function (client) {
     try {
       // windows 줄넘김 = \r\n
       if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
-        const [cmd, camperId] = buffer.split(" ");
+        const [cmd, param] = buffer.split(/\s/);
 
+        //checkout
         switch (cmd) {
           case "checkin":
-            checkIn(camperId, client);
+            checkIn(param, client);
+            loggedIn = param;
+            break;
+          case "checkout":
+            checkOut(loggedIn, client);
             break;
         }
 
@@ -30,6 +37,7 @@ const server = net.createServer(function (client) {
         buffer = "";
       }
     } catch (error) {
+      console.log(error);
       switch (error) {
         case "ID_LARGER_THAN_256":
           client.write("camperId is larger than 0 and smaller than 256.\n");
