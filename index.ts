@@ -5,7 +5,7 @@ import { summary } from "./summary";
 import { broadCast } from "./broadCast";
 import { direct } from "./direct";
 import { sendError } from "./error";
-import { clap } from "./clap";
+import { countClap, clap } from "./clap";
 
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;
@@ -28,6 +28,7 @@ const server = net.createServer(function (client) {
     try {
       // windows 줄넘김 = \r\n
       if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
+        countClap();
         const [cmd, ...params] = buffer.split(/\s/);
 
         switch (cmd) {
@@ -64,6 +65,8 @@ const server = net.createServer(function (client) {
           case "direct":
             direct(params as [string, string, string]);
             break;
+          case "clap":
+            client.write(`clap count is ${clap}`);
         }
 
         client.write(buffer);
