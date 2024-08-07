@@ -4,6 +4,8 @@ import { checkIn } from "./checkIn";
 const clients = [];
 const groups = {};
 let groupId = 1;
+let checkedIn = [];
+
 
 const server = net.createServer(function (client) {
   clients.push(client);
@@ -35,6 +37,13 @@ const server = net.createServer(function (client) {
     // windows 줄넘김 = \r\n
     if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
       let [cmd, camperId] = buffer.split(" ");
+      
+      if (checkedIn.includes(camperId)) {
+        console.log('already checked in. try another camperId');
+        return;  
+      } else {
+        checkedIn.push(camperId);
+      }
 
       switch (cmd) {
         case "checkin":
