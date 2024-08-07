@@ -14,22 +14,19 @@ const server = net.createServer(function (client) {
   client.write("Client connected " + remotePort);
 
   let loggedIn;
-  let buffer = "";
   let maxCount;
   let currentCount;
   let isChat = false;
   const encoder = new TextEncoder();
 
   client.on("data", function (data: Buffer) {
-    const message = data.toString();
+    let message = data.toString();
     const view = encoder.encode(message);
-    buffer += message;
 
     try {
-      // windows 줄넘김 = \r\n
-      if ((message == "\r\n" || message == "\n") && view.length <= 1024 && buffer.length >= 4) {
+      if (view.length <= 1024 && message.length >= 4) {
         countClap();
-        const [cmd, ...params] = buffer.split(/\s/);
+        const [cmd, ...params] = message.split(/\s/);
 
         switch (cmd) {
           case "checkin":
@@ -69,8 +66,8 @@ const server = net.createServer(function (client) {
             client.write(`clap count is ${clap}`);
         }
 
-        client.write(buffer);
-        buffer = "";
+        client.write(message);
+        message = "";
       }
     } catch (error) {
       sendError(error, client);
