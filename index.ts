@@ -2,6 +2,7 @@ import net from "node:net";
 import { checkIn } from "./checkIn";
 import { checkOut } from "./checkout";
 import { summary } from "./summary";
+import { broadCast } from "./broadCast";
 
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;
@@ -11,6 +12,9 @@ const server = net.createServer(function (client) {
 
   let loggedIn;
   let buffer = "";
+  let maxCount;
+  let currentCount;
+  let isChat = false;
   const encoder = new TextEncoder();
 
   client.on("data", function (data: Buffer) {
@@ -36,6 +40,21 @@ const server = net.createServer(function (client) {
               summary(param, client);
             }
             break;
+          case "chat":
+            currentCount = 0;
+            maxCount = param;
+            isChat = true;
+            break;
+          case "broadcast":
+            if (!maxCount || currentCount > maxCount) {
+              throw "maxCountOver";
+            } else if (!isChat) {
+              throw "notIsChat";
+            } else {
+              currentCount++;
+              broadCast(loggedIn, param);
+            }
+            break;
         }
 
         client.write(buffer);
@@ -49,6 +68,12 @@ const server = net.createServer(function (client) {
           break;
         case "ID_ALREADY":
           client.write("already checked in. try another camperId.\n");
+          break;
+        case "maxCountOver":
+          client.write("maxCount is over. please reset Count");
+          break;
+        case "notIsChat":
+          client.write("you did not opened chat.");
           break;
       }
     }

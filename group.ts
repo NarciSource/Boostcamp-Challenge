@@ -39,3 +39,11 @@ export function popFromGroups(camperId, client) {
 
   return newId;
 }
+
+export function broadCastPeer(camperId, text) {
+  const newId = checkedIn.get(camperId);
+
+  groups[newId].forEach((peer) => {
+    peer.write(text);
+  })
+}
