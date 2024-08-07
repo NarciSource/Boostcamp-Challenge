@@ -54,6 +54,7 @@ const server = net.createServer(function (client) {
     }
   });
   client.on("end", function () {
+    checkOut(loggedIn, client);
     console.log("Client disconnected");
   });
 });
