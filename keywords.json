@@ -1,0 +1,14 @@
+{
+  "day1": "IDE, node",
+  "day2": "Linux, System",
+  "day3": "XML, JSON",
+  "day4": "Heap, Stack",
+  "day6": "Object, Class",
+  "day7": "File Path, UnitTest",
+  "day8": "Immutable, Closure",
+  "day9": "Event, Publisher",
+  "day11": "Async, EventLoop",
+  "day13": "Git, Objects",
+  "day16": "HTTP, SQL",
+  "day18": "Network, Server"
+}

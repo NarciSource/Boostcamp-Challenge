@@ -1,6 +1,7 @@
 import net from "node:net";
 import { checkIn } from "./checkIn";
 import { checkOut } from "./checkout";
+import { summary } from "./summary";
 
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;
@@ -29,6 +30,11 @@ const server = net.createServer(function (client) {
             break;
           case "checkout":
             checkOut(loggedIn, client);
+            break;
+          case "summary":
+            if (loggedIn) {
+              summary(param, client);
+            }
             break;
         }
 
