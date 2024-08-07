@@ -10,7 +10,8 @@ export let groupId = 1;
 export function messageToPeer(id, camperId) {
   groups[id].forEach((peer) => {
     console.log(peer);
-    peer.write(`${camperId} is getting Out!`);
+    let message = `${camperId} is getting Out!`;
+    peer.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
   });
 }
 
@@ -27,7 +28,8 @@ export function pushToGroups(camperId: string, client: Socket) {
     groupId++;
   }
 
-  client.write(`checkin success to group#${groupId}\n`);
+  let message = `checkin success to group#${groupId}\n`;
+  client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
 }
 
 export function popFromGroups(camperId, client) {

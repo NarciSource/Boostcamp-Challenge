@@ -10,14 +10,14 @@ import { countClap, clap } from "./clap";
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;
 
+  let message = "Client connected" + remoteAddress + remotePort;
   console.log("Client connected", remoteAddress, remotePort);
-  client.write("Client connected " + remotePort);
+  client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
 
   let loggedIn;
   let maxCount;
   let currentCount;
   let isChat = false;
-  let queue = [];
   const encoder = new TextEncoder();
 
   client.on("data", function (data: Buffer) {
@@ -65,14 +65,17 @@ const server = net.createServer(function (client) {
             direct(params as [string, string, string]);
             break;
           case "clap":
-            client.write(`clap count is ${clap}`);
+            const message = `clap count is ${clap}`;
+            client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
             break;
         }
 
-        client.write(message);
+        client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
         message = "";
       }
     } catch (error) {
+      const message = "something went wrong.";
+      client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
       sendError(error, client);
     }
   });

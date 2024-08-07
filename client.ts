@@ -15,8 +15,8 @@ let cmdHistory = [];
 r1.on("line", async (input) => {
   if (input === "!history") {
     cmdHistory.forEach((cmd, idx) => {
-      console.log(`${idx + 1} ${cmd}`)
-    })
+      console.log(`${idx + 1} ${cmd}`);
+    });
   } else {
     cmdHistory.push(input);
     client.write(input);
@@ -26,13 +26,14 @@ r1.on("line", async (input) => {
 let checkedInTime: number;
 
 client.on("data", (data) => {
-  const output = data.toString();
+  console.log(data.toString());
+  const { message, time, length } = JSON.parse(data.toString());
 
-  console.log(output);
+  console.log(message);
 
-  if (output.includes("Client connected")) {
+  if (message.includes("Client connected")) {
     checkedInTime = new Date().getTime();
-  } else if (output.includes("CheckOut")) {
+  } else if (message.includes("CheckOut")) {
     const coreTime = new Date().getTime() - checkedInTime;
 
     const differenceInSeconds = Math.floor(coreTime / 1000);
