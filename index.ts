@@ -22,12 +22,13 @@ const server = net.createServer(function (client) {
   client.on("data", function (data: Buffer) {
     let message = data.toString();
     const view = encoder.encode(message);
+    console.log(message)
 
     try {
       if (view.length <= 1024 && message.length >= 4) {
         countClap();
         const [cmd, ...params] = message.split(/\s/);
-
+        console.log(cmd, ...params);
         switch (cmd) {
           case "checkin":
             checkIn(params[0], client);
