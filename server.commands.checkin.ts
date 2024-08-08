@@ -1,7 +1,7 @@
 import { Socket } from "node:net";
 import { code } from "./server.code";
 import { CamperId, setMembers } from "./server.manager.camper";
-import makeMessageResponse from "./server.makeMessageResponse";
+import postMessage from "./server.postMessage";
 
 export default function checkin({
     camperId,
@@ -18,10 +18,7 @@ export default function checkin({
 
     const groupId = setMembers(camperId, client);
 
-    const message = `checkin success to group#${groupId}\n`;
-    const capsuledMessage = makeMessageResponse(message);
-
-    client.write(capsuledMessage);
+    postMessage(client)(`checkin success to group#${groupId}\n`);
 
     return camperId;
 }

@@ -1,6 +1,6 @@
 import fs from "fs";
 import { Socket } from "node:net";
-import makeMessageResponse from "./server.makeMessageResponse";
+import postMessage from "./server.postMessage";
 
 export default function summary({ arg: day, client }: { arg: string; client: Socket }) {
     const raw = fs.readFileSync("./keywords.json", "utf-8");
@@ -8,7 +8,5 @@ export default function summary({ arg: day, client }: { arg: string; client: Soc
     const keyword = json[day];
     const message = keyword.toString();
 
-    const capsuledMessage = makeMessageResponse(message);
-
-    client.write(capsuledMessage);
+    postMessage(client)(message);
 }

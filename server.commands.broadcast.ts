@@ -1,4 +1,4 @@
-import makeMessageResponse from "./server.makeMessageResponse";
+import postMessage from "./server.postMessage";
 import { CamperId, getGroupId, getSocket } from "./server.manager.camper";
 import { getGroupMembers } from "./server.manager.group";
 
@@ -7,9 +7,7 @@ export default function broadcast(camperId: CamperId, message: string): void {
     const groupMembers = getGroupMembers(groupId);
     const sockets = groupMembers.map((member) => getSocket(member));
 
-    const capsuledMessage = makeMessageResponse(message);
-
     for (const peer of sockets) {
-        peer.write(capsuledMessage);
+        postMessage(peer)(message);
     }
 }
