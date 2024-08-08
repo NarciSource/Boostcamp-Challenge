@@ -10,9 +10,13 @@ client.on("data", getMessage);
 
 client.on("error", (error) => {
     console.error(error);
+    process.exit();
 });
 
-client.on("end", () => {});
+client.on("end", () => {
+    console.log("Done.");
+    process.exit();
+});
 
 export function sendMessage(command: string, data?: any) {
     const header: Header = {

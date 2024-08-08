@@ -1,5 +1,5 @@
 import Vorpal, { Args } from "vorpal";
-import { sendMessage } from "./client.connect";
+import client, { sendMessage } from "./client.connect";
 
 const cli = new Vorpal();
 
@@ -11,6 +11,7 @@ cli.command("checkin <camperId>", "Check in to the server.").action(async functi
 
 cli.command("checkout", "Check out to the server.").action(async function () {
     sendMessage("checkout");
+    client.end();
 });
 
 cli.command("chat maxCount=<maxCount>", "Enable the chat.").action(async function ({
