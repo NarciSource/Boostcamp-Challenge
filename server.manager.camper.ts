@@ -7,11 +7,11 @@ export type CamperId = string;
 const membersDictionary = new Map<CamperId, { groupId: GroupId; socket: Socket }>();
 
 export function getGroupId(camperId: CamperId): GroupId {
-    return membersDictionary.get(camperId).groupId;
+    return membersDictionary.get(camperId)?.groupId;
 }
 
 export function getSocket(camperId: CamperId): Socket {
-    return membersDictionary.get(camperId).socket;
+    return membersDictionary.get(camperId)?.socket;
 }
 
 let sizeOfGroups = 0;

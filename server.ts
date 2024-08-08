@@ -2,6 +2,7 @@ import net from "node:net";
 import Response, { Header } from "./protocol.Response";
 import { Header as RequestHeader } from "./protocol.Request";
 import runCommand from "./server.runCommand";
+import checkout from "./server.commands.checkout";
 import getErrorMessage from "./server.getErrorMessage";
 import { CamperId } from "./server.manager.camper";
 
@@ -49,16 +50,17 @@ const server = net.createServer(function (client) {
     });
 
     client.on("end", function () {
-        //checkOut(loggedIn, client);
+        checkout({ camperId, client });
         console.log("Client disconnected");
     });
 
     client.on("error", (error: NetworkError) => {
         if (error.code === "ECONNRESET") {
-            console.error(`Connection was reset by the ${camperId}.`);
+            console.error(`Connection was reset by the ${remoteAddress} ${remotePort}.`);
         } else {
             console.error("Socket error:", error);
         }
+        checkout({ camperId, client });
     });
 });
 
