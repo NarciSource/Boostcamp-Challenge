@@ -1,8 +1,15 @@
+import { Socket } from "node:net";
 import { getGroupMembers } from "./server.manager.group";
 import { CamperId, getGroupId, getSocket, popMember } from "./server.manager.camper";
 import makeMessageResponse from "./server.makeMessageResponse";
 
-export default function checkout({ camperId }: { camperId: CamperId }): void {
+export default function checkout({
+    camperId,
+    client,
+}: {
+    camperId: CamperId;
+    client: Socket;
+}): void {
     const groupId = getGroupId(camperId);
     const groupMembers = getGroupMembers(groupId);
 
@@ -15,4 +22,6 @@ export default function checkout({ camperId }: { camperId: CamperId }): void {
     for (const peer of sockets) {
         peer.write(capsuledMessage);
     }
+
+    client.write(makeMessageResponse("CheckOut"));
 }
