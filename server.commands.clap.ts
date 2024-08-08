@@ -7,8 +7,8 @@ export function clapHands() {
     clapCount++;
 }
 
-export default function clap({ client }: CommandArg): void {
-    const message = `clap count is ${clapCount}`;
+export default function clap({ client, camperId }: CommandArg): void {
+    postMessage(client)(`clap count is ${clapCount}`);
 
-    postMessage(client)(message);
+    console.log(`clap from ${camperId} => ${clapCount}`);
 }

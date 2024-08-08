@@ -15,4 +15,6 @@ export default function checkout({ camperId, client }: CommandArg): void {
     }
 
     postMessage(client)({ message: "checkout (disconnected)", extra: "checkout" });
+
+    console.log(`checkout from ${camperId} - disconnected`);
 }

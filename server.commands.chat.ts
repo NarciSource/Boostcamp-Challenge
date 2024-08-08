@@ -7,11 +7,11 @@ export default function chat({ camperId, maxCount }: CommandArg): void {
     const groupId = getGroupId(camperId);
     enableChat(groupId, maxCount);
 
-    const broadcastMessage = `broadcast from server, "채팅이 시작되었습니다"`;
     const groupMembers = getGroupMembers(groupId);
     const sockets = groupMembers.map(getSocket);
 
     for (const peer of sockets) {
-        postMessage(peer)(broadcastMessage);
+        postMessage(peer)(`broadcast from server, "채팅이 시작되었습니다"`);
     }
+    console.log(`broadcast to group#${groupId} => "채팅이 시작되었습니다", from="server"`);
 }

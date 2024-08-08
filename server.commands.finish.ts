@@ -7,11 +7,12 @@ export default function finish({ camperId }: CommandArg): void {
     const groupId = getGroupId(camperId);
     disableChat(groupId);
 
-    const broadcastMessage = `broadcast from server, "채팅이 종료되었습니다"`;
     const groupMembers = getGroupMembers(groupId);
     const sockets = groupMembers.map(getSocket);
 
     for (const peer of sockets) {
-        postMessage(peer)(broadcastMessage);
+        postMessage(peer)(`broadcast from server, "채팅이 종료되었습니다"`);
     }
+
+    console.log(`finish from ${camperId}`);
 }

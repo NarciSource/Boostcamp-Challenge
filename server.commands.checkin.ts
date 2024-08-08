@@ -14,5 +14,9 @@ export default function checkin({ camperId, client }: CommandArg): CamperId {
 
     postMessage(client)({ message: `Checkin success to group#${groupId}`, extra: "checkin" });
 
+    console.log(
+        `checkin ${camperId} (success) from ${client.remoteAddress}:${client.remotePort} => group#${groupId}`,
+    );
+
     return camperId;
 }
