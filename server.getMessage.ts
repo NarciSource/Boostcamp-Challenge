@@ -25,24 +25,24 @@ function getMessage(data: Buffer, client: Socket) {
     try {
         if (view.length <= 1024 && message.length >= 4) {
             countClap();
-            const [cmd, ...params] = message.split(/\s/);
-            console.log(cmd, ...params);
-            switch (cmd) {
+            const [, command, arg] = /^(\w+)\s(.*)/.exec(message);
+
+            switch (command) {
                 case "checkin":
-                    checkIn(params[0], client);
-                    loggedIn = params[0];
+                    loggedIn = arg;
+                    checkIn(loggedIn, client);
                     break;
                 case "checkout":
                     checkOut(loggedIn, client);
                     break;
                 case "summary":
                     if (loggedIn) {
-                        summary(params[0], client);
+                        summary(arg, client);
                     }
                     break;
                 case "chat":
                     currentCount = 0;
-                    maxCount = parseInt(params[0]);
+                    maxCount = parseInt(arg);
                     isChat = true;
                     break;
                 case "broadcast":
@@ -52,21 +52,26 @@ function getMessage(data: Buffer, client: Socket) {
                         throw "notIsChat";
                     } else {
                         currentCount++;
-                        broadCast(loggedIn, params[0]);
+                        broadCast(loggedIn, arg);
                     }
                     break;
                 case "finish":
                     isChat = false;
                     break;
-                case "direct":
-                    direct(params as [string, string, string]);
+                case "direct": {
+                    const [, peer, message] = /to (\w+) "(.*)"/.exec(arg);
+
+                    direct(peer, message);
                     break;
-                case "clap":
+                }
+                case "clap": {
                     const message = `clap count is ${clap}`;
+
                     client.write(
                         JSON.stringify({ message, time: Date.now(), length: message.length }),
                     );
                     break;
+                }
             }
 
             client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
