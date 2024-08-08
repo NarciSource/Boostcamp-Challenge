@@ -30,12 +30,11 @@ cli.command(`broadcast [message]`, "Send a message to my group.").action(async f
     sendMessage("broadcast", { message });
 });
 
-cli.command(
-    `direct to <targetId> [message]`,
-    "Send a direct message to a specific member",
-).action(async function ({ targetId, message }: Args) {
-    sendMessage("direct", { targetId, message });
-});
+cli.command(`direct to <targetId> [message]`, "Send a direct message to a specific member").action(
+    async function ({ targetId, message }: Args) {
+        sendMessage("direct", { targetId, message });
+    },
+);
 
 cli.command("summary <day>", "Obtain a keyword summary of the day.").action(async function ({
     day,
@@ -49,7 +48,7 @@ cli.command("clap", "Ask for the total request count from all clients.").action(
 
 cli.command("!history").action(async function () {
     for (const [idx, command] of Object.entries(cli.cmdHistory._hist)) {
-        console.log(`${idx + 1} ${command}`);
+        console.log(`${Number(idx) + 1} ${command}`);
     }
 });
 

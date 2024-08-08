@@ -2,22 +2,24 @@ import { Socket } from "node:net";
 import { CamperId } from "./server.type";
 import checkin from "./server.commands.checkin";
 import checkout from "./server.commands.checkout";
-import clap, { clapHands } from "./server.commands.clap";
-import chat from "./server.commands.chat";
-import direct from "./server.commands.direct";
 import summary from "./server.commands.summary";
+import chat from "./server.commands.chat";
 import broadcast from "./server.commands.broadcast";
+import finish from "./server.commands.finish";
+import direct from "./server.commands.direct";
+import clap, { clapHands } from "./server.commands.clap";
 import { verifyAuthentication } from "./server.middleware.auth";
 import { validateStringBounds } from "./server.middleware.validation";
 
 const commands = {
     checkin,
     checkout,
-    clap,
-    chat,
-    direct,
     summary,
+    chat,
     broadcast,
+    finish,
+    direct,
+    clap,
 };
 
 export default function runCommand(
