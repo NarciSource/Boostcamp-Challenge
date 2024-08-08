@@ -1,10 +1,9 @@
 import net from "node:net";
-import Response, { Header } from "./protocol.Response";
 import { Header as RequestHeader } from "./protocol.Request";
 import runCommand from "./server.runCommand";
 import checkout from "./server.commands.checkout";
-import getErrorMessage from "./server.getErrorMessage";
 import { CamperId } from "./server.manager.camper";
+import { getError } from "./server.code";
 import postMessage from "./server.postMessage";
 import postError from "./server.postError";
 
@@ -31,7 +30,7 @@ const server = net.createServer(function (client) {
                 camperId = data;
             }
         } catch (error) {
-            postError(client)(400, getErrorMessage(error));
+            postError(client)(getError(error));
         }
     });
 
