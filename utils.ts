@@ -1,7 +1,7 @@
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-export const getBytes = (message: string): number => encoder.encode(message).length;
+export const getBytes = (message: any): number => encoder.encode(JSON.stringify(message)).length;
 
 export function sliceUnderBytes(message: string, maxByte: number) {
     const byteArray = encoder.encode(message);

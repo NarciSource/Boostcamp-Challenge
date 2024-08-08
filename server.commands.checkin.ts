@@ -18,7 +18,7 @@ export default function checkin({
 
     const groupId = setMembers(camperId, client);
 
-    postMessage(client)(`checkin success to group#${groupId}\n`);
+    postMessage(client)({ message: `Checkin success to group#${groupId}`, extra: "checkin" });
 
     return camperId;
 }
