@@ -5,10 +5,10 @@ import postMessage from "./server.postMessage";
 
 export default function checkout({ camperId, client }: CommandArg): void {
     const groupId = getGroupId(camperId);
-    const groupMembers = getGroupMembers(groupId);
 
     popMember(camperId);
 
+    const groupMembers = getGroupMembers(groupId);
     const sockets = groupMembers.map((member) => getSocket(member));
     for (const peer of sockets) {
         postMessage(peer)(`${camperId} is getting Out!`);

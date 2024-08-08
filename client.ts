@@ -24,14 +24,14 @@ cli.command("finish", "Disable the chat.").action(async function () {
     sendMessage("finish");
 });
 
-cli.command(`broadcast "[message]"`, "Send a message to my group.").action(async function ({
+cli.command(`broadcast [message]`, "Send a message to my group.").action(async function ({
     message,
 }: Args) {
     sendMessage("broadcast", { message });
 });
 
 cli.command(
-    `direct to <targetId> "[message]"`,
+    `direct to <targetId> [message]`,
     "Send a direct message to a specific member",
 ).action(async function ({ targetId, message }: Args) {
     sendMessage("direct", { targetId, message });
