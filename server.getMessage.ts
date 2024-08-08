@@ -1,16 +1,7 @@
 import { Socket } from "node:net";
-import { checkIn } from "./server.commands.checkin";
-import { summary } from "./server.commands.summary";
-import { broadCast } from "./server.commands.broadcast";
-import { direct } from "./server.commands.direct";
 import { sendError } from "./server.sendError";
-import { countClap, clap } from "./server.commands.clap";
-import { checkOut } from "./server.commands.checkout";
-
-let maxCount: number;
-let currentCount: number;
-let isChat = false;
-let loggedIn: string;
+import { countClap } from "./server.commands.clap";
+import runCommand from "./server.runCommand";
 
 const encoder = new TextEncoder();
 
@@ -18,68 +9,25 @@ export default function getMessageFor(client: Socket) {
     return (data: Buffer) => getMessage(data, client);
 }
 function getMessage(data: Buffer, client: Socket) {
-    const { header, body } = JSON.parse(data.toString());
-    const message = body.data;
+    const { header: requestHeader, body: requestBody } = JSON.parse(data.toString());
+    const requestMessage = requestBody.data;
 
-    const view = encoder.encode(message);
+    const view = encoder.encode(requestMessage);
+
+    let message; 
 
     try {
-        if (view.length <= 1024 && message.length >= 4) {
+        if (view.length <= 1024 && requestMessage.length >= 4) {
             countClap();
-            const [, command, arg] = /^(\w+)\s(.*)/.exec(message);
+            const [, command, arg] = /^(\w+)\s(.*)/.exec(requestMessage);
 
-            switch (command) {
-                case "checkin":
-                    loggedIn = arg;
-                    checkIn(loggedIn, client);
-                    break;
-                case "checkout":
-                    checkOut(loggedIn, client);
-                    break;
-                case "summary":
-                    if (loggedIn) {
-                        summary(arg, client);
-                    }
-                    break;
-                case "chat":
-                    currentCount = 0;
-                    maxCount = parseInt(arg);
-                    isChat = true;
-                    break;
-                case "broadcast":
-                    if (!maxCount || currentCount > maxCount) {
-                        throw "maxCountOver";
-                    } else if (!isChat) {
-                        throw "notIsChat";
-                    } else {
-                        currentCount++;
-                        broadCast(loggedIn, arg);
-                    }
-                    break;
-                case "finish":
-                    isChat = false;
-                    break;
-                case "direct": {
-                    const [, peer, message] = /to (\w+) "(.*)"/.exec(arg);
+            const data = runCommand(command, arg, client);
 
-                    direct(peer, message);
-                    break;
-                }
-                case "clap": {
-                    const message = `clap count is ${clap}`;
-
-                    client.write(
-                        JSON.stringify({ message, time: Date.now(), length: message.length }),
-                    );
-                    break;
-                }
-            }
-
-            client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
+            message = { data };
         }
     } catch (error) {
-        const message = "something went wrong.";
-        client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-        sendError(error, client);
+       message = sendError(error);
     }
+
+    client.write(JSON.stringify(message));
 }

@@ -1,26 +1,16 @@
-import { Socket } from "node:net";
-
-export function sendError(error: string, client: Socket) {
+export function sendError(error: string): string {
     switch (error) {
         case "ID_LARGER_THAN_256": {
-            const message = "camperId is larger than 0 and smaller than 256.\n";
-            client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-            break;
+            return "camperId is larger than 0 and smaller than 256.\n";
         }
         case "ID_ALREADY": {
-            const message = "already checked in. try another camperId.\n";
-            client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-            break;
+            return "already checked in. try another camperId.\n";
         }
         case "maxCountOver": {
-            const message = "maxCount is over. please reset Count";
-            client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-            break;
+            return "maxCount is over. please reset Count";
         }
         case "notIsChat": {
-            const message = "you did not opened chat.";
-            client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-            break;
+            return "you did not opened chat.";
         }
     }
 }

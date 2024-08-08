@@ -1,5 +1,5 @@
 import net from "node:net";
-import { checkOut } from "./server.commands.checkout";
+import { checkout } from "./server.commands.checkout";
 import getMessageFor from "./server.getMessage";
 
 const server = net.createServer(function (client) {
