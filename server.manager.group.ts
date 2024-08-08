@@ -17,6 +17,17 @@ export function getGroupMembers(id: GroupId): CamperId[] {
     return groupsDictionary[id].groupMembers;
 }
 
+let sizeOfGroups = 0;
+
+export function setGroup(camperId: CamperId): GroupId {
+    if (getGroupMembers(sizeOfGroups).length >= 4) {
+        sizeOfGroups++;
+    }
+
+    groupsDictionary[sizeOfGroups].groupMembers.push(camperId);
+    return sizeOfGroups;
+}
+
 export function popGroup(camperId: CamperId, groupId: GroupId) {
     groupsDictionary[groupId].groupMembers = groupsDictionary[groupId].groupMembers.filter(
         (id: CamperId) => id !== camperId,

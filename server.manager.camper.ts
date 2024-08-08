@@ -1,5 +1,5 @@
 import { Socket } from "node:net";
-import { getGroupMembers, GroupId, popGroup } from "./server.manager.group";
+import { GroupId, popGroup, setGroup } from "./server.manager.group";
 import { code } from "./server.code";
 
 export type CamperId = string;
@@ -14,18 +14,12 @@ export function getSocket(camperId: CamperId): Socket {
     return membersDictionary.get(camperId)?.socket;
 }
 
-let sizeOfGroups = 0;
-
 export function setMembers(camperId: CamperId, socket: Socket): GroupId {
-    if (getGroupMembers(sizeOfGroups).length >= 4) {
-        sizeOfGroups++;
-    }
-
-    const groupId = sizeOfGroups;
-
     if (membersDictionary.has(camperId)) {
         throw code.ID_ALREADY_EXISTS;
     }
+
+    const groupId = setGroup(camperId);
 
     membersDictionary.set(camperId, { groupId, socket });
 
