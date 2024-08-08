@@ -1,6 +1,8 @@
 import net from "node:net";
-import getMessageFor from "./server.getMessage";
-import Response from "./protocol.Response";
+import Response, { Header } from "./protocol.Response";
+import runCommand from "./server.runCommand";
+import getErrorMessage from "./server.getErrorMessage";
+import { CamperId } from "./server.manager.camper";
 
 const server = net.createServer(function (client) {
     const { remoteAddress, remotePort } = client;
@@ -10,10 +12,39 @@ const server = net.createServer(function (client) {
     const body = { data: message };
     const response = new Response(header, body);
 
+    let camperId: CamperId;
+
     console.log(message);
     client.write(JSON.stringify(response));
 
-    client.on("data", getMessageFor(client));
+    client.on("data", function (buffer: Buffer) {
+        const { header: requestHeader, body: requestBody } = JSON.parse(buffer.toString());
+        const requestMessage = requestBody.data;
+
+        let capsuledMessage: string;
+
+        try {
+            const [, command, arg] = /^(\w+)\s?(.*)/.exec(requestMessage);
+
+            const data = runCommand(command, arg, camperId, client);
+
+            if (command === "checkin") {
+                camperId = data;
+            }
+        } catch (error) {
+            const errorMessage = getErrorMessage(error);
+
+            const header: Header = {
+                code: 400,
+                time: Date.now(),
+                errorMessage,
+            };
+            const response = new Response(header);
+            capsuledMessage = JSON.stringify(response);
+
+            client.write(capsuledMessage);
+        }
+    });
 
     client.on("end", function () {
         //checkOut(loggedIn, client);

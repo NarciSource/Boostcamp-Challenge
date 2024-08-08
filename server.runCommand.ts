@@ -1,10 +1,13 @@
 import { Socket } from "node:net";
 import checkin from "./server.commands.checkin";
 import checkout from "./server.commands.checkout";
-import clap from "./server.commands.clap";
+import clap, { countClap } from "./server.commands.clap";
 import direct from "./server.commands.direct";
 import summary from "./server.commands.summary";
 import broadcast from "./server.commands.broadcast";
+import { getBytes } from "./utils";
+import { code } from "./server.code";
+import { CamperId } from "./server.manager.camper";
 
 const commands = {
     checkin,
@@ -19,7 +22,18 @@ let maxCount: number;
 let currentCount: number;
 let isChat = false;
 
-export default function runCommand(command: string, arg: any, client: Socket): string {
+export default function runCommand(
+    command: string,
+    arg: any,
+    camperId: CamperId,
+    client: Socket,
+): any {
+    if (arg.length < 4 || getBytes(arg) > 1024) {
+        throw code.MESSAGE_SIZE_EXCEED;
+    }
+
+    countClap();
+
     if (command === "chat") {
         currentCount = 0;
         maxCount = parseInt(arg);
@@ -36,6 +50,6 @@ export default function runCommand(command: string, arg: any, client: Socket): s
         }
     }
 
-    const message = commands[command](arg, client);
-    return message;
+    const data = commands[command]({ arg, camperId, client });
+    return data;
 }

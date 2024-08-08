@@ -1,8 +1,15 @@
 import { Socket } from "node:net";
-import { CamperId, setMembers } from "./server.manager.camper";
 import { code } from "./server.code";
+import { CamperId, setMembers } from "./server.manager.camper";
+import makeMessageResponse from "./server.makeMessageResponse";
 
-export default function checkin(camperId: CamperId, client: Socket): string {
+export default function checkin({
+    arg: camperId,
+    client,
+}: {
+    arg: CamperId;
+    client: Socket;
+}): CamperId {
     const idNumberPart = parseInt(camperId.slice(1));
     if (idNumberPart > 256) {
         throw code.INVALID_ID;
@@ -11,5 +18,9 @@ export default function checkin(camperId: CamperId, client: Socket): string {
     const groupId = setMembers(camperId, client);
 
     const message = `checkin success to group#${groupId}\n`;
-    return message;
+    const capsuledMessage = makeMessageResponse(message);
+
+    client.write(capsuledMessage);
+
+    return camperId;
 }
