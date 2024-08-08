@@ -18,9 +18,10 @@ export default function getMessageFor(client: Socket) {
     return (data: Buffer) => getMessage(data, client);
 }
 function getMessage(data: Buffer, client: Socket) {
-    let message = data.toString();
+    const { header, body } = JSON.parse(data.toString());
+    const message = body.data;
+
     const view = encoder.encode(message);
-    console.log(message);
 
     try {
         if (view.length <= 1024 && message.length >= 4) {
@@ -75,7 +76,6 @@ function getMessage(data: Buffer, client: Socket) {
             }
 
             client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-            message = "";
         }
     } catch (error) {
         const message = "something went wrong.";
