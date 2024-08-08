@@ -1,0 +1,7 @@
+export enum code {
+    INVALID_ID,
+    ID_ALREADY_EXISTS,
+    MAX_COUNT_OVER,
+    CHAT_NOT_ENABLED,
+    MESSAGE_SIZE_EXCEED,
+}

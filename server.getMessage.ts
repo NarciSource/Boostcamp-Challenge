@@ -1,10 +1,11 @@
 import { Socket } from "node:net";
 import Response, { Header } from "./protocol.Response";
-import sendError from "./server.sendError";
 import runCommand from "./server.runCommand";
 import makeMessageResponse from "./server.makeMessageResponse";
+import getErrorMessage from "./server.getErrorMessage";
 import { countClap } from "./server.commands.clap";
 import { getBytes } from "./utils";
+import { code } from "./server.code";
 
 export default function getMessageFor(client: Socket) {
     return (buffer: Buffer) => getMessage(buffer, client);
@@ -18,7 +19,7 @@ function getMessage(buffer: Buffer, client: Socket) {
 
     try {
         if (requestMessage.length < 4 || getBytes(requestMessage) > 1024) {
-            throw "Message size limit exceeded";
+            throw code.MESSAGE_SIZE_EXCEED;
         }
         countClap();
 
@@ -28,7 +29,7 @@ function getMessage(buffer: Buffer, client: Socket) {
 
         capsuledMessage = makeMessageResponse(message);
     } catch (error) {
-        const errorMessage = sendError(error);
+        const errorMessage = getErrorMessage(error);
 
         const header: Header = {
             code: 400,
