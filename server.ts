@@ -52,8 +52,20 @@ const server = net.createServer(function (client) {
         //checkOut(loggedIn, client);
         console.log("Client disconnected");
     });
+
+    client.on("error", (error: NetworkError) => {
+        if (error.code === "ECONNRESET") {
+            console.error(`Connection was reset by the ${camperId}.`);
+        } else {
+            console.error("Socket error:", error);
+        }
+    });
 });
 
 server.listen(2024, function () {
     console.log("Server listening for connection");
 });
+
+interface NetworkError extends Error {
+    code?: string;
+}
