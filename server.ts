@@ -1,90 +1,24 @@
 import net from "node:net";
-import { checkIn } from "./server.commands.checkin";
 import { checkOut } from "./server.commands.checkout";
-import { summary } from "./server.commands.summary";
-import { broadCast } from "./server.commands.broadcast";
-import { direct } from "./server.commands.direct";
-import { sendError } from "./server.sendError";
-import { countClap, clap } from "./server.commands.clap";
+import getMessageFor from "./server.getMessage";
 
 const server = net.createServer(function (client) {
-  const { remoteAddress, remotePort } = client;
+    const { remoteAddress, remotePort } = client;
 
-  let message = "Client connected" + remoteAddress + remotePort;
-  console.log("Client connected", remoteAddress, remotePort);
-  client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
+    let message = "Client connected" + remoteAddress + remotePort;
+    console.log("Client connected", remoteAddress, remotePort);
+    client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
 
-  let loggedIn;
-  let maxCount;
-  let currentCount;
-  let isChat = false;
-  const encoder = new TextEncoder();
+    const getMessage = getMessageFor(client);
 
-  client.on("data", function (data: Buffer) {
-    let message = data.toString();
-    const view = encoder.encode(message);
-    console.log(message);
+    client.on("data", getMessage);
 
-    try {
-      if (view.length <= 1024 && message.length >= 4) {
-        countClap();
-        const [cmd, ...params] = message.split(/\s/);
-        console.log(cmd, ...params);
-        switch (cmd) {
-          case "checkin":
-            checkIn(params[0], client);
-            loggedIn = params[0];
-            break;
-          case "checkout":
-            checkOut(loggedIn, client);
-            break;
-          case "summary":
-            if (loggedIn) {
-              summary(params[0], client);
-            }
-            break;
-          case "chat":
-            currentCount = 0;
-            maxCount = params[0];
-            isChat = true;
-            break;
-          case "broadcast":
-            if (!maxCount || currentCount > maxCount) {
-              throw "maxCountOver";
-            } else if (!isChat) {
-              throw "notIsChat";
-            } else {
-              currentCount++;
-              broadCast(loggedIn, params[0]);
-            }
-            break;
-          case "finish":
-            isChat = false;
-            break;
-          case "direct":
-            direct(params as [string, string, string]);
-            break;
-          case "clap":
-            const message = `clap count is ${clap}`;
-            client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-            break;
-        }
-
-        client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-        message = "";
-      }
-    } catch (error) {
-      const message = "something went wrong.";
-      client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-      sendError(error, client);
-    }
-  });
-  client.on("end", function () {
-    checkOut(loggedIn, client);
-    console.log("Client disconnected");
-  });
+    client.on("end", function () {
+        //checkOut(loggedIn, client);
+        console.log("Client disconnected");
+    });
 });
 
 server.listen(2024, function () {
-  console.log("Server listening for connection");
+    console.log("Server listening for connection");
 });
