@@ -29,6 +29,7 @@ const server = net.createServer(function (client) {
                 camperId = data;
             }
         } catch (error) {
+            console.error(error);
             postError(client)(getError(error));
         }
     });

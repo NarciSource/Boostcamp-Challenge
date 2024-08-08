@@ -7,9 +7,8 @@ import chat from "./server.commands.chat";
 import direct from "./server.commands.direct";
 import summary from "./server.commands.summary";
 import broadcast from "./server.commands.broadcast";
-import { getBytes } from "./utils";
-import { code } from "./server.code";
 import { verifyAuthentication } from "./server.middleware.auth";
+import { validateStringBounds } from "./server.middleware.validation";
 
 const commands = {
     checkin,
@@ -27,9 +26,7 @@ export default function runCommand(
     camperId: CamperId,
     client: Socket,
 ): any {
-    if (arg.length < 4 || getBytes(arg) > 1024) {
-        throw code.MESSAGE_SIZE_EXCEED;
-    }
+    validateStringBounds(arg);
 
     clapHands();
 
