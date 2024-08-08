@@ -1,5 +1,4 @@
 import net from "node:net";
-import { checkout } from "./server.commands.checkout";
 import getMessageFor from "./server.getMessage";
 import Response from "./protocol.Response";
 

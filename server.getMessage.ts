@@ -23,7 +23,7 @@ function getMessage(buffer: Buffer, client: Socket) {
         }
         countClap();
 
-        const [, command, arg] = /^(\w+)\s(.*)/.exec(requestMessage);
+        const [, command, arg] = /^(\w+)\s?(.*)/.exec(requestMessage);
 
         const message = runCommand(command, arg, client);
 
