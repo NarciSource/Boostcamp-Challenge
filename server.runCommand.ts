@@ -9,6 +9,7 @@ import summary from "./server.commands.summary";
 import broadcast from "./server.commands.broadcast";
 import { getBytes } from "./utils";
 import { code } from "./server.code";
+import { verifyAuthentication } from "./server.middleware.auth";
 
 const commands = {
     checkin,
@@ -31,6 +32,8 @@ export default function runCommand(
     }
 
     clapHands();
+
+    verifyAuthentication({ camperId, ...arg });
 
     const data = commands[command]({ camperId, client, ...arg });
     return data;

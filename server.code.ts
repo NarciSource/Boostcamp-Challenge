@@ -6,6 +6,7 @@ export enum code {
     MAX_COUNT_OVER,
     CHAT_NOT_ENABLED,
     MESSAGE_SIZE_EXCEED,
+    UNAUTHORIZED_ACCESS,
 }
 
 export function getError(error: code): ErrorPair {
@@ -24,6 +25,9 @@ export function getError(error: code): ErrorPair {
 
         case code.MESSAGE_SIZE_EXCEED:
             return { code: 400, errorMessage: "The message size exceeds the allowed limit." };
+
+        case code.UNAUTHORIZED_ACCESS:
+            return { code: 401, errorMessage: "Unauthorized access." };
 
         default:
             return { code: 400, errorMessage: "It's your fault anyway." };
