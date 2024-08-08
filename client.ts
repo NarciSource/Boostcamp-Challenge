@@ -47,4 +47,10 @@ cli.command("clap", "Ask for the total request count from all clients.").action(
     sendMessage("clap");
 });
 
+cli.command("!history").action(async function () {
+    for (const [idx, command] of Object.entries(cli.cmdHistory._hist)) {
+        console.log(`${idx + 1} ${command}`);
+    }
+});
+
 cli.delimiter("$").show();
