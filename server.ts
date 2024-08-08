@@ -1,8 +1,8 @@
 import net from "node:net";
+import { CamperId } from "./server.type";
 import Request from "./protocol.Request";
 import runCommand from "./server.runCommand";
 import checkout from "./server.commands.checkout";
-import { CamperId } from "./server.manager.camper";
 import { getError } from "./server.code";
 import postMessage from "./server.postMessage";
 import postError from "./server.postError";

@@ -1,14 +1,9 @@
-import { CamperId, getGroupId, getSocket } from "./server.manager.camper";
+import { CommandArg } from "./server.type";
+import { getGroupId, getSocket } from "./server.manager.camper";
 import { enableChat, getGroupMembers } from "./server.manager.group";
 import postMessage from "./server.postMessage";
 
-export default function chat({
-    camperId,
-    maxCount,
-}: {
-    camperId: CamperId;
-    maxCount: number;
-}): void {
+export default function chat({ camperId, maxCount }: CommandArg): void {
     const groupId = getGroupId(camperId);
     enableChat(groupId, maxCount);
 

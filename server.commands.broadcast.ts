@@ -1,9 +1,10 @@
+import { CommandArg } from "./server.type";
 import postMessage from "./server.postMessage";
-import { CamperId, getGroupId, getSocket } from "./server.manager.camper";
+import { getGroupId, getSocket } from "./server.manager.camper";
 import { chatCount, chatOneTime, getGroupMembers, isEnableChat } from "./server.manager.group";
 import { code } from "./server.code";
 
-export default function broadcast(camperId: CamperId, message: string): void {
+export default function broadcast({ camperId, message }: CommandArg): void {
     const groupId = getGroupId(camperId);
 
     if (!isEnableChat(groupId)) {

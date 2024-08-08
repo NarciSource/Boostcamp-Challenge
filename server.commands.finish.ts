@@ -1,8 +1,9 @@
-import { CamperId, getGroupId, getSocket } from "./server.manager.camper";
+import { CommandArg } from "./server.type";
+import { getGroupId, getSocket } from "./server.manager.camper";
 import { disableChat, getGroupMembers } from "./server.manager.group";
 import postMessage from "./server.postMessage";
 
-export default function finish({ camperId }: { camperId: CamperId }): void {
+export default function finish({ camperId }: CommandArg): void {
     const groupId = getGroupId(camperId);
     disableChat(groupId);
 

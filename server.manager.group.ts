@@ -1,13 +1,5 @@
+import { CamperId, GroupId, GroupInform } from "./server.type";
 import DefaultDict from "./collections.DefaultDict";
-import { CamperId } from "./server.manager.camper";
-
-export type GroupId = number;
-
-interface GroupInform {
-    groupMembers: CamperId[];
-    enableChat: boolean;
-    maxCount: number;
-}
 
 const initial = (): GroupInform => ({ groupMembers: [], enableChat: false, maxCount: Infinity });
 

@@ -1,3 +1,5 @@
+import { ErrorPair } from "./server.type";
+
 export enum code {
     INVALID_ID,
     ID_ALREADY_EXISTS,
@@ -6,7 +8,7 @@ export enum code {
     MESSAGE_SIZE_EXCEED,
 }
 
-export function getError(error: code): { code: number; errorMessage: string } {
+export function getError(error: code): ErrorPair {
     switch (error) {
         case code.INVALID_ID:
             return { code: 400, errorMessage: "CamperId is larger than 0 and smaller than 256." };

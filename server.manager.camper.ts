@@ -1,8 +1,7 @@
 import { Socket } from "node:net";
-import { GroupId, popGroup, setGroup } from "./server.manager.group";
+import { CamperId, GroupId } from "./server.type";
+import { popGroup, setGroup } from "./server.manager.group";
 import { code } from "./server.code";
-
-export type CamperId = string;
 
 const membersDictionary = new Map<CamperId, { groupId: GroupId; socket: Socket }>();
 

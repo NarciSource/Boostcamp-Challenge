@@ -1,15 +1,9 @@
-import { Socket } from "node:net";
+import { CamperId, CommandArg } from "./server.type";
 import { code } from "./server.code";
-import { CamperId, setMembers } from "./server.manager.camper";
+import { setMembers } from "./server.manager.camper";
 import postMessage from "./server.postMessage";
 
-export default function checkin({
-    camperId,
-    client,
-}: {
-    camperId: CamperId;
-    client: Socket;
-}): CamperId {
+export default function checkin({ camperId, client }: CommandArg): CamperId {
     const idNumberPart = parseInt(camperId.slice(1));
 
     if (idNumberPart > 256) {

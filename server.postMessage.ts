@@ -1,9 +1,10 @@
 import { Socket } from "node:net";
+import { NestedMessage } from "./server.type";
 import Response from "./protocol.Response";
 import { getBytes } from "./utils";
 
 export default function postMessage(client: Socket) {
-    return function (message: string | { message: string; extra: string }) {
+    return function (message: string | NestedMessage) {
         const header = {
             code: 200,
             time: Date.now(),

@@ -1,4 +1,5 @@
 import net from "node:net";
+import { CommandArg } from "./client.type";
 import getMessage from "./client.getMessage";
 import Request, { Header } from "./protocol.Request";
 
@@ -18,7 +19,7 @@ client.on("end", () => {
     process.exit();
 });
 
-export function sendMessage(command: string, data?: any) {
+export function sendMessage(command: string, data?: CommandArg) {
     const header: Header = {
         command,
     };

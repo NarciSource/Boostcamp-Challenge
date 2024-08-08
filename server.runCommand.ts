@@ -1,4 +1,5 @@
 import { Socket } from "node:net";
+import { CamperId } from "./server.type";
 import checkin from "./server.commands.checkin";
 import checkout from "./server.commands.checkout";
 import clap, { clapHands } from "./server.commands.clap";
@@ -8,7 +9,6 @@ import summary from "./server.commands.summary";
 import broadcast from "./server.commands.broadcast";
 import { getBytes } from "./utils";
 import { code } from "./server.code";
-import { CamperId } from "./server.manager.camper";
 
 const commands = {
     checkin,
