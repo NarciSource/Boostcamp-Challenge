@@ -1,21 +1,47 @@
-import net from "node:net";
-import cli from "./client.cli";
-import getMessage from "./client.getMessage";
+import Vorpal, { Args } from "vorpal";
+import { sendMessage } from "./client.connect";
 
-const connectionInformation = { host: "localhost", port: 2024 };
+const cli = new Vorpal();
 
-const client = net.createConnection(connectionInformation, () => {
-  console.log("Connected");
+cli.command("checkin <camperId>", "Check in to the server.").action(async function ({
+    camperId,
+}: Args) {
+    sendMessage("checkin", { camperId });
 });
 
-client.on("data", getMessage);
-
-client.on("error", (error) => {
-  console.error(error);
+cli.command("checkout", "Check out to the server.").action(async function () {
+    sendMessage("checkout");
 });
 
-client.on("end", () => {});
+cli.command("chat", "Enable the chat.").action(async function () {
+    sendMessage("chat");
+});
 
-cli();
+cli.command("finish", "Disable the chat.").action(async function () {
+    sendMessage("finish");
+});
 
-export default client;
+cli.command(`broadcast "[message]"`, "Send a message to my group.").action(async function ({
+    message,
+}: Args) {
+    sendMessage("broadcast", { message });
+});
+
+cli.command(
+    `direct to <targetId> "[message]"`,
+    "Send a direct message to a specific member",
+).action(async function ({ targetId, message }: Args) {
+    sendMessage("direct", { targetId, message });
+});
+
+cli.command("summary <day>", "Obtain a keyword summary of the day.").action(async function ({
+    day,
+}: Args) {
+    sendMessage("summary", { day });
+});
+
+cli.command("clap", "Ask for the total request count from all clients.").action(async function () {
+    sendMessage("clap");
+});
+
+cli.delimiter("$").show();

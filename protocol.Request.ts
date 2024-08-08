@@ -1,5 +1,5 @@
 export interface Header {
-    query_type: string;
+    command: string;
     "Content-Type"?: string;
 }
 

@@ -50,6 +50,6 @@ export default function runCommand(
         }
     }
 
-    const data = commands[command]({ arg, camperId, client });
+    const data = commands[command]({ camperId, client, ...arg });
     return data;
 }

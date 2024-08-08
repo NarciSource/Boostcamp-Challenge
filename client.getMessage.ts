@@ -1,4 +1,4 @@
-import client from "./client";
+import client from "./client.connect";
 import Response from "./protocol.Response";
 
 let checkedInTime: number;
@@ -6,11 +6,11 @@ let checkedInTime: number;
 export default function getMessage(data: Buffer) {
     const { header, body }: Response = JSON.parse(data.toString());
 
-    const message = body.data;
+    const message = body?.data;
 
-    if (message.includes("Client connected")) {
+    if (message?.includes("Client connected")) {
         checkedInTime = new Date().getTime();
-    } else if (message.includes("CheckOut")) {
+    } else if (message?.includes("CheckOut")) {
         const coreTime = new Date().getTime() - checkedInTime;
 
         const differenceInSeconds = Math.floor(coreTime / 1000);
@@ -23,5 +23,7 @@ export default function getMessage(data: Buffer) {
         );
 
         client.end();
+    } else {
+        console.log(message);
     }
 }

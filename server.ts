@@ -1,5 +1,6 @@
 import net from "node:net";
 import Response, { Header } from "./protocol.Response";
+import { Header as RequestHeader } from "./protocol.Request";
 import runCommand from "./server.runCommand";
 import getErrorMessage from "./server.getErrorMessage";
 import { CamperId } from "./server.manager.camper";
@@ -18,15 +19,16 @@ const server = net.createServer(function (client) {
     client.write(JSON.stringify(response));
 
     client.on("data", function (buffer: Buffer) {
-        const { header: requestHeader, body: requestBody } = JSON.parse(buffer.toString());
-        const requestMessage = requestBody.data;
+        const { header: requestHeader, body: requestBody }: { header: RequestHeader; body: any } =
+            JSON.parse(buffer.toString());
 
         let capsuledMessage: string;
 
         try {
-            const [, command, arg] = /^(\w+)\s?(.*)/.exec(requestMessage);
+            const command = requestHeader.command;
+            const requestData = requestBody.data;
 
-            const data = runCommand(command, arg, camperId, client);
+            const data = runCommand(command, requestData, camperId, client);
 
             if (command === "checkin") {
                 camperId = data;

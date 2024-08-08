@@ -4,13 +4,14 @@ import { CamperId, setMembers } from "./server.manager.camper";
 import makeMessageResponse from "./server.makeMessageResponse";
 
 export default function checkin({
-    arg: camperId,
+    camperId,
     client,
 }: {
-    arg: CamperId;
+    camperId: CamperId;
     client: Socket;
 }): CamperId {
     const idNumberPart = parseInt(camperId.slice(1));
+
     if (idNumberPart > 256) {
         throw code.INVALID_ID;
     }
