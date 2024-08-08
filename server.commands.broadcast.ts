@@ -1,5 +1,6 @@
 import Response from "./protocol.Response";
-import { getGroupId, getGroupMembers, getSocket, CamperId } from "./server.groupManager";
+import { CamperId, getGroupId, getSocket } from "./server.manager.camper";
+import { getGroupMembers } from "./server.manager.group";
 
 export function broadCast(camperId: CamperId, message: string) {
     const groupId = getGroupId(camperId);

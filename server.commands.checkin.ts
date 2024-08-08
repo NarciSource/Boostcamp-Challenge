@@ -1,5 +1,5 @@
 import { Socket } from "node:net";
-import { CamperId, setMembers } from "./server.groupManager";
+import { CamperId, setMembers } from "./server.manager.camper";
 
 export function checkin(camperId: CamperId, client: Socket): string {
     const idNumberPart = parseInt(camperId.slice(1));

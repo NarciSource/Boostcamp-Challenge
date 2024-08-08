@@ -1,5 +1,6 @@
-import { getGroupMembers, getGroupId, getSocket, popMember, CamperId } from "./server.groupManager";
+import { getGroupMembers } from "./server.manager.group";
 import Response from "./protocol.Response";
+import { CamperId, getGroupId, getSocket, popMember } from "./server.manager.camper";
 
 export function checkout(camperId: CamperId): void {
     const groupId = getGroupId(camperId);

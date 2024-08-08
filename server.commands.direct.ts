@@ -1,5 +1,5 @@
 import Response from "./protocol.Response";
-import { getSocket } from "./server.groupManager";
+import { getSocket } from "./server.manager.camper";
 
 export function direct(targetId: string, message: string): void {
     const target = getSocket(targetId);
