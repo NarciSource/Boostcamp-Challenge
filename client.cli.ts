@@ -1,6 +1,7 @@
 import readline from "readline";
 import client from "./client";
 import Request, { Header } from "./protocol.Request";
+import { sliceUnderBytes } from "./utils";
 
 export default function cli() {
     const r1 = readline.createInterface({
@@ -11,6 +12,8 @@ export default function cli() {
     let cmdHistory = [];
 
     r1.on("line", async (input) => {
+        input = sliceUnderBytes(input, 1024);
+
         if (input === "!history") {
             cmdHistory.forEach((cmd, idx) => {
                 console.log(`${idx + 1} ${cmd}`);

@@ -15,7 +15,7 @@ export function messageToPeer(id: number, camperId: string): void {
     });
 }
 
-export function pushToGroups(camperId: string, client: Socket): void {
+export function pushToGroups(camperId: string, client: Socket): number {
     if (checkedIn.has(camperId)) {
         throw "ID_ALREADY";
     }
@@ -28,8 +28,7 @@ export function pushToGroups(camperId: string, client: Socket): void {
         groupId++;
     }
 
-    let message = `checkin success to group#${groupId}\n`;
-    client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
+    return groupId;
 }
 
 export function popFromGroups(camperId: string, client: Socket): number {
