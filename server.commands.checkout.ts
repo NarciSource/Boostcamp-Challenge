@@ -1,4 +1,4 @@
-import { popFromGroups, messageToPeer } from "./group";
+import { popFromGroups, messageToPeer } from "./server.groupManager";
 
 export function checkOut(camperId, client) {
   const id = popFromGroups(camperId, client);

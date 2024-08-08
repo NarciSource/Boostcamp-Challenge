@@ -1,4 +1,4 @@
-import { broadCastPeer } from "./group";
+import { broadCastPeer } from "./server.groupManager";
 
 export function broadCast(camperId, text) {
   broadCastPeer(camperId, text);

@@ -1,11 +1,11 @@
 import net from "node:net";
-import { checkIn } from "./checkIn";
-import { checkOut } from "./checkout";
-import { summary } from "./summary";
-import { broadCast } from "./broadCast";
-import { direct } from "./direct";
-import { sendError } from "./error";
-import { countClap, clap } from "./clap";
+import { checkIn } from "./server.commands.checkin";
+import { checkOut } from "./server.commands.checkout";
+import { summary } from "./server.commands.summary";
+import { broadCast } from "./server.commands.broadcast";
+import { direct } from "./server.commands.direct";
+import { sendError } from "./server.sendError";
+import { countClap, clap } from "./server.commands.clap";
 
 const server = net.createServer(function (client) {
   const { remoteAddress, remotePort } = client;

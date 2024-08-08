@@ -1,5 +1,5 @@
 import { Socket } from "node:net";
-import { pushToGroups } from "./group";
+import { pushToGroups } from "./server.groupManager";
 
 export function checkIn(camperId: string, client: Socket) {
   const newId = parseInt(camperId.slice(1));

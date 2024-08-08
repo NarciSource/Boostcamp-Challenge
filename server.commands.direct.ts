@@ -1,4 +1,4 @@
-import { checkedIn } from "./group";
+import { checkedIn } from "./server.groupManager";
 
 export function direct([, camperId, message]) {
   const { client } = checkedIn.get(camperId);
