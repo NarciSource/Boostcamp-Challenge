@@ -1,11 +1,24 @@
-import { Socket } from "node:net";
-import { popFromGroups, messageToPeer } from "./server.groupManager";
+import { getGroupMembers, getGroupId, getSocket, popMember, CamperId } from "./server.groupManager";
+import Response from "./protocol.Response";
 
-export function checkout(camperId: string, client: Socket): string {
-    const id = popFromGroups(camperId, client);
+export function checkout(camperId: CamperId): void {
+    const groupId = getGroupId(camperId);
+    const groupMembers = getGroupMembers(groupId);
 
-    messageToPeer(id, camperId);
+    popMember(camperId);
 
-    const message = `CheckOut ${id}`;
-    return message;
+    const message = `${camperId} is getting Out!`;
+    const header = {
+        code: 200,
+        time: Date.now(),
+        "Content-Type": "application/json",
+        "Content-Length": message.length,
+    };
+    const body = { data: message };
+    const transferMessage = new Response(header, body);
+
+    const sockets = groupMembers.map((member) => getSocket(member));
+    for (const peer of sockets) {
+        peer.write(JSON.stringify(transferMessage));
+    }
 }

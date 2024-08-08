@@ -14,8 +14,7 @@ const server = net.createServer(function (client) {
     console.log(message);
     client.write(JSON.stringify(response));
 
-    const getMessage = getMessageFor(client);
-    client.on("data", getMessage);
+    client.on("data", getMessageFor(client));
 
     client.on("end", function () {
         //checkOut(loggedIn, client);

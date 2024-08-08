@@ -1,5 +1,21 @@
-import { broadCastPeer } from "./server.groupManager";
+import Response from "./protocol.Response";
+import { getGroupId, getGroupMembers, getSocket, CamperId } from "./server.groupManager";
 
-export function broadCast(camperId: string, text: string) {
-    broadCastPeer(camperId, text);
+export function broadCast(camperId: CamperId, message: string) {
+    const groupId = getGroupId(camperId);
+    const groupMembers = getGroupMembers(groupId);
+
+    const sockets = groupMembers.map((member) => getSocket(member));
+    const header = {
+        code: 200,
+        time: Date.now(),
+        "Content-Type": "application/json",
+        "Content-Length": message.length,
+    };
+    const body = { data: message };
+    const transferMessage = new Response(header, body);
+
+    for (const peer of sockets) {
+        peer.write(JSON.stringify(transferMessage));
+    }
 }

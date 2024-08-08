@@ -1,50 +1,49 @@
 import { Socket } from "node:net";
 import DefaultDict from "./collections.DefaultDict";
 
-export const checkedIn = new Map<string, { groupId: number; client: Socket }>();
+export type CamperId = string;
+export type GroupId = number;
 
-export const groups = new DefaultDict<Socket[]>(() => []);
+const membersDictionary = new Map<CamperId, { groupId: GroupId; socket: Socket }>();
 
-export let groupId = 1;
+const groupsDictionary = new DefaultDict<CamperId[]>(() => []);
 
-export function messageToPeer(id: number, camperId: string): void {
-    groups[id].forEach((peer: Socket) => {
-        console.log(peer);
-        let message = `${camperId} is getting Out!`;
-        peer.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
-    });
+export function getGroupMembers(id: GroupId): CamperId[] {
+    return groupsDictionary[id];
 }
 
-export function pushToGroups(camperId: string, client: Socket): number {
-    if (checkedIn.has(camperId)) {
+export function getGroupId(id: CamperId): GroupId {
+    return membersDictionary[id].groupId;
+}
+
+export function getSocket(id: CamperId): Socket {
+    return membersDictionary[id].socket;
+}
+
+let sizeOfGroups = 0;
+
+export function setMembers(id: CamperId, socket: Socket): GroupId {
+    if (getGroupMembers(sizeOfGroups).length >= 4) {
+        sizeOfGroups++;
+    }
+
+    const groupId = sizeOfGroups;
+
+    if (membersDictionary.has(id)) {
         throw "ID_ALREADY";
     }
 
-    checkedIn.set(camperId, { groupId, client });
-
-    groups[groupId].push(client);
-
-    if (groups[groupId].length >= 4) {
-        groupId++;
-    }
+    membersDictionary.set(id, { groupId, socket });
 
     return groupId;
 }
 
-export function popFromGroups(camperId: string, client: Socket): number {
-    const { groupId } = checkedIn.get(camperId);
+export function popMember(id: CamperId): void {
+    const groupId = getGroupId(id);
 
-    groups[groupId] = groups[groupId].filter((group: Socket) => {
-        return group !== client;
-    });
+    groupsDictionary[groupId] = groupsDictionary[groupId].filter(
+        (memberId: CamperId) => memberId !== id,
+    );
 
-    return groupId;
-}
-
-export function broadCastPeer(camperId: string, text: string): void {
-    const { groupId } = checkedIn.get(camperId);
-
-    groups[groupId].forEach((peer: Socket) => {
-        peer.write(text);
-    });
+    membersDictionary.delete(id);
 }

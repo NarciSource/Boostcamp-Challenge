@@ -1,7 +1,17 @@
-import { checkedIn } from "./server.groupManager";
+import Response from "./protocol.Response";
+import { getSocket } from "./server.groupManager";
 
-export function direct(camperId: string, message: string): void {
-    const { client } = checkedIn.get(camperId);
+export function direct(targetId: string, message: string): void {
+    const target = getSocket(targetId);
 
-    client.write(JSON.stringify({ message, time: Date.now(), length: message.length }));
+    const header = {
+        code: 200,
+        time: Date.now(),
+        "Content-Type": "application/json",
+        "Content-Length": message.length,
+    };
+    const body = { data: message };
+    const transferMessage = new Response(header, body);
+
+    target.write(JSON.stringify(transferMessage));
 }
