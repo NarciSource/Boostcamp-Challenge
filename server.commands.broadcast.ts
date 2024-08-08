@@ -2,7 +2,7 @@ import makeMessageResponse from "./server.makeMessageResponse";
 import { CamperId, getGroupId, getSocket } from "./server.manager.camper";
 import { getGroupMembers } from "./server.manager.group";
 
-export function broadCast(camperId: CamperId, message: string) {
+export default function broadcast(camperId: CamperId, message: string) {
     const groupId = getGroupId(camperId);
     const groupMembers = getGroupMembers(groupId);
     const sockets = groupMembers.map((member) => getSocket(member));

@@ -1,9 +1,10 @@
 import { Socket } from "node:net";
-import { checkin } from "./server.commands.checkin";
-import { checkout } from "./server.commands.checkout";
+import checkin from "./server.commands.checkin";
+import checkout from "./server.commands.checkout";
 import clap from "./server.commands.clap";
-import { direct } from "./server.commands.direct";
-import { summary } from "./server.commands.summary";
+import direct from "./server.commands.direct";
+import summary from "./server.commands.summary";
+import broadcast from "./server.commands.broadcast";
 
 const commands = {
     checkin,
@@ -11,6 +12,7 @@ const commands = {
     clap,
     direct,
     summary,
+    broadcast,
 };
 
 let maxCount: number;

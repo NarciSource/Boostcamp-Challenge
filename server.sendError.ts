@@ -1,4 +1,4 @@
-export function sendError(error: string): string {
+export default function sendError(error: string): string {
     switch (error) {
         case "ID_LARGER_THAN_256": {
             return "camperId is larger than 0 and smaller than 256.\n";

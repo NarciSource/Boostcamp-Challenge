@@ -1,10 +1,10 @@
 import { Socket } from "node:net";
-import { sendError } from "./server.sendError";
-import { countClap } from "./server.commands.clap";
 import Response, { Header } from "./protocol.Response";
+import sendError from "./server.sendError";
 import runCommand from "./server.runCommand";
-import { getBytes } from "./utils";
 import makeMessageResponse from "./server.makeMessageResponse";
+import { countClap } from "./server.commands.clap";
+import { getBytes } from "./utils";
 
 export default function getMessageFor(client: Socket) {
     return (buffer: Buffer) => getMessage(buffer, client);

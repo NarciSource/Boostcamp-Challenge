@@ -2,7 +2,7 @@ import { getGroupMembers } from "./server.manager.group";
 import { CamperId, getGroupId, getSocket, popMember } from "./server.manager.camper";
 import makeMessageResponse from "./server.makeMessageResponse";
 
-export function checkout(camperId: CamperId): void {
+export default function checkout(camperId: CamperId): void {
     const groupId = getGroupId(camperId);
     const groupMembers = getGroupMembers(groupId);
 
