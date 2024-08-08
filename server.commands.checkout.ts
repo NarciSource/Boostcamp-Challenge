@@ -20,5 +20,5 @@ export default function checkout({
         postMessage(peer)(`${camperId} is getting Out!`);
     }
 
-    postMessage(client)({ message: "Checkout was successful.", extra: "checkout" });
+    postMessage(client)({ message: "checkout (disconnected)", extra: "checkout" });
 }

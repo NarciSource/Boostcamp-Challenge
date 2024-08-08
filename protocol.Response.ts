@@ -1,7 +1,7 @@
 export interface Header {
     code: number;
-    errorMessage?: string;
     time: number;
+    errorMessage?: string;
     "Content-Type"?: string;
     "Content-Length"?: number;
 }
@@ -15,10 +15,7 @@ export default class Response {
     body: any;
 
     constructor(header: Header, body?: any) {
-        this.header = {
-            ...header,
-            "Content-Type": "application/json",
-        };
+        this.header = header;
         this.body = body;
     }
 }

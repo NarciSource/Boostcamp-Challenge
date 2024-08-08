@@ -1,8 +1,22 @@
+import { Socket } from "node:net";
 import postMessage from "./server.postMessage";
-import { getSocket } from "./server.manager.camper";
+import { CamperId, getSocket } from "./server.manager.camper";
 
-export default function direct(targetId: string, message: string): void {
+export default function direct({
+    camperId,
+    targetId,
+    message,
+    client,
+}: {
+    camperId: CamperId;
+    targetId: CamperId;
+    message: string;
+    client: Socket;
+}): void {
     const target = getSocket(targetId);
 
-    postMessage(target)(message);
+    const directMessage = `dm from ${camperId}, "${message}"`;
+
+    postMessage(target)(directMessage);
+    postMessage(client)("direct (success)");
 }

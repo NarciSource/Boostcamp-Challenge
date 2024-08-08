@@ -17,10 +17,11 @@ export default function broadcast(camperId: CamperId, message: string): void {
     chatOneTime(groupId);
 
     // Send a message to the group members.
-    const groupMembers = getGroupMembers(groupId);
-    const sockets = groupMembers.map((member) => getSocket(member));
+    const broadcastMessage = `broadcast from ${camperId}, "${message}"`;
+    const members = getGroupMembers(groupId);
+    const sockets = members.map(getSocket);
 
     for (const peer of sockets) {
-        postMessage(peer)(message);
+        postMessage(peer)(broadcastMessage);
     }
 }
