@@ -1,5 +1,5 @@
 import net from "node:net";
-import { Header as RequestHeader } from "./protocol.Request";
+import Request from "./protocol.Request";
 import runCommand from "./server.runCommand";
 import checkout from "./server.commands.checkout";
 import { CamperId } from "./server.manager.camper";
@@ -17,8 +17,7 @@ const server = net.createServer(function (client) {
     let camperId: CamperId;
 
     client.on("data", function (buffer: Buffer) {
-        const { header: requestHeader, body: requestBody }: { header: RequestHeader; body: any } =
-            JSON.parse(buffer.toString());
+        const { header: requestHeader, body: requestBody }: Request = JSON.parse(buffer.toString());
 
         try {
             const command = requestHeader.command;

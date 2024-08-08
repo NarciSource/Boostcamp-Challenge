@@ -3,7 +3,7 @@ import postMessage from "./server.postMessage";
 
 export let clapCount = 0;
 
-export function countClap() {
+export function clapHands() {
     clapCount++;
 }
 

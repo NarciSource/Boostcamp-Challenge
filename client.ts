@@ -13,8 +13,10 @@ cli.command("checkout", "Check out to the server.").action(async function () {
     sendMessage("checkout");
 });
 
-cli.command("chat", "Enable the chat.").action(async function () {
-    sendMessage("chat");
+cli.command("chat maxCount=<maxCount>", "Enable the chat.").action(async function ({
+    maxCount,
+}): Args {
+    sendMessage("chat", { maxCount });
 });
 
 cli.command("finish", "Disable the chat.").action(async function () {
