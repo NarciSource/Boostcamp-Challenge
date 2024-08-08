@@ -1,3 +1,4 @@
+import { Socket } from "node:net";
 import { checkIn } from "./server.commands.checkin";
 import { summary } from "./server.commands.summary";
 import { broadCast } from "./server.commands.broadcast";
@@ -6,17 +7,17 @@ import { sendError } from "./server.sendError";
 import { countClap, clap } from "./server.commands.clap";
 import { checkOut } from "./server.commands.checkout";
 
-let maxCount;
-let currentCount;
+let maxCount: number;
+let currentCount: number;
 let isChat = false;
-let loggedIn;
+let loggedIn: string;
 
 const encoder = new TextEncoder();
 
-export default function getMessageFor(client) {
-    return (data) => getMessage(data, client);
+export default function getMessageFor(client: Socket) {
+    return (data: Buffer) => getMessage(data, client);
 }
-function getMessage(data: Buffer, client) {
+function getMessage(data: Buffer, client: Socket) {
     let message = data.toString();
     const view = encoder.encode(message);
     console.log(message);
@@ -41,7 +42,7 @@ function getMessage(data: Buffer, client) {
                     break;
                 case "chat":
                     currentCount = 0;
-                    maxCount = params[0];
+                    maxCount = parseInt(params[0]);
                     isChat = true;
                     break;
                 case "broadcast":
