@@ -68,6 +68,8 @@
 
 -   [ ] pageOut(index)
 
-    현재 페이지에 있는 값을 swapFile[currentPageIndex]
+    -   현재 페이지에 있는 값을 swapFile[currentPageIndex] 에 덮어쓴다
+
+    -   pageOutCount를 +1 증가한다
 
 ## 문제 해결 과정

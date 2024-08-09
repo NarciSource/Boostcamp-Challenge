@@ -1,4 +1,4 @@
-type Page = number[];
+type Page = { address: Address; space: number[] };
 type Address = number;
 
 const PAGE_SIZE = 1024;
@@ -13,10 +13,12 @@ export default class VirtualMemory {
             throw "Error";
         }
 
-        this.swapFile = Array.from({ length: 8 }, () => Array.from({ length: PAGE_SIZE }));
+        this.swapFile = Array.from({ length: 8 }).map((value, idx) => ({
+            address: baseAddress + idx * PAGE_SIZE,
+            space: Array.from({ length: PAGE_SIZE }),
+        }));
 
         this.currentPage = this.swapFile[0];
-
         this.currentPageIndex = 0;
     }
 
@@ -30,7 +32,7 @@ export default class VirtualMemory {
             const page = this.swapFile[this.currentPageIndex];
             this.currentPage = page;
 
-            if (page.length > size * length) {
+            if (page.space.length > size * length) {
                 return page[0];
             } else {
                 this.#pageOut();
@@ -41,8 +43,8 @@ export default class VirtualMemory {
     }
 
     read(address: Address): number[] {
-        if (this.currentPage.includes(address)) {
-            return this.currentPage.slice(8);
+        if (this.currentPage.address < address && address < this.currentPage.address + PAGE_SIZE) {
+            return this.currentPage.space.slice(8);
         } else {
             this.#pageOut();
             this.#pageIn();
@@ -52,14 +54,15 @@ export default class VirtualMemory {
     }
 
     write(address: Address, value: number[]) {
-        if (this.currentPage.includes(address)) {
-            this.currentPage = value;
+        if (this.currentPage.address < address && address < this.currentPage.address + PAGE_SIZE) {
+            this.currentPage.space = value;
 
             this.#pageOut();
-        }
-        else {
+        } else {
             this.#pageOut();
             this.#pageIn();
         }
     }
+
+    free(address: Address) {}
 }
