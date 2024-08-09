@@ -72,5 +72,9 @@ export default class VirtualMemory {
         }
     }
 
+    report(): [number, number] {
+        return [this.#pageInCount, this.#pageOutCount];
+    }
+
     free(address: Address) {}
 }

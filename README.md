@@ -54,7 +54,7 @@
 
     현재 페이지 값을 한꺼번에 확인할 수 있도록 16진수 문자열로 출력한다
 
--   [ ] report() -> [pageInCount, pageOutCount]
+-   [x] report() -> [pageInCount, pageOutCount]
 
     지금까지 pageInCount와 pageOutCount를 순서대로 배열에 담아 리턴한다
 
