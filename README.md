@@ -60,13 +60,13 @@
 
 ### private 메소드
 
--   [ ] pageIn(index)
+-   [x] pageIn(index)
 
     -   swapFile[currentPageIndex] 에 값을 현재 페이지에 덮어쓴다
 
     -   pageInCount를 +1 증가한다
 
--   [ ] pageOut(index)
+-   [x] pageOut(index)
 
     -   현재 페이지에 있는 값을 swapFile[currentPageIndex] 에 덮어쓴다
 

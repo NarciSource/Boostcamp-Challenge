@@ -7,6 +7,8 @@ export default class VirtualMemory {
     currentPage: Page;
     currentPageIndex: number;
     swapFile: Page[];
+    #pageInCount = 0;
+    #pageOutCount = 0;
 
     init(baseAddress: number) {
         if (baseAddress < 0xf000 || baseAddress > 0xfa00) {
@@ -22,9 +24,15 @@ export default class VirtualMemory {
         this.currentPageIndex = 0;
     }
 
-    #pageIn() {}
+    #pageIn() {
+        this.currentPage = this.swapFile[this.currentPageIndex];
+        this.#pageInCount++;
+    }
 
-    #pageOut() {}
+    #pageOut() {
+        this.swapFile[this.currentPageIndex] = this.currentPage;
+        this.#pageOutCount++;
+    }
 
     alloc(size: number, length: number): Address {
         for (let i = 0; i < 8; i++) {
