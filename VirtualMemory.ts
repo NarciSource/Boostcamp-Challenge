@@ -39,4 +39,15 @@ export default class VirtualMemory {
         }
         return 0;
     }
+
+    read(address: Address): number[] {
+        if (this.currentPage.includes(address)) {
+            return this.currentPage.slice(8);
+        } else {
+            this.#pageOut();
+            this.#pageIn();
+        }
+
+        return null;
+    }
 }
