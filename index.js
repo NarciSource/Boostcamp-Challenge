@@ -9,7 +9,16 @@ const r1 = readline.createInterface({
 
 r1.on("line", async (input) => {
     const [param0, param1, param2, param3] = input.split(",");
-    make_7segment(param0, param1, param2, param3);
+
+    try {
+        const display_board = make_7segment(param0, param1, param2, param3);
+
+        for (const line of display_board) {
+            console.log(line.join(""));
+        }
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 const combine_lines = (delimiter) => (acc, cur) =>
@@ -19,14 +28,13 @@ const fill_segments = (segment, non_segment) => (line) =>
     line.map((x) => (x === 1 ? segment : x === 0 ? non_segment : x));
 
 function make_7segment(number_str, segment, non_segment, delimiter) {
-    const numbers = number_str.split("");
+    if (isNaN(number_str)) {
+        throw "ERROR_PARAM0";
+    }
 
-    const display_board = numbers
+    return number_str
+        .split("")
         .map((number) => segments[number])
         .reduce(combine_lines(delimiter))
         .map(fill_segments(segment, non_segment));
-
-    for (const line of display_board) {
-        console.log(line.join(""));
-    }
 }
