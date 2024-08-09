@@ -2,36 +2,43 @@ type Page = { address: Address; space: number[] };
 type Address = number;
 
 const PAGE_SIZE = 1024;
+const FILE_SIZE = 8;
 
 export default class VirtualMemory {
-    currentPage: Page;
     currentPageIndex: number;
     swapFile: Page[];
     #pageInCount = 0;
     #pageOutCount = 0;
 
-    init(baseAddress: number) {
+    init(baseAddress: number): void {
         if (baseAddress < 0xf000 || baseAddress > 0xfa00) {
             throw "Error";
         }
 
-        this.swapFile = Array.from({ length: 8 }).map((value, idx) => ({
+        this.swapFile = new Array(FILE_SIZE).fill(null).map((value, idx) => ({
             address: baseAddress + idx * PAGE_SIZE,
-            space: Array.from({ length: PAGE_SIZE }),
+            space: new Array(PAGE_SIZE).fill(null),
         }));
 
-        this.currentPage = this.swapFile[0];
         this.currentPageIndex = 0;
     }
 
+    get currentPage(): Page {
+        return this.swapFile[this.currentPageIndex];
+    }
+
     #pageIn(index: number) {
-        this.currentPage = this.swapFile[index];
+        this.swapFile[this.currentPageIndex] = this.swapFile[index];
         this.#pageInCount++;
     }
 
     #pageOut(index: number) {
         this.swapFile[index] = this.currentPage;
         this.#pageOutCount++;
+    }
+
+    remain_space(page: Page): number {
+        return page.space.filter((i) => !i).length;
     }
 
     alloc(size: number, length: number): Address {
@@ -41,8 +48,8 @@ export default class VirtualMemory {
             this.#pageOut(index);
             this.#pageIn(index);
 
-            if (page.space.length > size * length) {
-                return page[0];
+            if (this.remain_space(page) > size * length) {
+                return page.address;
             }
         }
         return 0;
@@ -50,13 +57,16 @@ export default class VirtualMemory {
 
     find_page(target_address: Address): number {
         return this.swapFile.findIndex(
-            ({ address }) => address < target_address && target_address < address + PAGE_SIZE,
+            ({ address }) => address <= target_address && target_address <= address + PAGE_SIZE,
         );
     }
 
     read(address: Address): number[] {
         let page: Page;
-        if (this.currentPage.address < address && address < this.currentPage.address + PAGE_SIZE) {
+        if (
+            this.currentPage.address <= address &&
+            address <= this.currentPage.address + PAGE_SIZE
+        ) {
             page = this.currentPage;
         } else {
             const index = this.find_page(address);
@@ -67,12 +77,15 @@ export default class VirtualMemory {
             page = this.swapFile[index];
         }
 
-        return this.currentPage.space.slice(8);
+        return page.space.slice(0, 8);
     }
 
     write(address: Address, value: number[]): void {
         let page: Page;
-        if (this.currentPage.address < address && address < this.currentPage.address + PAGE_SIZE) {
+        if (
+            this.currentPage.address <= address &&
+            address <= this.currentPage.address + PAGE_SIZE
+        ) {
             page = this.currentPage;
 
             this.#pageOut(this.currentPageIndex);
@@ -84,7 +97,7 @@ export default class VirtualMemory {
 
             page = this.swapFile[index];
         }
-        this.currentPage.space = value;
+        page.space = value;
     }
 
     report(): [number, number] {
@@ -96,11 +109,13 @@ export default class VirtualMemory {
 
         this.swapFile[index] = {
             ...this.swapFile[index],
-            space: Array.from({ length: PAGE_SIZE }),
+            space: new Array(PAGE_SIZE).fill(null),
         };
     }
 
     peek(): string {
-        return this.swapFile.flatMap(({ space }) => space.map((value) => value.toString())).join();
+        return this.swapFile
+            .flatMap(({ space }) => space.map((value) => value?.toString(16) || "").join(""))
+            .join("");
     }
 }
