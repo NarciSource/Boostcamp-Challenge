@@ -50,4 +50,16 @@ export default class VirtualMemory {
 
         return null;
     }
+
+    write(address: Address, value: number[]) {
+        if (this.currentPage.includes(address)) {
+            this.currentPage = value;
+
+            this.#pageOut();
+        }
+        else {
+            this.#pageOut();
+            this.#pageIn();
+        }
+    }
 }
