@@ -12,19 +12,19 @@
 
 -   [x] init(baseAddress)
 
-    -   클래스를 초기화하면서 baseAddress를 F000~FA00 범위 내에서 지정할 수 있다
-    -   baseAddress를 시작으로 8개의 Page를 초기화하고 swapFile에 저장한다
-    -   그 중에 첫번째 페이지를 currentPage에 지정 혹은 복사하고 currentPageIndex는 0으로 지정한다
+    -   [x] 클래스를 초기화하면서 baseAddress를 F000~FA00 범위 내에서 지정할 수 있다
+    -   [x] baseAddress를 시작으로 8개의 Page를 초기화하고 swapFile에 저장한다
+    -   [x] 그 중에 첫번째 페이지를 currentPage에 지정 혹은 복사하고 currentPageIndex는 0으로 지정한다
 
--   [ ] alloc(size, length) -> Address
+-   [x] alloc(size, length) -> Address
 
-    -   현재 선택된 페이지에 size\*length 만큼 할당이 가능한지 확인한다
+    -   [x] 현재 선택된 페이지에 size\*length 만큼 할당이 가능한지 확인한다
 
-    -   할당 가능하면 할당하고 첫번째 주소를 리턴한다
+    -   [x] 할당 가능하면 할당하고 첫번째 주소를 리턴한다
 
-    -   만약 할당이 불가능하면, 다음 페이지를 현재 페이지로 가져오고 다시 할당이 가능한지 확인한다 (pageOut 한 다음에 pageIn 처리한다)
+    -   [x] 만약 할당이 불가능하면, 다음 페이지를 현재 페이지로 가져오고 다시 할당이 가능한지 확인한다 (pageOut 한 다음에 pageIn 처리한다)
 
-    -   최소 페이지부터 8번째 페이지까지 확인하고 할당이 안되면 주소는 0값을 리턴한다
+    -   [x] 최소 페이지부터 8번째 페이지까지 확인하고 할당이 안되면 주소는 0값을 리턴한다
 
     -   현재 페이지에는 마지막 가져온 페이지가 남는다
 
