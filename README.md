@@ -10,7 +10,7 @@
 
 ## public 메소드
 
--   [ ] init(baseAddress)
+-   [x] init(baseAddress)
 
     -   클래스를 초기화하면서 baseAddress를 F000~FA00 범위 내에서 지정할 수 있다
     -   baseAddress를 시작으로 8개의 Page를 초기화하고 swapFile에 저장한다
