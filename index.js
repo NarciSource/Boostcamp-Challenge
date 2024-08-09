@@ -31,6 +31,9 @@ function make_7segment(number_str, segment, non_segment, delimiter) {
     if (isNaN(number_str)) {
         throw "ERROR_PARAM0";
     }
+    if (!number_str || !segment || !non_segment || !delimiter) {
+        throw "ERROR_COMMA";
+    }
 
     return number_str
         .split("")
