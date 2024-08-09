@@ -1,0 +1,29 @@
+{
+  "name": "day16",
+  "version": "1.0.0",
+  "description": "파일데이터 시스템",
+  "main": "client.ts",
+  "scripts": {
+    "start": "ts-node ./client.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gist.github.com/11167c02d574a6373104a82350b935fc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/11167c02d574a6373104a82350b935fc"
+  },
+  "homepage": "https://gist.github.com/11167c02d574a6373104a82350b935fc",
+  "devDependencies": {
+    "@types/vorpal": "^1.12.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "papaparse": "^5.4.1",
+    "vorpal": "^1.12.0"
+  }
+}
