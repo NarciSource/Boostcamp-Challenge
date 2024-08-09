@@ -46,7 +46,7 @@
 
     -   [x] 주소가 포함된 페이지를 불러와서 value를 해당 주소에 8바이트 덮어쓰고 pageOut 처리한다
 
--   [ ] free(address)
+-   [x] free(address)
 
     해당 주소값을 해제하고 여유 공간으로 확보한다
 

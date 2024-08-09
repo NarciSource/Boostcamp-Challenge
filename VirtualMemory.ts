@@ -92,6 +92,11 @@ export default class VirtualMemory {
     }
 
     free(address: Address) {
-        this.swapFile;
+        const index = this.find_page(address);
+
+        this.swapFile[index] = {
+            ...this.swapFile[index],
+            space: Array.from({ length: PAGE_SIZE }),
+        };
     }
 }
