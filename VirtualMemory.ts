@@ -99,4 +99,8 @@ export default class VirtualMemory {
             space: Array.from({ length: PAGE_SIZE }),
         };
     }
+
+    peek(): string {
+        return this.swapFile.flatMap(({ space }) => space.map((value) => value.toString())).join();
+    }
 }
