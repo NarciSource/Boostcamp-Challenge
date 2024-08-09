@@ -24,57 +24,74 @@ export default class VirtualMemory {
         this.currentPageIndex = 0;
     }
 
-    #pageIn() {
-        this.currentPage = this.swapFile[this.currentPageIndex];
+    #pageIn(index: number) {
+        this.currentPage = this.swapFile[index];
         this.#pageInCount++;
     }
 
-    #pageOut() {
-        this.swapFile[this.currentPageIndex] = this.currentPage;
+    #pageOut(index: number) {
+        this.swapFile[index] = this.currentPage;
         this.#pageOutCount++;
     }
 
     alloc(size: number, length: number): Address {
-        for (let i = 0; i < 8; i++) {
-            this.currentPageIndex++;
-            const page = this.swapFile[this.currentPageIndex];
-            this.currentPage = page;
+        for (let index = 0; index < 8; index++) {
+            const page = this.swapFile[index];
+
+            this.#pageOut(index);
+            this.#pageIn(index);
 
             if (page.space.length > size * length) {
                 return page[0];
-            } else {
-                this.#pageOut();
-                this.#pageIn();
             }
         }
         return 0;
     }
 
-    read(address: Address): number[] {
-        if (this.currentPage.address < address && address < this.currentPage.address + PAGE_SIZE) {
-            return this.currentPage.space.slice(8);
-        } else {
-            this.#pageOut();
-            this.#pageIn();
-        }
-
-        return null;
+    find_page(target_address: Address): number {
+        return this.swapFile.findIndex(
+            ({ address }) => address < target_address && target_address < address + PAGE_SIZE,
+        );
     }
 
-    write(address: Address, value: number[]) {
+    read(address: Address): number[] {
+        let page: Page;
         if (this.currentPage.address < address && address < this.currentPage.address + PAGE_SIZE) {
-            this.currentPage.space = value;
-
-            this.#pageOut();
+            page = this.currentPage;
         } else {
-            this.#pageOut();
-            this.#pageIn();
+            const index = this.find_page(address);
+
+            this.#pageOut(index);
+            this.#pageIn(index);
+
+            page = this.swapFile[index];
         }
+
+        return this.currentPage.space.slice(8);
+    }
+
+    write(address: Address, value: number[]): void {
+        let page: Page;
+        if (this.currentPage.address < address && address < this.currentPage.address + PAGE_SIZE) {
+            page = this.currentPage;
+
+            this.#pageOut(this.currentPageIndex);
+        } else {
+            const index = this.find_page(address);
+
+            this.#pageOut(index);
+            this.#pageIn(index);
+
+            page = this.swapFile[index];
+        }
+        this.currentPage.space = value;
     }
 
     report(): [number, number] {
         return [this.#pageInCount, this.#pageOutCount];
     }
 
-    free(address: Address) {}
+    free(address: Address) {
+        this.swapFile;
+    }
 }
