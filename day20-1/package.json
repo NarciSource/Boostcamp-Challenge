@@ -1,0 +1,21 @@
+{
+  "name": "day20",
+  "version": "1.0.0",
+  "description": "표준입출력 미션",
+  "type":"module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gist.github.com/dd2b5b5b5feee8be05293c0559d68520.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/dd2b5b5b5feee8be05293c0559d68520"
+  },
+  "homepage": "https://gist.github.com/dd2b5b5b5feee8be05293c0559d68520"
+}
